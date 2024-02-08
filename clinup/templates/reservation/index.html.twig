@@ -1,0 +1,188 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Réservations{% endblock %}
+
+{% block body %}
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+        
+                    <div class="row reservation">
+                        <div class="col-auto me-auto">
+                            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
+                        </div>
+                        <div class="col-1">
+                            <a href="{{ path('app_reservation_new') }}" type="button"><i class="bi bi-plus-square-fill"></i></a>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                    {% if reservations|length > 0 %}
+                    {% for reservation in reservations %}
+                       <div class="col-md-6">
+                            <a href="{{ path('app_list_postuler',{'id': reservation.id}) }}"><div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-auto me-auto">
+                                            <strong class="card-title log">{{ reservation.logement }}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            {% if reservation.statut == "en attente" %}
+                                                <div class="col-md-2 alert alert-warning attente" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 139, 60);"></i>  En attente
+                                                </div>
+                                            {% elseif reservation.statut == "confirmer" %}
+                                                <div class="col-md-2 alert alert-warning confirmer" role="alert">
+                                                   <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(7, 84, 201);"></i>  Confirmée
+                                                </div>
+                                            {% elseif reservation.statut == "Annuler" %}
+                                                <div class="col-md-2 alert alert-warning annuler" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Annulée
+                                                </div>
+                                            {% elseif reservation.statut == "payer" %}
+                                                <div class="col-md-2 alert alert-warning payer" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(60, 196, 39);"></i>  Payée
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: auto;">
+                                        <div class="col-md-auto">
+                                            <div class="card ">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Date & Heure</h6>
+                                                    <h6 class="res-d2">{{ reservation.date ? reservation.date|date('j M. Y') : '' }} | {{ reservation.heure ? reservation.heure|date('H:i') : '' }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Nbre d'heures</h6>
+                                                    <h6 class="res-d2">{{ reservation.nbrHeure }}min</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Agents intéressés</h6>
+                                                    <h6 class="res-d2">{{ counts[reservation.id] }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></a>
+                        </div>
+                        {% endfor %}
+                        {% else %}                 
+                        <div class="emptyReserv">
+                            <img src="/assets/img/reserEmp.png"><br>
+                            <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
+                            <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
+                            <a href="{{ path('app_reservation_new') }}"><button type="button" class="btn btn-secondary poster">Poster une réservation</button></a>
+                        </div>
+                {% endif %}
+                </div>
+        </div>
+        {% if cible == "addReservation" %}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Poster une réservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form method="post">
+                <div class="row">
+                   <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date">Le jour</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="date" name="reservation[date]"required>
+                                <span class="input-group-addon"><i class="bi bi-calendar-event"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="surface">Heure</label>
+                            <div class="input-group">
+                                <input type="time" class="form-control" id="surface" name="reservation[heure]" placeholder="Donnez une heure" required>
+                                <span class="input-group-addon"><i class="bi bi-clock"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="surface">Nombre des heures de ménage</label>
+                                <div id="hour-selector" class="hour-selector">
+                                    <button type="button" onclick="changeHours(-1)" class="cursur">-</button>
+                                    <input type="text" id="hourValue" name="reservation[nbrHeure]" value="1h30" readonly>
+                                    <button type="button" onclick="changeHours(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="completAdresse">Pour le logement</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.logement) }}
+                                    <span class="input-group-addon"><i class="bi bi-chevron-down"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="completAdresse">Ajouter une note (Optionnel)</label>
+                                {{ form_widget(form.description) }}
+                            </div>
+                        </div>
+                </div><br>
+                <div class="form-group col align-self-center" style="text-align: center;">
+                    <button  type="submit" class="btn btn-secondary post">Poster</button>
+                </div>
+                {{ form_row(form._token) }}
+            </form><br>
+      </div>
+    </div>
+  </div>
+  {% block scripteditEventModalIdentity %}
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+</script>
+<script>
+function changeHours(change) {
+    var currentValue = document.getElementById('hourValue').value;
+    var match = currentValue.match(/^(\d+)h(\d+)$/);
+    var hours = parseInt(match[1], 10);
+    var minutes = parseInt(match[2], 10);
+    
+    // Convertissez tout en minutes pour le calcul
+    var totalMinutes = hours * 60 + minutes + (change * 30); // changez par pas de 30 minutes
+
+    // Assurez-vous que la valeur reste dans un intervalle acceptable
+    if (totalMinutes < 90) totalMinutes = 90;  // Limite inférieure 1h30
+    if (totalMinutes > 150) totalMinutes = 150; // Limite supérieure 2h30
+
+    // Convertissez de nouveau en heures et minutes
+    var newHours = Math.floor(totalMinutes / 60);
+    var newMinutes = totalMinutes % 60;
+
+    // Mise à jour de la valeur de l'input
+    document.getElementById('hourValue').value = newHours + 'h' + (newMinutes < 10 ? '0' : '') + newMinutes;
+}
+</script>
+
+                    {% endblock %}
+            {% endif %}
+    </main>
+
+{% endblock %}

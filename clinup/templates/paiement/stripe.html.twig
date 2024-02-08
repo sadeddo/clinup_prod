@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    {% for message in app.flashes('refresh') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+        {% for messages in app.flashes('return') %}
+            <div class="alert alert-success">{{ messages }}</div>
+        {% endfor %}
+    {% if user.statutStripe == '0' %}
+        <h4>Configuration d'un compte de paiement</h4></br>
+        <p>
+            Nous ne conservons aucune information relative à votre compte bancaire. Pour la gestion et le traitement sécurisés de tous les paiements, nous faisons confiance à Stripe, leader mondial dans le domaine des solutions de paiement sécurisées.
+        </p>
+        <p>Une fois que le hôte valide votre prestation, le paiement de votre client(e) sera transféré sur votre compte dans un délai d'environ 2 à 3 jours ouvrables.</p>
+        <a href="{{ path('app_account_link')}}" target="_blank"><button type="submit" class="btn btn-primary">Commencer</button></br></a></br>
+        </div></br> 
+    {% elseif user.statutStripe == '1'  %}
+         <h4>Compte de Paiement Configuré</h4></br>
+        <p>
+    Votre compte de paiement Stripe est maintenant configuré et opérationnel. Vous pouvez gérer vos informations de paiement et consulter vos transactions en toute sécurité grâce à Stripe, notre partenaire de confiance pour les solutions de paiement sécurisées. 
+</p>
+<p>
+    Lorsque vos prestations seront validées par les hôtes, les paiements de vos clients seront traités et transférés sur votre compte Stripe. Ces fonds seront disponibles dans un délai d'environ 2 à 3 jours ouvrables après chaque transaction réussie. 
+</p>
+<p>
+    N'hésitez pas à consulter votre tableau de bord Stripe pour des détails supplémentaires sur vos paiements et pour mettre à jour vos informations si nécessaire.
+</p>
+
+       <a href="https://dashboard.stripe.com/login" target="_blank"><button type="button" class="btn btn-primary">Accéder à Stripe</button><br></a></br>
+        </div></br> 
+    {% endif %}</br>
+
+   </main>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConversationController!{% endblock %}
+
+{% block body %}
+{{ form_start(form) }}
+    {{ form_widget(form.content) }}
+    <button >send</button>
+{{ form_end(form) }}
+  {% for message in messages %}
+            <tr>
+                <td>{{ message.id }}</td>
+                <td>{{ message.content }}</td>
+                
+            </tr>
+        {% else %}
+          <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+{% endblock %}

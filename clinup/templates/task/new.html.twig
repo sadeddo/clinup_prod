@@ -1,0 +1,33 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <h5>Nouvelle tâche</h5>
+ <form method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="nom">Titre</label>
+                <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre è cette tâche" required>
+            </div>
+        </div>
+    </div><br>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="task[description]" placeholder="Décrivez la tâche"></textarea>
+    </div><br>
+
+    <div class="form-group col align-self-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+    {{ form_row(form._token) }}
+</form><br>
+
+</div>
+    </main>
+{% endblock %}

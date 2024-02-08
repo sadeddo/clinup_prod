@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <h5>Modifier</h5><br>
+ <form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nom">Prénom</label>
+                {{ form_widget(form.firstname) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="surface">Nom</label>
+                {{ form_widget(form.lastname) }}
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="text">E-mail</label>
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="completAdresse">Numéro de téléphone</label>
+                {{ form_widget(form.phoneNumber) }}
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="text">Date de naissance</label>
+                {{ form_widget(form.birthday) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="completAdresse">Sexe</label>
+                {{ form_widget(form.gender) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="text">Adresse</label>
+                {{ form_widget(form.adresse) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="text">Adresse</label>
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+    </div><br>
+
+
+    <div class="form-group col align-self-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+    {{ form_row(form._token) }}
+</form><br>
+
+</div>
+    </main>
+{% endblock %}

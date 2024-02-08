@@ -1,0 +1,66 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+<main class="main-container">
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;">
+        <div class="row justify-content-between mb-3">
+            <div class="col-11" style="font-size: 1.2rem;">
+                La liste des tâches pour cette réservation
+            </div>
+        </div>
+
+        <ul class="list-group">
+        {% for task in reservation.logement.tasks %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center" style="margin-top:0%;"> 
+                    <a data-bs-toggle="collapse" href="#collapse{{ task.id }}" aria-expanded="false" aria-controls="collapse{{ task.id }}" class="text-decoration-none">
+                        <i class="bi bi-bookmark"></i> {{ task.titre }}
+                    </a>
+                    <div>
+                     <a href="{{ path('app_task_edit', {'id': task.id})}}"><span><i class="bi bi-pencil-square"></i></span></a>
+                     <a  data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash"></i></a>
+      <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i></h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h4>Vous ne pourrez pas revenir en arrière.</h4>
+                                                <p>Toutes les informations concernant ce logement, y compris les missions et l'historique qui lui sont associés, seront supprimées.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ path('app_task_delete', {'id': task.id})}}"><button type="button" class="btn b3" >Supprimer</button></a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>              
+                     <a href="{{ path('app_task_modifier_statut', {'id': task.id}) }}"><span>
+                        {{ task.statut ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
+                    </span></a>
+                    </div>
+                </div>
+                <div class="collapse mt-2" id="collapse{{ task.id }}">
+                    <div class="card card-body">
+                        {{ task.description }}
+                        <div class="d-flex flex-wrap">
+                        {% for imgTask in task.ImgTasks %}
+                        <div class="p-2">
+                            <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 150px; height: auto;">
+                        </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li><br>
+        {% else %}
+            <li class="list-group-item">Aucune tâche trouvée</li>
+        {% endfor %}
+        </ul>
+    </div>
+</main>
+{% endblock %}

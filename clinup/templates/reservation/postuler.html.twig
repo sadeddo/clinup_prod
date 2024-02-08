@@ -1,0 +1,146 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}détails réservation{% endblock %}
+
+{% block body %}
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            <h5 class="titree">Détails de réservation</h5>
+             <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <strong class="card-title log">Logement: {{ reservation.logement }}</strong>
+                        </div>
+                        <div class="col-auto">
+                            {% if reservation.statut == "en attente" %}
+                                                <div class="col-md-2 alert alert-warning attente" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 139, 60);"></i>  En attente
+                                                </div>
+                                            {% elseif reservation.statut == "confirmer" %}
+                                                <div class="col-md-2 alert alert-warning confirmer" role="alert">
+                                                   <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(7, 84, 201);"></i>  Confirmée
+                                                </div>
+                                            {% elseif reservation.statut == "Annuler" %}
+                                                <div class="col-md-2 alert alert-warning annuler" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Annulée
+                                                </div>
+                                            {% elseif reservation.statut == "payer" %}
+                                                <div class="col-md-2 alert alert-warning payer" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(60, 196, 39);"></i>  Payée
+                                                </div>
+                                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Date & Heure</h6>
+                                    <h6 class="res-d2">{{ reservation.date ? reservation.date|date('j M. Y') : '' }} | {{ reservation.heure ? reservation.heure|date('H:i') : '' }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Nombre d'heures</h6>
+                                    <h6 class="res-d2">{{ reservation.nbrHeure }}min</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Description</h6>
+                                    <h6 class="res-d2">{{ reservation.description }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+                <h5 class="titree">Agents intéressés</h5>
+            {% for prestataire in reservation.postulers %}
+             <div class="card">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="d-flex  marg">
+                                                <img src="{{ app.request.basepath }}/img/{{ prestataire.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                <div>
+                                                <h6 class="card-title mb-0 nom">{{ prestataire.prestataire.firstname }} {{ prestataire.prestataire.lastname }}   <span class="">
+                                                    <i class="bi bi-star-fill start"></i> 4.9
+                                                    </span></h6>
+                                            
+                                                <div class="card-subtitle dateC">
+                                                    <span class="text-muted">14 jan. 2024 | 14:28</span>
+                                                
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text mt-2 comment">{{ prestataire.comment }}</p>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <a href="{{ path("app_consulter_profileP",{"id":prestataire.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary">Voir profil</a>
+                                                <a href="{{ path("checkout",{"idPresta":prestataire.prestataire.id,"idDemande":reservation.id})}}" type="button" class="btn btn-secondary">Réserver</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div><br>
+                     </div>
+                </div>
+                {% else %}
+                <div class="emptyReserv">
+                    <img src="/assets/img/reserEmp.png"><br>
+                    <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
+                    <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
+                </div>
+                {% endfor %}
+               
+        <h5 class="titree">Tâches</h5>
+             <div class="card">
+                <div class="card-body">
+                <div class="accordion" id="accordionExample">
+                    <div class="row">
+                        {% for task in reservation.logement.tasks %}
+                            <div class="col-md-6">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
+                                        {{ task.titre}}
+                                    </button>
+                                    </h2>
+                                    <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        {{ task.description}}
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="emptyReserv">
+                                <img src="/assets/img/reserEmp.png"><br>
+                                <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
+                                <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+                </div>
+        </div>
+    </main>
+{% endblock %}

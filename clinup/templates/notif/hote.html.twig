@@ -1,0 +1,23 @@
+{% extends 'base1.html.twig' %}
+
+{% block body %}
+  <!-- Main -->
+  <main class="main-container">
+    <div class="notifications">
+      <h4>Notifications:</h4>
+      {% if notifications|length > 0 %}
+        {% for notification in notifications %}
+          <div class="notification">
+            <a href="{{ notification.targetUrl }}">
+              <h6>{{ notification.content }}</h6>
+              <time> {{ notification.createdAt|date('Y-m-d H:i') }} </time>
+            </a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Vous n'avez aucune notification pour le moment.</p>
+      {% endif %}
+    </div>
+  </main>
+  <!-- End Main -->
+{% endblock %}

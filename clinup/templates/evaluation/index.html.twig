@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+            <div class="main-cards">
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Evaluation:</p>
+                    </div>
+                    <span class="text-primary font-weight-bold">{{ evolution | number_format(1, '.', '') }} ★</span>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Ton palier:</p>
+                    <p class="text-primary"><i data-toggle="palier" title="Bronze :Moins de 30 missions, jusqu'à 3 étoiles. |
+                    Argent :30-70 missions, 3,5 à 4,5 étoiles. |
+                    Or :Plus de 70 missions, 5 étoiles." class="bi bi-exclamation-circle update"></i></p>
+                    </div>
+                    <span class="text-primary font-weight-bold">{{ palier  }}</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Ton tarif:</p>
+                    <p class="text-primary"><i data-toggle="tarif" title="Bronze :35€/h | Argent :45€/h | Or :60€/h" class="bi bi-exclamation-circle update"></i></p>
+                    </div>
+                    <span class="text-primary font-weight-bold">{{ tarif  }} h/€</span>
+                </div>
+            </div>
+            <h4>Avis sur mon travail</h4>
+            {% for comment in comments %}
+                <div class="comment-box">
+                    <div ><img class="avatar" src="{{app.request.basepath}}/img/{{ comment.getClient().picture }}" alt="Image ronde" ></div>
+                    <div class="content">
+                        <div class="username d-flex">{{ comment.getClient().getFirstname() }}</div><div class="date">{{ comment.getCreatedAt().format('d-m-Y H:i') }}</div>
+                        <div class="evaluation">
+                            {% for i in 1..comment.getEvaluation() %}
+                                ★
+                            {% endfor %}
+                        </div>
+                        <div class="comment-text">{{ comment.getComment() }}</div>
+                        {% if comment.getReponse() != null %}
+                            <div class="response">
+                                <strong>Ta réponse:</strong> {{ comment.getReponse() }}
+                                <div class="date">{{ comment.getDateRep().format('d-m-Y') }}</div>
+                            </div>
+                        {% else %}
+                            <a href="{{ path('app_rep',{'id':comment.getId()}) }}"><button type="submit"  class="btn btn-primary">{{ button_label|default('Répondre') }}</button></a>
+                          
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+ 
+    
+<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="palier"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+var tooltipTrigger = [].slice.call(document.querySelectorAll('[data-toggle="tarif"]'))
+var tooltipList = tooltipTrigger.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+</script>
+{# modal pour domicile #}
+       {% if cible == "rep" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                             {{ form_widget(form.reponse) }}  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                         {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalDomicile %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+  <!-- End Main -->
+</div>
+    </main>
+{% endblock %}

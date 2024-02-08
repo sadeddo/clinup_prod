@@ -1,0 +1,86 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+<main class="main-container">
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+        <h5 style="color:#FF385C;">Problèmes signalés par les prestataires</h5>
+        <div class="logements">
+            {% for logement in logements %}
+                <div class="logement">
+                    <p>Logement {{ logement.nom }}</p>
+                    <div class="problemes">
+                        <!-- Onglets pour chaque logement -->
+                        <ul class="nav nav-tabs" id="myTab-{{ logement.id }}" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="statut1-tab-{{ logement.id }}" data-bs-toggle="tab" data-bs-target="#statut1-{{ logement.id }}" type="button" role="tab" aria-controls="statut1" aria-selected="true">Problèmes Résolus</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="statut0-tab-{{ logement.id }}" data-bs-toggle="tab" data-bs-target="#statut0-{{ logement.id }}" type="button" role="tab" aria-controls="statut0" aria-selected="false">Problèmes non-Résolus</button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenu des onglets -->
+                        <div class="tab-content" id="myTabContent-{{ logement.id }}">
+                            <div class="tab-pane fade show active" id="statut1-{{ logement.id }}" role="tabpanel" aria-labelledby="statut1-tab">
+                                <ul>
+                                   {% set probleme_statut1 = logement.problemes|filter(probleme => probleme.statut == '1') %}
+                                    {% if probleme_statut1|length > 0 %}
+                                        <ul>
+                                            {% for probleme in probleme_statut1 %}
+                                                <li>
+                                                   <div class="row justify-content-between">
+                                                    <div class="col-7" style="font-size: 1.4rem;">
+                                                    {{ probleme.titre }}
+                                                    </div>
+                                                    <div class="col-1" style="font-size: 1.3rem;">
+                                                    <a href="{{ path('app_probleme_modifier_statut', {'id': probleme.id}) }}"><span>
+                                                        {{ probleme.statut ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
+                                                    </span></a>
+                                                    </div>
+                                                </div> {{ probleme.description }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}<br>
+                                        <p>Vous n'avez actuellement aucun problème résolu</p><br>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="statut0-{{ logement.id }}" role="tabpanel" aria-labelledby="statut0-tab">
+                                <ul>
+                                   {% set probleme_statut1 = logement.problemes|filter(probleme => probleme.statut == '0') %}
+                                    {% if probleme_statut1|length > 0 %}
+                                        <ul>
+                                            {% for probleme in probleme_statut1 %}
+                                                <li>
+                                              <div class="row justify-content-between">
+                                                    <div class="col-7" style="font-size: 1.4rem;">
+                                                    {{ probleme.titre }}
+                                                    </div>
+                                                    <div class="col-1" style="font-size: 1.3rem;">
+                                                    <a href="{{ path('app_probleme_modifier_statut', {'id': probleme.id}) }}"><span>
+                                                        {{ probleme.statut ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
+                                                    </span></a>
+                                                    </div>
+                                                </div>
+                                                     {{ probleme.description }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}<br>
+                                        <p>Vous n'avez actuellement aucun problème non-résolu.</p><br>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>Vous n'avez aucun logement enregistré.</p>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

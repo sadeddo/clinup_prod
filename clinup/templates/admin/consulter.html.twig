@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Material Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/admin.css">
+  </head>
+  <body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            <span class="material-icons-outlined">
+                <img src="/assets/img/logo-clinup.png" alt="easyloc" width="129px">
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!-- ms-auto positionne les éléments à droite -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/chemin/de/deconnexion">Déconnexion</a> <!-- Lien de déconnexion -->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+<h4 style="color: #dc3545;">Profil</h4>
+<div class="row">
+    <div class="col-md-11">
+        <div class="form-group">
+            <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ prestataire.picture }}" alt="Image ronde" style="width: 205px; margin-top:2%;">
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="form-group">
+            <a href="{{ path('app_admin_valider',{'id': prestataire.id})}}">
+                      <span style="font-size: 1.8rem;">
+                        {{ prestataire.isVerified ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
+                    </span></a>
+        </div>
+    </div>
+</div><br>
+    <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" class="form-control" value="{{ prestataire.firstname }}" readonly>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" class="form-control" value="{{ prestataire.lastname }}" readonly>
+        </div>
+    </div>
+</div><br>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" class="form-control" value="{{ prestataire.email }}" readonly>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="phoneNumber">Numéro de téléphone</label>
+            <input type="text" id="phoneNumber" class="form-control" value="{{ prestataire.phoneNumber }}" readonly>
+        </div>
+    </div>
+</div><br>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="birthday">Date de naissance</label>
+            <input type="text" id="birthday" class="form-control" value="{{ prestataire.birthday|date('Y-m-d') }}" readonly>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="gender">Sexe</label>
+            <input type="text" id="gender" class="form-control" value="{{ prestataire.gender }}" readonly>
+        </div>
+    </div>
+</div><br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="adresse">Adresse</label>
+            <input type="text" id="adresse" class="form-control" value="{{ prestataire.adresse }}" readonly>
+        </div>
+    </div>
+</div><br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" class="form-control" readonly>{{ prestataire.description }}</textarea>
+        </div>
+    </div>
+</div><br>
+<h4 style="color: #dc3545;">Expériences</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Poste</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for experience in prestataire.experiences %}
+        <tr>
+            <td>{{ experience.experience }}</td>
+            <td>{{ experience.dtStart|date('Y-m-d') }}</td>
+            <td>{{ experience.dtEnd|date('Y-m-d') }}</td>
+            <td>{{ experience.description }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">Aucune expérience enregistrée.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table></br>
+<h4 style="color: #dc3545;">Justificatifs</h4>
+<ul class="list-group">
+    {% for justif in prestataire.justifs %}
+        <div class="justif">
+        {% if justif.type == 'identity' %}
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+                Voir la pièce d'identité
+            </a></li>
+        {% elseif justif.type == 'vitale' %}
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+                Voir la carte vitale
+            </a></li>
+        {% elseif justif.type == 'domicile' %}
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+                Voir le justificatif de domicile
+            </a></li>
+        {% endif %}
+            
+        </div>
+    {% else %}
+        <p>Aucun justificatif disponible.</p>
+    {% endfor %}
+</ul></br>
+<h4 style="color: #dc3545;">Configuration Stripe</h4>
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    {{ prestataire.idStripe}}
+    <span class="badge bg-primary rounded-pill">
+        {% if prestataire.statutStripe == 1 %}
+            Configuré
+        {% else %}
+            Non configuré
+        {% endif %}
+
+    </span>
+  </li>
+</ul></br>
+
+
+</div>
+  </body>
+</html>

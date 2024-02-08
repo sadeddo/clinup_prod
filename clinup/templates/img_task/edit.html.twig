@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ImgTask{% endblock %}
+
+{% block body %}
+    <h1>Edit ImgTask</h1>
+
+    {{ include('img_task/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_img_task_index') }}">back to list</a>
+
+    {{ include('img_task/_delete_form.html.twig') }}
+{% endblock %}

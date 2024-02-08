@@ -1,0 +1,372 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container d-flex" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+        <style>
+        .container{
+            width:100% !important;
+            margin:0%;
+            padding:0%;
+            max-width: 100%;
+        }
+        .users{
+            width:70%;
+        }
+        .space{
+            width:10%;
+        }
+        .details{
+            width:30%;
+            border:1px solid rgba(0, 0, 0, 0.16);
+            border-radius: 6px;
+            padding-left: 1%;
+            padding-right: 1%;
+            padding-top: 1%;
+            padding-bottom: 1%;
+        }
+        .conversations{
+            width:30%;
+            min-height: 100vh;
+            border:1px solid rgba(0, 0, 0, 0.16);
+        }
+        .detail{
+            margin-left:7%;
+        }
+        .search{
+            width: 60%;
+        }
+        .message{
+            width: 94%;
+        }
+        .Search{
+            width: 89%;
+            margin-left: 18%;
+        }
+        .cards{
+            margin-top:4%;
+        }
+        .card{
+            width: 20rem;
+            margin-left:6%;
+            margin-bottom:7%;
+            display:contents;
+            }
+        .collapse{
+            margin-left:75%;
+        }
+        .card-title {
+            display: flex;
+            justify-content: space-between; /* Pour espacer les deux éléments autant que possible */
+        }
+
+        .card-title h4.text-end {
+            margin-left: auto; /* Déplace la deuxième h4 à la fin de la ligne */
+        }
+        .search-box {
+  background: rgba(38, 32, 32, 0.11);
+  padding: 10px 13px;
+}
+.search-box .input-wrapper {
+  background: #fff;
+  border-radius: 40px;
+}
+.search-box .input-wrapper i {
+  color: grey;
+  margin-left: 7px;
+  vertical-align: middle;
+}
+input {
+  border: none;
+  border-radius: 30px;
+  width: 80%;
+  margin-left: 6%;
+}
+input::placeholder {
+  color: #e3e3e3;
+  font-weight: 300;
+  margin-left: 20px;
+}
+input:focus {
+  outline: none;
+}
+.icon-button {
+    background: none; /* Supprime l'arrière-plan du bouton */
+    border: none; /* Supprime la bordure du bouton */
+    padding: 0; /* Supprime le rembourrage du bouton */
+    cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
+}
+.friend-drawer {
+  padding: 10px 15px;
+  display: flex;
+  vertical-align: baseline;
+  background: #fff;
+  transition: 0.3s ease;
+}
+.friend-drawer--grey {
+  background: #eee;
+}
+.friend-drawer .text {
+  margin-left: 12px;
+  width: 70%;
+}
+.friend-drawer .text h6 {
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+.friend-drawer .text p {
+  margin: 0;
+}
+.friend-drawer .time {
+  color: grey;
+}
+.friend-drawer--onhover:hover {
+  background: #74b9ff;
+  cursor: pointer;
+}
+.friend-drawer--onhover:hover p,
+.friend-drawer--onhover:hover h6,
+.friend-drawer--onhover:hover .time {
+  color: #fff !important;
+}
+
+hr {
+  margin: 5px auto;
+  width: 60%;
+}
+
+.chat-bubble {
+  padding: 10px 14px;
+  background: #eee;
+  margin: 10px 30px;
+  border-radius: 9px;
+  position: relative;
+  animation: fadeIn 1s ease-in;
+}
+.chat-bubble:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-bottom: 0;
+  margin-top: -10px;
+}
+.chat-bubble--left:after {
+  left: 0;
+  border-right-color: #eee;
+  border-left: 0;
+  margin-left: -20px;
+}
+.chat-bubble--right:after {
+  right: 0;
+  border-left-color: #74b9ff;
+  border-right: 0;
+  margin-right: -20px;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.profile-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 40px;
+}
+
+.offset-md-9 .chat-bubble {
+  background: #74b9ff;
+  color: #fff;
+}
+
+.chat-box-tray {
+  background: #eee;
+  display: flex;
+  align-items: baseline;
+  padding: 10px 15px;
+  align-items: center;
+  margin-top: 19px;
+  bottom: 0;
+}
+.chat-box-tray input {
+  margin: 0 10px;
+  padding: 6px 2px;
+}
+.chat-box-tray i {
+  color: grey;
+  font-size: 30px;
+  vertical-align: middle;
+}
+.chat-box-tray i:last-of-type {
+  margin-left: 25px;
+}
+.conv {
+    text-align: center; /* Centre le texte horizontalement */
+    margin-left: 31%;
+    margin-top:-12%;
+}
+.center{
+    font-size: 21vh;
+color: rgb(3, 23, 102);
+}
+a {
+    text-decoration: none; /* Supprime le soulignement des liens */
+    /* Ajoutez d'autres styles personnalisés pour les liens si nécessaire */
+}
+.nom{
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centre verticalement */
+}
+.noborder {
+    border: none; /* Supprime la bordure */
+    background: none; /* Supprime le fond */
+    padding: 0; /* Supprime le rembourrage */
+    cursor: pointer; /* Change le curseur pour montrer que le bouton est cliquable */
+}
+.bi{
+    margin-left: 0% !important;
+}
+.navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 0 !important;
+    }
+.container-fluid{
+    margin-left: 3%;
+margin-right: 3%;
+}
+.bi{
+    color:#FF385C;
+}
+h6{
+  color:black;
+}
+.b2{
+    background-color: #FF385C;
+    border-color: #FF385C;
+    font-size: 19px;
+}
+        </style>
+
+            <div class="conversations">
+              {% if conversations|length > 0 %}
+                {% set conversations = conversations|sort((a, b) => b.CreatedAt <=> a.CreatedAt) %}
+
+{% for conversation in conversations %}
+    <a  href="{{ path('app_messages_show', {'id': conversation.id,'idrecipiant': conversation.idRecipiant}) }}">
+       <div class="friend-drawer friend-drawer--onhover">
+                        <img class="profile-image" src="{{app.request.basepath}}/img/{{conversation.picture}}" alt="">
+                        <div class="text">
+                            <h6>{{ conversation.nom }}</h6>
+                            {% if conversation.type == 'image' %}
+                                <p class="text-muted"><i class="bi bi-image-fill"></i> Photo</p>
+                            {% else %}
+                                <p class="text-muted">{{ conversation.lastMessage }}</p>
+                            {% endif %}
+                        </div>
+                        <span class="time text-muted small">{{ conversation.CreatedAt|date('H:i') }}</span>
+                    </div>
+    </a>
+    <hr>
+{% endfor %}
+{% else %}
+    <p>Vous n'avez actuellement aucune conversation.</p>
+{% endif %}
+
+            </div>
+            <div class="users">
+                <div class="settings-tray">
+                    <div class="friend-drawer no-gutters friend-drawer--grey">
+                        <img class="profile-image" src="{{app.request.basepath}}/img/{{convUser.picture}}" alt="">
+                        <div class="text nom">
+                            <h6>{{ convUser.firstname }} {{ convUser.lastname }}</h6>
+                        </div>
+		            </div>
+		        </div>
+                <div class="chat-panel">
+                {% for message in messages %}
+                        {% if message.sender.id != idUser %}
+                            <div class="row no-gutters">
+                                <div class="col-md-3">
+                                    <div class="chat-bubble chat-bubble--left">
+                                    {% if message.type == 'image' %}
+                                        <img class="" src="{{app.request.basepath}}/message/{{message.content}}" alt="" width="70" height="70">
+                                    {% else %}
+                                        {{message.content}}
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                           
+                           
+                        {% else %}
+                            <div class="row no-gutters">
+                                <div class="col-md-3 offset-md-9">
+                                    <div class="chat-bubble chat-bubble--right">
+                                        {% if message.type == 'image' %}
+                                        <img class="" src="{{app.request.basepath}}/message/{{message.content}}" alt="" width="110" height="110">
+                                    {% else %}
+                                        {{message.content}}
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        {% endif %}
+
+                {% endfor %}
+            </div>
+                <div  style="position: fixed;bottom: 0;width: 55%;">
+                    <div class="chat-box-tray">
+                    <button type="submit" class="noborder" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="bi bi-camera"></i>
+                    </button>
+                        <form class="d-flex message" name="message" method="post">
+                        <input class="form-control me-2" type="text"  name="message[content]" placeholder="  Entrez un message" required>
+                        <button class="noborder" type="submit"><i class="bi bi-send"></i></button>
+                        {{ form_row(form._token) }}
+                    </form>
+                    </div>
+			    </div>
+            </div>
+        {# modal picture #}
+              <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Envoyer une image</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <form name="messageFile" method="post" enctype="multipart/form-data">
+                            {{ form_row(form2._token) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form2.content) }}        
+                            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn b2">{{ button_label|default('Envoyer') }}</button>
+                    
+                </div></form>
+            </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+    </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+<div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+<h5>Ajouter une expérience</h5>
+   <form method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="nom">Poste</label>
+                {{ form_widget(form.experience) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nom">Date de début</label>
+                {{ form_widget(form.dtStart) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="surface">Date de fin</label>
+                {{ form_widget(form.dtEnd) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="nom">Description</label>
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="form-group col align-self-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div><br>
+    {{ form_row(form._token) }}
+</form>
+</div>
+    </main>
+{% endblock %}

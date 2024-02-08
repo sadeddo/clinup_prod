@@ -1,0 +1,450 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <!-- Main -->
+    <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;">
+          
+                <div class="container-fluid mt-3">
+		<div class="row">
+        {% for message in app.flashes('error') %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                            {% endfor %}
+			<!-- Colonne des jours de la semaine -->
+			<div class="col-sm-2">
+				<h2></h2><br><br><br>
+				<ul class="list-group">
+					<li class="list-group-item" onclick="location.href='/availabilities/lundis';">Lundis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/mardis';">Mardis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/mercredis';">Mercredis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/jeudis';">Jeudis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/vendredis';">Vendredis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/samedis';">Samedis</li><br>
+					<li class="list-group-item" onclick="location.href='/availabilities/dimanches';">Dimanches</li><br>
+				</ul>
+			</div>
+			<!-- Colonne du calendrier -->
+			<div class="col-sm-10">
+				<h2></h2>
+				<div id="calendar"></div>
+			</div><br>
+		</div>
+	</div>
+        </div>
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                locale: 'fr',
+                headerToolbar:{
+                    start: 'today',
+                    center: 'title',
+                    end: 'prev,next'
+                },
+                navLinks:true,
+                buttonText:{
+                    today: 'Aujourd\'hui',
+                },
+                timeZone: 'Europe/Paris',
+                slotMinTime:"07:00:00",
+                slotMaxTime:"21:00:00",
+                allDaySlot: false,
+                events: {{data|raw}},
+                themeSystem: 'bootstrap',
+                eventClick: function(info) {
+                             window.location.href="/availabilities/edit/" + info.event.id;
+                        }
+                });
+                calendar.render();
+            });
+        </script>
+            {# le offcanvasconsulter liée au bouton consulter pour chaque lundis #}
+		{% if cible == "modalMonday" %}
+            <div class="modal fade" id="modalajouter"   tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les lundis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                             <div class="d-flex">
+                            <div class="group">     
+                            <label style="">Date de début:</label> 
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">      
+                            <label style="">Date de fin:</label>
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalajouter %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalajouter')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un lundis #}
+        {# le offcanvasconsulter liée au bouton consulter pour chaque mardis #}
+		{% if cible == "modalTuesday" %}
+            <div class="modal fade" id="modalMardi"  tabindex="-1" aria-labelledby="staticBackdropLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les mardis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="d-flex">
+                            <div class="group">      
+                            <label>Date de début:</label>
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">      
+                            <label >Date de fin:</label>
+                                {{ form_widget(form.dtEnd) }} 
+
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalMardi %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalMardi')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un mardis #}
+            {# le offcanvasconsulter liée au bouton consulter pour chaque mercredis #}
+		{% if cible == "modalWednesday" %}
+            <div class="modal fade" id="modalMercredi"  tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les Mercredis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="d-flex">
+                            <div class="group">      
+                            <label style="">Date de début:</label>
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">      
+                                <label>Date de fin:</label>
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalMercredi %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalMercredi')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un Mercredi #}
+            {# le offcanvasconsulter liée au bouton consulter pour chaque jeudi #}
+		{% if cible == "modalThursday" %}
+            <div class="modal fade" id="modalJeudi"  tabindex="-1" aria-labelledby="staticBackdropLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les Jeudis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="d-flex">
+                            <div class="group">      
+                            <label style="">Date de début:</label>
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">      
+                            <label style="">Date de fin:</label>
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalJeudi %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalJeudi')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un jeudi #}
+            {# le offcanvasconsulter liée au bouton consulter pour chaque vendredi #}
+		{% if cible == "modalFriday" %}
+            <div class="modal fade" id="modalVendredi"  tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les Vendredis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                          <div class="d-flex">
+                            <div class="group">     
+                            <label >Date de début:</label> 
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">  
+                            <label >Date de fin:</label>    
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalVendredi %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalVendredi')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un Vendredi #}
+            {# le offcanvasconsulter liée au bouton consulter pour chaque Samedi #}
+		{% if cible == "modalSaturday" %}
+            <div class="modal fade" id="modalSamedi"  tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les Samedis</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="d-flex">
+                            <div class="group"> 
+                            <label>Date de début:</label>     
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">   
+                            <label style="">Date de fin:</label>   
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalSamedi %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalSamedi')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# fin modalajouter pour ajouter un samedi #}
+            {# le offcanvasconsulter liée au bouton consulter pour chaque Dimanche #}
+		{% if cible == "modalSunday" %}
+            <div class="modal fade" id="modalDimanche"  tabindex="-1" aria-labelledby="staticBackdropLabel" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="text-start inputwithoutmargintop">
+                                <span class="invoicingsection"><label>Ajouter vos disponibilités pour tous les Dimanches</label></span>
+                            </p>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                             <div class="d-flex">
+                            <div class="group"> 
+                                <label>Date de début:</label>     
+                                {{ form_widget(form.dtStart) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">   
+                            <label >Date de fin:</label>   
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+                {% block scriptmodalDimanche %}
+                <script>
+                        var myOffcanvas = document.getElementById('modalDimanche')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {% if cible == "edit" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"><label>Modifier votre disponibilité</label></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="d-flex">
+                            <div class="group">  
+                            <label>Date de début:</label>    
+                                {{ form_widget(form.dtStart) }} 
+                                
+                            </div>
+                            </div>
+                             <div class="d-flex">
+                            <div class="group">  
+                            <label>Date de fin:</label>    
+                                {{ form_widget(form.dtEnd) }}  
+                                <span class="highlight"></span>
+                                <span class="bar"></span>
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModal %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+    </main>
+  <!-- End Main -->
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+<main class="main-container">
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;">
+        <div class="row justify-content-between mb-3">
+            <div class="col-11" style="font-size: 1.2rem;">
+                La liste des tâches pour cette réservation
+            </div>
+        </div>
+
+        <ul class="list-group">
+        {% for task in tasks %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center" style="margin-top:0%;"> 
+                    <a data-bs-toggle="collapse" href="#collapse{{ task.id }}" aria-expanded="false" aria-controls="collapse{{ task.id }}" class="text-decoration-none">
+                        <i class="bi bi-bookmark"></i> {{ task.titre }}
+                    </a>
+                    <div>
+                     <a href="{{ path('app_img_task_new', {'idReservation': idReservation,'idTask':task.id})}}"><span><i class="bi bi-plus-square"></i></span></a>
+                                      
+                     <span>
+                        {{ task.statut ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
+                    </span>
+                    </div>
+                </div>
+                <div class="collapse mt-2" id="collapse{{ task.id }}">
+                    <div class="card card-body">
+                        {{ task.description }}
+                        <div class="d-flex flex-wrap">
+                        {% for imgTask in task.ImgTasks %}
+                        <div class="p-2">
+                            <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 150px; height: auto;">
+                        </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li><br>
+        {% else %}
+            <li class="list-group-item">Aucune tâche trouvée</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {# modal pour identity #}
+       {% if cible == "ajouter" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Image</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+</main>
+{% endblock %}

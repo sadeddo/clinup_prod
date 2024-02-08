@@ -1,0 +1,50 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <h5>Modifier</h5><br>
+ <form method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nom">Quel jour vous convient le mieux ?</label>
+                {{ form_widget(form.date) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="surface">Quelle heure vous convient le mieux ?</label>
+                {{ form_widget(form.heure) }}
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="text">De combien d'heures de ménage avez-vous besoin ?</label>
+                {{ form_widget(form.nbrHeure) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="completAdresse">Pour quel logement ?</label>
+                {{ form_widget(form.logement) }}
+            </div>
+        </div>
+    </div><br>
+
+
+    <div class="form-group col align-self-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+    {{ form_row(form._token) }}
+</form><br>
+
+</div>
+    </main>
+{% endblock %}

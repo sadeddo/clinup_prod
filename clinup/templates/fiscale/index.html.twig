@@ -1,0 +1,262 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <!-- Main -->
+    <!-- Main -->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold"></p>
+        </div>
+
+        <div class="main-cards">
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Missions aujourd'hui:</p>
+            </div>
+            <span class="text-primary font-weight-bold">{{today}}</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Missions cette semaine:</p>
+            </div>
+            <span class="text-primary font-weight-bold">{{week}}</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Missions ce mois:</p>
+            </div>
+            <span class="text-primary font-weight-bold">{{month}}</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Missions cette année:</p>
+            </div>
+            <span class="text-primary font-weight-bold">4</span>
+          </div>
+
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <p class="chart-title">Somme Mensuelle de Vos Revenus</p>
+            <div id="bar-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">Moyenne Mensuelle de Vos Revenus</p>
+            <div id="area-chart"></div>
+          </div>
+
+        </div>
+        <div class="charts-card">
+            <p class="chart-title">Moyenne des Revenus de Tous les Prestataires</p>
+            <div id="area-chart-all"></div>
+          </div>
+        <table class="table" style="background-color:white;">
+  <thead>
+    <tr>
+      <th scope="col">Récapitulatif Mensuel </th>
+      <th scope="col"></th>
+      <th scope="col"><a href="{{ path('download_csv') }}"><button type="button" class="btn btn-primary" style="margin-left: 57%;background-color:#FF385C;border-color:#FF385C;"><i class="bi bi-file-earmark-pdf" style="color:white;"></i></button></a></th>
+    </tr>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Nombre d'heure</th>
+      <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for month, data in monthlyData %}
+            <tr>
+                <td>{{ month }}</td>
+                <td>{{ data.totalHours }}</td>
+                <td>{{ data.totalEarnings }} €</td>
+            </tr>
+        {% endfor %}
+  </tbody>
+</table>
+      </main>
+      <!-- End Main -->
+      <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var monthlyRevenues = {{ monthlyRevenues|json_encode|raw }};
+                var labels1 = [];
+                var data1 = [];
+                for (var month in monthlyRevenues) {
+                    if (monthlyRevenues.hasOwnProperty(month)) {
+                        labels1.push(month);
+                        data1.push(monthlyRevenues[month]);
+                    }
+                }
+
+            const barChartOptions = {
+                series: [{
+                data: data1, // Utilise les données de revenus
+                }],
+                chart: {
+                type: 'bar',
+                height: 350,
+                toolbar: {
+                    show: false,
+                },
+                },
+                colors: ['#FF385C', '#FF385C', '#FF385C', '#f5b74f', '#f5b74f'],
+                plotOptions: {
+                bar: {
+                    distributed: true,
+                    borderRadius: 4,
+                    horizontal: false,
+                    columnWidth: '40%',
+                },
+                },
+                dataLabels: {
+                enabled: false,
+                },
+                legend: {
+                show: false,
+                },
+                xaxis: {
+                categories: labels1,
+                title: {
+                    text: 'Mois',
+                },
+                },
+                yaxis: {
+                title: {
+                    text: 'Revenus(€)',
+                },
+                },
+            };
+            
+            const barChart = new ApexCharts(
+            document.querySelector('#bar-chart'),
+            barChartOptions
+            );
+            barChart.render();
+
+            var monthlyRevenuesAvg = {{ monthlyRevenuesAvg|json_encode|raw }};
+            var labels2 = [];
+            var data2 = [];
+            for (var month in monthlyRevenuesAvg) {
+                if (monthlyRevenuesAvg.hasOwnProperty(month)) {
+                    labels2.push(month);
+                    data2.push(monthlyRevenuesAvg[month]);
+                }
+            }
+
+            const areaChartOptions = {
+            series: [
+                {
+                name: 'Revenus Moyens par Mois',
+                data: data2,
+                },
+            ],
+            chart: {
+                height: 350,
+                type: 'area',
+                toolbar: {
+                show: false,
+                },
+            },
+            colors: ['#FF385C'], // Choisissez la couleur souhaitée
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth',
+            },
+            labels: labels2,
+            markers: {
+                size: 0,
+            },
+            yaxis: [
+                {
+                title: {
+                    text: 'Revenus(€)',
+                },
+                },
+            ],
+            xaxis: {
+                title: {
+                    text: 'Mois',
+                },
+                },
+            tooltip: {
+                shared: true,
+                intersect: false,
+            },
+            };
+
+            const areaChart = new ApexCharts(
+            document.querySelector('#area-chart'),
+            areaChartOptions
+            );
+            areaChart.render();
+
+            var monthlyRevenuesAll = {{ dataForChartAll|json_encode|raw }};
+            var labels3 = [];
+            var data3 = [];
+            for (var month in monthlyRevenuesAll) {
+                if (monthlyRevenuesAll.hasOwnProperty(month)) {
+                    labels3.push(month);
+                    data3.push(monthlyRevenuesAll[month]);
+                }
+            }
+            const areaChartOptionsAll = {
+            series: [
+                {
+                name: 'Revenus Moyens par Mois',
+                data: data3,
+                },
+            ],
+            chart: {
+                height: 350,
+                type: 'area',
+                toolbar: {
+                show: false,
+                },
+            },
+            colors: ['#FF385C'], // Choisissez la couleur souhaitée
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth',
+            },
+            labels: labels3,
+            markers: {
+                size: 0,
+            },
+            yaxis: [
+                {
+                title: {
+                    text: 'Revenus(€)',
+                },
+                },
+            ],
+            xaxis: {
+                title: {
+                    text: 'Mois',
+                },
+                },
+            tooltip: {
+                shared: true,
+                intersect: false,
+            },
+            };
+
+            const areaChartAll = new ApexCharts(
+            document.querySelector('#area-chart-all'),
+            areaChartOptionsAll
+            );
+            areaChartAll.render();     
+                        
+                        });
+                </script>
+  <!-- End Main -->
+{% endblock %}

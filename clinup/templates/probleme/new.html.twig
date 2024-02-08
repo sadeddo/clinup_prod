@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <h5>Signaler un problème dans ce logement</h5><br>
+ <form method="post">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="nom">Titre</label>
+                {{ form_widget(form.titre) }}
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="nom">Description</label>
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+    </div><br>
+
+    
+ <div class="row">
+        <div class="col-md-10"> 
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+    {{ form_row(form._token) }}
+</form><br>
+
+</div>
+    </main>
+{% endblock %}

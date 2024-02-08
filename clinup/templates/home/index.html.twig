@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Home</title>
+
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/home.css">
+</head>
+<body>
+    <div class="grid-container">
+
+        
+        <!-- Header -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img src="/assets/img/logo-clinup.png" alt="easyloc" width="110px"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                           
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            
+                        </li>
+                        <li class="nav-item dropdown">
+                           
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login')}}" >
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-con">Connexion</button>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-ins">Inscription</button>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Agent d'entretien</a></li>
+                                <li><a class="dropdown-item" href="#">Hôte</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Header -->
+
+        <!-- Main -->
+        {% block body %}
+        <section class="bloc1H">
+            <div class="titles1H">
+                <h1 class="home-hero-section__headline">
+                    Clinup, votre allié incontournable pour simplifier la recherche, rémunérer et coordonner les prestataires d'entretien dédiés à vos locations saisonnières.
+                </h1>
+                <p class="home-hero-section__body">
+                    Faites partie de la communauté d'hôtes et de gestionnaires de propriétés qui ont automatisé la gestion de l'entretien de leurs locations saisonnières avec Clinup.
+                </p>
+                <button type="button" class="btn btn-primary btn-lg">Trouver des agents</button>
+                <button type="button" class="btn btn-secondary btn-lg">S’inscrire</button>
+         
+            </div>
+            
+        </section>
+        <section class="bloc2H">
+            <div class="bloc2Hdiv">
+               <h2 class="title2H"> Automatisez la synchronisation de vos calendriers de réservation avec Clinup. </h2>
+               <h2 class="soustitle2H">Importez vos réservations depuis des plateformes telles qu'Airbnb, Vrbo, Abritel, Booking.com et d'autres encore, les consolidant en un seul endroit. </h2>
+               <h6 class="sous2title2H">Prêt(e) à faciliter la gestion de vos locations temporaires ?</h6>
+               <button type="button" class="btn btn-primary btn-lg">S’inscrire</button>
+            </div>
+        </section>
+        <section class="bloc3H">
+            <div class="bloc3Hdiv1">
+              <h4 class="title3H">  Les outils essentiels  </h4>
+              <h6 class="soustitle3H">  Facilitez la gestion de votre ménage Airbnb, automatisables en quelques clics.  </h6>
+              <div class="bloc3Hdiv">
+                <h4 class="title3Hdiv"> <i class="bi bi-calendar-week"></i> Planification Simplifiée  </h4>
+                <h6 class="soustitle3Hdiv">  Un agent d'entretien prêt dès qu'une nouvelle réservation est ajoutée à votre calendrier, sans nécessiter votre intervention. </h6>
+                <h6 class="soustitle3Hdiv">  Gérez rapidement le ménage de vos logements sur Airbnb et d'autres plateformes avec le site Clinup.  </h6>
+                <button type="button" class="btn btn-primary btn-lg">S’inscrire</button>
+              <div>
+              <div>
+
+              </div>
+            </div>
+        </section></br>
+        <section class="bloc3H">
+            <div class="bloc3Hdiv1">
+              <div class="bloc3Hdiv">
+                <h4 class="title3Hdiv"> <i class="bi bi-wallet2"></i> Paiements Sans Effort  </h4>
+                <h6 class="soustitle3Hdiv">  Dites adieu aux paiements manuels. </h6>
+                <h6 class="soustitle3Hdiv">  Le processus de paiement pour le service de ménage sur Airbnb est simple : en moyenne, seulement 5 minutes suffisent. Avec Clinup, simplifiez vos transactions grâce aux paiements automatiques.  </h6>
+                <button type="button" class="btn btn-primary btn-lg">S’inscrire</button>
+              <div>
+              <div>
+
+              </div>
+            </div>
+        </section></br>
+        <section class="bloc1H">
+            <div class="titles1H">
+                <h1 class="home-hero-section__headline">
+                    Trouvez des agents d'entretien sur la MarketPlace de Clinup. 
+                </h1>
+                <p class="home-hero-section__body">
+                    Recevez des offres de professionnels fiables près de chez vous et gérez toutes vos missions d'entretien au même endroit.
+
+                </p>
+                <button type="button" class="btn btn-primary btn-lg">Trouver des agents</button>
+         
+            </div>
+            
+        </section>
+        {% endblock %}
+        <!-- End Main -->
+        
+    </div>
+
+    <!-- Bootstrap 5 Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- jQuery (optional, only if needed) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <!-- Other Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Custom JavaScript can go here
+    </script>
+<div class="footer-clean">
+        <footer>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-sm-3 col-md-3 item">
+                        <h3>Fonctionnalités</h3>
+                        <ul>
+                            <li><a class="" href="#">Planification automatique</a></li>
+                                <li><a class="" href="#">Automatiser les paiements</a></li>
+                                <li><a class="" href="#">Marketplace</a></li>
+                                <li><a class="" href="#">Liste des tâches</a></li>
+                                <li><a class="" href="#">Signaler un problème</a></li>
+                                <li><a class="" href="#">Gestion de l'inventaire</a></li>
+                                <li><a class="" href="#">Tchat intégré</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 col-md-4 item">
+                        <h3>Ressources</h3>
+                        <ul>
+                            <li><a class="" href="#">Avec qui travaillons-nous?</a></li>
+                                <li><a class="" href="#">Programme de Parrainage pou Hôtes</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a>
+                        <p class="copyright">ClinUp©2023</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

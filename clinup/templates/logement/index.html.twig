@@ -1,0 +1,73 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Logement index{% endblock %}
+
+{% block body %}
+<main class="main-container">
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+        <div class="row justify-content-between">
+            <div class="col-7" style="font-size: 1.5rem;">
+                <i class="bi bi-house-fill"></i> Logements
+            </div>
+            <div class="col-1" style="font-size: 1.5rem;">
+                <a href="{{ path('app_logement_new') }}"><i class="bi bi-plus-square-fill"></i></a>
+            </div>
+        </div><br>
+        {% for logement in logements %}
+        <div class="card mb-3" style="max-width: 1020px;">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    <img src="/assets/img/log.png" class="img-fluid rounded-start" alt="Image du logement">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ logement.nom }}</h5>
+                        <p class="card-text"><i class="fa-solid fa-bed"></i> {{ logement.nbrChambre }} <i class="fa-solid fa-bath"></i> {{ logement.nbrBain }}</p>
+                        <p class="card-text"><small class="text-body-secondary">{{ logement.adresse }},{{ logement.completAdresse }}</small></p>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ path('app_logement_edit', {'id': logement.id}) }}"><i class="bi bi-pencil-square"></i></a>
+                    <a href="{{ path('app_task_index', {'id': logement.id}) }}"><i class="bi bi-list-check"></i></a>
+                    <a href="#" data-logement-id="{{ logement.id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash"></i></a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto" style="padding-top: 20%;">
+                Vous n'avez créé aucun logement.
+            </div>
+        </div><br>
+        {% endfor %}
+        <br>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmation de suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer ce logement ? Cette action est irréversible.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a href="" id="deleteConfirmButton" class="btn btn-danger">Supprimer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(item => {
+        item.addEventListener('click', event => {
+            const logementId = event.currentTarget.getAttribute('data-logement-id');
+            const deleteUrl = `{{ path('app_logement_delete', {'id': 'ID_PLACEHOLDER'}) }}`.replace('ID_PLACEHOLDER', logementId);
+            document.getElementById('deleteConfirmButton').href = deleteUrl;
+        });
+    });
+</script>
+{% endblock %}

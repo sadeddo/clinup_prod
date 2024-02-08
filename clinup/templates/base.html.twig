@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Material Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <i class="bi bi-list"></i>
+        </div>
+        <div class="header-left">
+          
+        </div>
+        
+        <div class="header-right">
+            <a href='{{ path('app_notif')}}' >
+                <i class="bi bi-bell position-relative" style="color:#FF385C;">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                       
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </i>
+            </a>
+            <a href="{{ path('app_chat')}}"><i class="bi bi-chat-right" style="color:#FF385C;"></i></a>
+          
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <a href=""><span class="material-icons-outlined"><img src="/assets/img/logo-clinup.png" alt="easyloc" width=" 129px"></span></a>
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()"><i class="bi bi-x"></i></span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_fiscale')}}" >
+              <i class="bi bi-columns-gap"></i> Dashboard 
+
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_modifier_profile_profileP')}}" >
+              <i class="bi bi-person"></i> Mon profil 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_justificatif')}}" >
+              <i class="bi bi-list-check"></i> Mes justificatifs 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_experience_index')}}" >
+              <i class="bi bi-patch-check"></i> Mes expériences 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_evaluation')}}" >
+              <i class="bi bi-star"></i> Evaluation 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_dispo')}}" >
+              <i class="bi bi-calendar4-range"></i> Mes disponibilités 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_paiement')}}" >
+              <i class="bi bi-credit-card"></i> Paiement
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_reservation_prestataire')}}" >
+              <i class="bi bi-check2-square"></i> Mes réservations
+            </a>
+          </li>
+            
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_logout') }}" >
+              <i class="bi bi-box-arrow-right"></i> Déconnexion
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- End Sidebar -->
+
+      <!-- Main -->
+      {% block body %}
+      {% endblock %}
+      <!-- End Main -->
+      
+    </div>
+
+    <!-- Scripts -->
+    <script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuDynld9yqVTXrVVT8ObLSQ0B9P4ZvW28&libraries=places&callback=initMap">
+</script>
+<script>
+var input2 = document.getElementById('adress');
+var autocomplete2 = new google.maps.places.Autocomplete(input2);
+autocomplete2.addListener('place_changed', function() {
+var place = autocomplete2.getPlace();
+
+});
+
+</script>
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <script src="https://kit.fontawesome.com/7c91415ed6.js" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script src="/assets/js/scripts.js"></script>
+  </body>
+</html>

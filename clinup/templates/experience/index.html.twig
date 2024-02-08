@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Logement{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+ <div class="row justify-content-between">
+    <div class="col-7" style="font-size: 1.2rem;">
+       Mes expériences
+    </div>
+    <div class="col-1" style="font-size: 1.2rem;">
+      <a href="{{ path('app_experience_new') }}"><i class="bi bi-plus-square-fill"></i></a>
+    </div>
+  </div><br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>début</th>
+                <th>fin</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for experience in experiences %}
+            <tr>
+                <td>{{ experience.experience }}</td>
+                <td>{{ experience.dtStart ? experience.dtStart|date('Y-m-d') : '' }}</td>
+                <td>{{ experience.dtEnd ? experience.dtEnd|date('Y-m-d') : '' }}</td>
+                <td>{{ experience.description }}</td>
+                <td>
+                    <a href="{{ path('app_experience_show', {'id': experience.id}) }}"></a>
+                    <a href="{{ path('app_experience_edit', {'id': experience.id}) }}"></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucune expérience trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+    </main>
+{% endblock %}

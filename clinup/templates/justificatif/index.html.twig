@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <!-- Main -->
+    <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;">
+           <div class="container">
+        <div class="titre">Pièces jointes de {{nomUser}}</div>
+        <div class="texte">Pour finaliser votre dossier, vous devez fournir des pièces justificatives.</div>
+    </div><br>
+    <div class="container">
+        <div class="carre">
+            <a href="{{ path('app_justificatif_identity') }}"><p style="padding: 3%; float: left;"><i class="bi bi-paperclip"></i> Pièce d'identité</p></a>
+            <span class="vertical-line"></span>
+            <a href="{{ path('app_download_identity') }}" style="padding: 3%; float: right;display: -webkit-flex;" class="text-end " href=""></span> <p> Parcourir</p></a>
+        </div><br>
+        <div class="carre">
+            <a href="{{ path('app_justificatif_vitale') }}"><p style="padding: 3%; float: left;"><i class="bi bi-paperclip"></i> Carte vitale</p></a>
+            <span class="vertical-line"></span>
+            <a href="{{ path('app_download_vitale') }}"><p style="padding: 3%; float: right;" class="text-end">Parcourir</p></a>
+        </div><br>
+        <div class="carre">
+            <a href="{{ path('app_justificatif_domicile') }}"><p style="padding: 3%; float: left;"><i class="bi bi-paperclip"></i> Justificatif de domicile</p></a>
+            <span class="vertical-line"></span>
+            <a href="{{ path('app_download_domicile') }}"><p style="padding: 3%; float: right;" class="text-end">Parcourir</p></a>
+        </div><br>
+        
+    </div>
+
+</div>
+        </div>
+{# modal pour identity #}
+       {% if cible == "identityCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Pièce d'identité</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour vitale #}
+       {% if cible == "vitaleCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Carte vitale</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalVitale %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour domicile #}
+       {% if cible == "domicileCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Justificatif de domicile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalDomicile %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour autre #}
+    </main>
+  <!-- End Main -->
+{% endblock %}

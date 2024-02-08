@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ImgTask{% endblock %}
+
+{% block body %}
+    <h1>Create new ImgTask</h1>
+
+    {{ include('img_task/_form.html.twig') }}
+
+    <a href="{{ path('app_img_task_index') }}">back to list</a>
+{% endblock %}
