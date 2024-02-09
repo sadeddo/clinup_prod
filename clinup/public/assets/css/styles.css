@@ -1,0 +1,795 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: rgba(251, 253, 255, 1);
+    color: #000000 !important;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .material-icons-outlined {
+    vertical-align: middle;
+    line-height: 1px;
+  }
+  
+  .text-primary {
+    color: black !important;
+    text-decoration: none;
+    color: rgba(56, 56, 56, 0.93);
+    font-size: 1.1em !important;
+  }
+  
+  .text-blue {
+    color: #246dec;
+  }
+  
+  .text-red {
+    color: #cc3c43;
+  }
+  
+  .text-green {
+    color: #367952;
+  }
+  
+  .text-orange {
+    color: #f5b74f;
+  }
+  
+  .font-weight-bold {
+    font-weight: 600;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 260px 1fr 1fr 1fr;
+    grid-template-rows: 0.2fr 3fr;
+    grid-template-areas:
+      "sidebar header header header"
+      "sidebar main main main";
+    height: 100vh;
+  }
+  
+  
+  /* ---------- HEADER ---------- */
+  
+  .header {
+    grid-area: header;
+    height: 70px;
+    background-color: #f7fcff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px 0 30px;
+  }
+  
+  .menu-icon {
+    display: none;
+  }
+  .header-right i {
+    font-size: 1.1em; /* Ajustez la taille selon vos besoins */
+    margin: 0 10px; /* Ajoute un espace de 10px à gauche et à droite de chaque icône */
+    color: #FF385C; /* Défini la couleur, peut être omis si déjà défini dans le HTML */
+  }
+  /* ---------- SIDEBAR ---------- */
+  
+  #sidebar {
+    grid-area: sidebar;
+    height: 100%;
+    background-color: white;
+    color: #9799ab;
+    overflow-y: auto;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .submenu {
+    display: none;
+    list-style: none;
+    padding-left: 20px; /* ajuster selon le besoin */
+  }
+  
+  .sidebar-list-item:hover .submenu {
+    display: block;
+  }
+  
+  .submenu-toggle {
+    cursor: pointer;
+  }
+  
+  .sidebar-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 20px 2px 14px;
+ 
+  }
+  
+  .sidebar-title > span {
+    display: none;
+  }
+  
+  .sidebar-brand {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  .sidebar-list {
+    padding: 0;
+    margin-top: 15px;
+    list-style-type: none;
+  }
+  
+  .sidebar-list-item {
+    padding: 20px 20px 7px 35px;
+  }
+  
+  .sidebar-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+  }
+  
+  .sidebar-list-item > a {
+    color: black;
+    font-size: 17px;
+  }
+  
+  .sidebar-responsive {
+    display: inline !important;
+    position: absolute;
+    /*
+      the z-index of the ApexCharts is 11
+      we want the z-index of the sidebar higher so that
+      the charts are not showing over the sidebar 
+      on small screens
+    */
+    z-index: 12 !important;
+  }
+  
+  
+  /* ---------- MAIN ---------- */
+  
+  .main-container {
+    grid-area: main;
+    overflow-y: auto;
+  }
+  
+  .main-title {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .main-title > p {
+    font-size: 20px;
+  }
+  
+ 
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+ 
+  
+  .chart-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  
+  /* ---------- SCROLLBARS ---------- */
+  
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #a5aaad;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #FF385C;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #FF385C;
+  }
+  
+  
+  /* ---------- MEDIA QUERIES ---------- */
+  
+  
+  /* Medium <= 992px */
+  @media screen and (max-width: 992px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.2fr 3fr;
+      grid-template-areas:
+        "header"
+        "main";
+    }
+  
+    #sidebar {
+      display: none;
+    }
+  
+    .menu-icon {
+      display: inline;
+    }
+  
+    .sidebar-title > span {
+      display: inline;
+    }
+  }
+  
+  /* Small <= 768px */
+  @media screen and (max-width: 768px) {
+   
+  
+    .charts {
+      grid-template-columns: 1fr;
+      margin-top: 30px;
+    }
+  }
+  
+  /* Extra Small <= 576px */
+  @media screen and (max-width: 576px) {
+    .header-left {
+      display: none;
+    }
+  }
+  /* form */
+  .group 			  { 
+    position:relative; 
+    margin-bottom:45px; 
+    flex: 1; /* Chaque groupe prendra une part égale de l'espace disponible */
+    margin: 10px; /* Ajouter un peu d'espace autour des groupes */
+  }
+  .d-flex {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne en dessous si l'espace est insuffisant */
+    margin-top: 5%;
+}
+
+/* Media query pour les écrans plus petits */
+@media (max-width: 600px) {
+    .d-flex {
+        flex-direction: column; /* Les éléments s'alignent verticalement sur les petits écrans */
+    }
+
+    .group {
+        flex: 0 0 100%; /* Chaque groupe prendra toute la largeur disponible */
+    }
+}
+  input 				{
+    font-size:18px;
+    border:none;
+    border-bottom:1px solid #757575;
+  }
+  label 				 {
+    color:#FF385C; 
+    font-size:13px;
+    font-weight:normal;
+   
+  }
+  .highlight {
+    position:absolute;
+    height:60%; 
+    width:100px; 
+    top:25%; 
+    left:0;
+    pointer-events:none;
+    opacity:0.5;
+  }
+  .bar:before {
+    left:50%;
+  }
+  .bar:after {
+    right:50%; 
+  }
+  .bar 	{ position:relative; display:block; width:300px; }
+  .bar:before, .bar:after 	{
+    content:'';
+    height:2px; 
+    width:0;
+    bottom:1px; 
+    position:absolute;
+    background:#5264AE; 
+    transition:0.2s ease all; 
+    -moz-transition:0.2s ease all; 
+    -webkit-transition:0.2s ease all;
+  }  
+  /* active state */
+input:focus ~ label, input:valid ~ label 		{
+    top:-20px;
+    font-size:14px;
+    color:#FF385C ;
+  }
+  .btn{
+    background-color:#FF385C !important ;
+    border-color: #FF385C;
+  }
+  /* active state */
+input:focus ~ .highlight {
+    -webkit-animation:inputHighlighter 0.3s ease;
+    -moz-animation:inputHighlighter 0.3s ease;
+    animation:inputHighlighter 0.3s ease;
+  }
+  /* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+    width:50%;
+  }
+  /* ANIMATIONS ================ */
+  @-webkit-keyframes inputHighlighter {
+      from { background:#5264AE; }
+    to 	{ width:0; background:transparent; }
+  }
+  @-moz-keyframes inputHighlighter {
+      from { background:#5264AE; }
+    to 	{ width:0; background:transparent; }
+  }
+  @keyframes inputHighlighter {
+      from { background:#5264AE; }
+    to 	{ width:0; background:transparent; }
+  }
+
+  .update{
+    padding:2%;
+    color: #FF385C;
+  }
+  .exp thead th{
+    border-bottom: 0px solid #dee2e6 !important;
+    border-top: 0px solid #dee2e6 !important; 
+  }
+
+  .exp thead .content{
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+  .choice{
+    position: initial !important;
+    color:black !important;
+  }
+  .check{
+    width: auto !important;
+    margin-right: 9px !important;
+  }
+  .comment-box {
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: start;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.evaluation {
+    color: gold;
+    margin-bottom: 10px;
+}
+
+.badge {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+
+.date {
+    font-size: 12px;
+    color: #888;
+}
+.container {
+    max-width: 1090px;
+    margin: 0 auto;
+}
+
+.titre {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.texte {
+    font-size: 14px;
+}
+.carre {
+    width: 77%;
+    height: 70px;
+    border: 1px solid #000000;
+    border-radius: 8px;
+}
+.vertical-line{
+border-left: 1px solid #000000;
+display: inline-block;
+height: 36px;
+/* margin: 0 20px; */
+margin-top: 2%;
+}
+a {
+color: #FF385C;; /* Utilise la couleur héritée du texte environnant */
+text-decoration: none; /* Supprime le soulignement */
+}
+a:hover {
+    color: pink; /* ou la couleur rose spécifique que vous préférez */
+}
+.fc-button-primary{
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+.fc-today-button{
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle{
+    border-color: #FF385C;
+}
+.notifications {
+    font-family: Arial, sans-serif;
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Style pour chaque notification */
+  .notification {
+    background: white;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  /* Légère élévation lors du survol d'une notification */
+  .notification:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Style pour l'en-tête des notifications */
+  .notifications h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .notifications h6 {
+    color: black;
+  }
+  
+  /* Vous pouvez ajouter des styles spécifiques à des classes ou des id si nécessaire. */
+  /* Par exemple, pour les notifications "importantes", vous pourriez avoir: */
+  .notification.important {
+    border-color: #FF385C;
+    background-color: #fee2e2;
+  }
+  time{
+    font-size: 10px;
+    border-color: #ff385d91;
+  }
+  .badge{
+    padding: 3px 6px;
+font-size: 10px;
+  }
+  .detail {
+    padding-left: 5%;
+    }
+    .bi {
+      color: #FF385C;
+      }
+      .alert-primary {
+        --bs-alert-color: #000;
+        --bs-alert-bg: #ff385c17;
+        --bs-alert-border-color: #ff385c;
+        --bs-alert-link-color: #ff385c;
+    }
+    .initials-circle {
+        background-color: #eeeeee;
+        color: #333;
+        font-size: 14px;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;            /* Hauteur du cercle */
+        border-radius: 50%;       /* Rend le div en forme de cercle */
+        display: flex;            /* Utilise Flexbox pour centrer le contenu */
+        justify-content: center;  /* Centre horizontalement le texte dans le cercle */
+        align-items: center;      /* Centre verticalement le texte dans le cercle */
+        text-align: center;       /* Assure que le texte est centré si plus d'une ligne est nécessaire */
+        overflow: hidden;         /* Empêche le débordement du contenu */
+      }
+      .initials-circle-notif {
+        background-color: #ffffff;
+        color: #333;
+        font-size: 14px;
+        font-weight: bold;
+        width: 40px;
+        height: 40px;            /* Hauteur du cercle */
+        border-radius: 50%;       /* Rend le div en forme de cercle */
+        display: flex;            /* Utilise Flexbox pour centrer le contenu */
+        justify-content: center;  /* Centre horizontalement le texte dans le cercle */
+        align-items: center;      /* Centre verticalement le texte dans le cercle */
+        text-align: center;       /* Assure que le texte est centré si plus d'une ligne est nécessaire */
+        overflow: hidden;    
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .initials-circle-notif .bi {
+        color: #000 !important;
+      }
+      
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Adjust the gap as needed */
+    }
+    .bi-arrow-left{
+        color:#000 !important;
+    }
+    .b{
+        padding-bottom: 0px !important;
+        padding-top: 5px !important;
+    }
+    .res-d{
+        font-size: 0.8rem;
+color: rgba(0, 0, 0, 0.59);
+    }
+    .res-d2{
+        font-size: 0.8rem;
+color: rgb(0, 0, 0);
+    }
+    .log{
+        font-size: 0.9rem !important;
+    }
+    .attente{
+        background-color: white;
+        padding: 4px;
+        font-size: 0.7rem;
+        width: auto;
+        display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+        width: auto; /* ajuste automatiquement la largeur au contenu */
+        border-radius: 16px;
+        padding-left: 19px;
+        padding-right: 19px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: rgb(255, 139, 60);
+        border-color: rgb(255, 139, 60);
+        
+    }
+    .confirmer{
+        background-color: white;
+        padding: 4px;
+        font-size: 0.7rem;
+        width: auto;
+        display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+        width: auto; /* ajuste automatiquement la largeur au contenu */
+        border-radius: 16px;
+        padding-left: 19px;
+        padding-right: 19px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: rgb(7, 84, 201);
+        border-color: rgb(57, 126, 232);
+    }
+    .annuler{
+        background-color: white;
+        padding: 4px;
+        font-size: 0.7rem;
+        width: auto;
+        display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+        width: auto; /* ajuste automatiquement la largeur au contenu */
+        border-radius: 16px;
+        padding-left: 19px;
+        padding-right: 19px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: rgb(255, 28, 63);
+        border-color: rgb(255, 28, 63);
+    }
+    .payer{
+        background-color: white;
+        padding: 4px;
+        font-size: 0.7rem;
+        width: auto;
+        display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+        width: auto; /* ajuste automatiquement la largeur au contenu */
+        border-radius: 16px;
+        padding-left: 19px;
+        padding-right: 19px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: rgb(60, 196, 39);
+        border-color: rgb(60, 196, 39); 
+    }
+    .titree{
+        padding-top: 33px;
+        padding-bottom: 0px;
+    }
+    .btn-primary {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.75);
+     
+        line-height: 15px;
+        border: 2px solid #FF385C !important;
+        border-radius: 40px;
+        margin-bottom: 6px;
+      }
+      
+      .btn1{
+        background-color:white !important;
+      }
+      .btn-secondary{
+        border-radius: 40px;
+        line-height: 15px;
+        font-size: 13px;
+      }
+      .marg{
+        margin-top:0% !important;
+      }
+      .nom{
+        font-size: 0.8rem;
+      }
+      .start{
+        margin-left: 7px;
+        color: #ffaf2b;
+      }
+      .dateC{
+        font-size: 0.8rem;
+        margin-top: 2px;
+      }
+      .comment{
+        font-size: 0.9rem;
+      }
+      .accordionc{
+        margin-bottom: 16px;
+      }
+      .accordion-button:not(.collapsed){
+        background-color:white !important;
+      }
+      .emptyReserv{
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .emptyReserv img{
+        margin: auto;
+        width: 158px;
+      }
+      .poster{
+        width: 223px;
+        margin: auto;
+        padding: 12px;
+        font-size: 0.9rem;
+        font-weight: bold;
+      }
+      .reservation i{
+        background-color: white;
+      }
+      .reservation button{
+        padding: 11px;
+        font-weight: bold;
+      }
+      .auth{
+        background-color: white;
+      }
+      .facilitez{
+        font-size: 28px;
+        font-weight: 650;
+        line-height: 40px;
+        letter-spacing: -0.018em;
+        text-align: center;
+        color: white;
+      }
+      .form-auth{
+        border:1px solid #0000004a;
+        padding: 31px;
+        border-radius: 7px;
+      }
+      .titre1{
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
+      .titre2{
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      .titre3{
+        text-align: left;
+        font-size: 0.9rem;
+      }
+      .col-md-6{
+        margin-bottom: 11px;
+      }
+      .col-md-12{
+        margin-bottom: 11px;
+      }
+      .label{
+        color:rgba(0, 0, 0, 0.88) !important;
+      }
+      .selected {
+        border: 2px solid #FF385C !important; /* Couleur rose */
+    }
+    .modal-reservation{
+        border-radius: 6%;
+        padding: 2%;
+    }
+/* styles.css */
+
+.hour-selector {
+    display: flex;
+    align-items: center;
+}
+
+.hour-selector button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #FF385C;
+    background-color: #ffffff;
+    border-radius: 15px; /* Boutons circulaires */
+    cursor: pointer;
+}
+
+.hour-selector input {
+    width: 60px;
+    text-align: center;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+}
+.modal-reservation label{
+    color:black;
+}
+.input-group {
+    position: relative;
+}
+
+.input-group-addon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    background: none;
+    padding: 0.375rem 0.75rem;
+}
+
+.input-group .form-control {
+    padding-right: 30px; /* Ajustez cette valeur en fonction de la taille de votre icône */
+}
+
+.input-group-addon i {
+    color: #0000007d; /* Ou n'importe quelle autre couleur que vous préférez */
+}
+.post{
+    padding-left: 11%;
+padding-right: 12%;
+font-size: 0.9rem;
+padding-top: 3%;
+padding-bottom: 3%;
+}
