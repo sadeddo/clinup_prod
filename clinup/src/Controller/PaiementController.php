@@ -92,8 +92,8 @@ class PaiementController extends AbstractController
         $stripe = Stripe::setApiKey($this->stripeSecretKey);
         $accountLink = AccountLink::create([
             'account' => $accountId,
-            'refresh_url' => 'http://127.0.0.1:8002/paiement/refresh',
-            'return_url' => 'http://127.0.0.1:8002/paiement/return',
+            'refresh_url' => 'https://clinup.fr/paiement/refresh',
+            'return_url' => 'https://clinup.fr/paiement/return',
             'type' => 'account_onboarding',
         ]);
         return new RedirectResponse($accountLink->url);
