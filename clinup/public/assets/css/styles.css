@@ -558,6 +558,13 @@ font-size: 10px;
         font-size: 0.8rem;
 color: rgba(0, 0, 0, 0.59);
     }
+    .res-dAnn{
+      font-size: 0.8rem;
+color: #FF385C;
+  }
+  .res-contact{
+    font-size: 0.9rem;
+}
     .res-d2{
         font-size: 0.8rem;
 color: rgb(0, 0, 0);
@@ -629,6 +636,7 @@ color: rgb(0, 0, 0);
     .titree{
         padding-top: 33px;
         padding-bottom: 0px;
+        font-weight: 600;
     }
     .btn-primary {
         font-size: 13px;
@@ -642,6 +650,8 @@ color: rgb(0, 0, 0);
       
       .btn1{
         background-color:white !important;
+        color:black !important;
+
       }
       .btn-secondary{
         border-radius: 40px;
@@ -792,4 +802,42 @@ padding-right: 12%;
 font-size: 0.9rem;
 padding-top: 3%;
 padding-bottom: 3%;
+}
+.btn{
+  font-size: 12px;
+}
+.ap{
+  font-size: 1.3rem;
+  color: rgba(0, 0, 0, 0.31);
+}
+.fas{
+  color:rgb(250, 188, 71);
+}
+.logem label{
+  color:black !important;
+}
+.logem input::placeholder{
+  font-size: 13px;
+}
+.number-input {
+  display: flex;
+  align-items: center;
+}
+.number-input button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #f2f2f2;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.number-input input[type="number"] {
+  text-align: center;
+  border: none;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  margin: 0 5px;
 }

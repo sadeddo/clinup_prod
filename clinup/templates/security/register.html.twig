@@ -53,7 +53,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div >
-                                        
                                         <div class="role-option" onclick="selectRole('ROLE_HOTE')" data-role="ROLE_HOTE" style="border:1px solid #0000004a;text-align:center;padding-top: 25px;border-radius: 11px;">
                                             <img src="/assets/img/key.png" width="44" height="44">
                                             <h6 style="color: #000000ab;">Hôte</h6>
@@ -98,22 +97,22 @@
                 </div>
             </div>
         </main>
-          <script>
-    function selectRole(role) {
-        const externalRoleInput = document.getElementById('role');
-        externalRoleInput.value = role;
-        
-        const roleDivs = document.querySelectorAll('.role-option');
-    roleDivs.forEach(function(div) {
-        const divRole = div.getAttribute('data-role');
-        if (divRole === role) {
-            div.classList.add('selected');
-        } else {
-            div.classList.remove('selected');
-        }
-    });
-    }
-</script>
+            <script>
+                function selectRole(role) {
+                    const externalRoleInput = document.getElementById('role');
+                    externalRoleInput.value = role;
+                    
+                    const roleDivs = document.querySelectorAll('.role-option');
+                roleDivs.forEach(function(div) {
+                    const divRole = div.getAttribute('data-role');
+                    if (divRole === role) {
+                        div.classList.add('selected');
+                    } else {
+                        div.classList.remove('selected');
+                    }
+                });
+                }
+            </script>
 
 
   </body>

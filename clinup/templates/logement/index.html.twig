@@ -1,13 +1,13 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}Logement index{% endblock %}
+{% block title %}Logements{% endblock %}
 
 {% block body %}
-<main class="main-container">
-    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
         <div class="row justify-content-between">
-            <div class="col-7" style="font-size: 1.5rem;">
-                <i class="bi bi-house-fill"></i> Logements
+             <div class="col-auto me-auto">
+                <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
             </div>
             <div class="col-1" style="font-size: 1.5rem;">
                 <a href="{{ path('app_logement_new') }}"><i class="bi bi-plus-square-fill"></i></a>
@@ -15,9 +15,11 @@
         </div><br>
         {% for logement in logements %}
         <div class="card mb-3" style="max-width: 1020px;">
-            <div class="row g-0">
+            <div class="row">
                 <div class="col-md-3">
-                    <img src="/assets/img/log.png" class="img-fluid rounded-start" alt="Image du logement">
+                    <div>
+                        <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 41%;padding-top: 13%;"> 
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
@@ -35,9 +37,12 @@
         </div>
         {% else %}
         <div class="row justify-content-md-center">
-            <div class="col-md-auto" style="padding-top: 20%;">
-                Vous n'avez créé aucun logement.
-            </div>
+             <div class="emptyReserv">
+                            <img src="/assets/img/reserEmp.png"><br>
+                            <h5 style="font-weight: bold;">Aucun logement ajoutée</h5><br>
+                            <h6>Il est temps d'ajouter vos logements avec leurs tâches et de commencer à réserver des entretiens</h6><br>
+                            <a href="{{ path('app_logement_new') }}"><button type="button" class="btn btn-secondary poster">Ajouter mes logements</button></a>
+                        </div>
         </div><br>
         {% endfor %}
         <br>

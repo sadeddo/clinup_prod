@@ -6,6 +6,52 @@
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
             <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            {% if reservation.statut == "confirmer" %}
+            <h5 class="titree">Détails d’entretien</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>Résultats</h6>
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% for task in reservation.logement.tasks %}
+                                        <div class="col-md-6">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
+                                                    {{ task.titre}}
+                                                </button>
+                                                </h2>
+                                                <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                {% for imgTask in task.ImgTasks %}
+                                                <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                    <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 150px; height: auto;">
+                                                </div>
+                                                    {% else %}
+                                                    <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                    <span>Résultat non ajoutée<span>
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                            <div class="emptyReserv" style="padding:4%;">
+                                                <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
+                                                <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
+                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement <a href="{{ path('app_task_index',{'id':reservation.logement.id})}}">en cliquant içi</a></h6><br>
+                                            </div>
+                                    {% endfor %}
+                                </div></br>
+                                <h5 style="font-size: 14px;font-weight: 550;">L’agent a confirmé l’entretien de toutes les tâches assignées. Êtes-vous satisfait du résultat ?</h5>
+                                <a data-bs-toggle="modal" data-bs-target="#exampleModalconfirmer" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
+                                <a href="" type="button" class="btn btn1 btn-secondary" style="margin-bottom:1%;">Je ne suis pas satisfait</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
             <h5 class="titree">Détails de réservation</h5>
              <div class="card">
                 <div class="card-body">
@@ -61,86 +107,158 @@
                             </div>
                         </div>
                     </div>
-
-                </div>
-                </div>
-                <h5 class="titree">Agents intéressés</h5>
-            {% for prestataire in reservation.postulers %}
-             <div class="card">
-                <div class="card-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <div class="d-flex  marg">
-                                                <img src="{{ app.request.basepath }}/img/{{ prestataire.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                <div>
-                                                <h6 class="card-title mb-0 nom">{{ prestataire.prestataire.firstname }} {{ prestataire.prestataire.lastname }}   <span class="">
-                                                    <i class="bi bi-star-fill start"></i> 4.9
-                                                    </span></h6>
-                                            
-                                                <div class="card-subtitle dateC">
-                                                    <span class="text-muted">14 jan. 2024 | 14:28</span>
-                                                
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <p class="card-text mt-2 comment">{{ prestataire.comment }}</p>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <a href="{{ path("app_consulter_profileP",{"id":prestataire.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary">Voir profil</a>
-                                                <a href="{{ path("checkout",{"idPresta":prestataire.prestataire.id,"idDemande":reservation.id})}}" type="button" class="btn btn-secondary">Réserver</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                    {% if reservation.statut == "Annuler" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-dAnn"><i class="bi bi-exclamation-circle"></i> Motif d’annulation</h6>
+                                    <h6 class="res-d2">{{ reservation.description }}</h6>
                                 </div>
                             </div>
                         </div>
-                        </div><br>
-                     </div>
+
+                    </div>
+                    <h6 class="res-contact"><i class="bi bi-question-circle" style="color:rgba(15, 163, 75, 1);"></i> Avez-vous une question ou une demande ? Contactez l'équipe de support <a style="color:rgba(15, 163, 75, 1);">en cliquant içi</a> </h6>
+
+                    {% endif %}
                 </div>
-                {% else %}
-                <div class="emptyReserv">
-                    <img src="/assets/img/reserEmp.png"><br>
-                    <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
-                    <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
                 </div>
-                {% endfor %}
-               
-        <h5 class="titree">Tâches</h5>
-             <div class="card">
-                <div class="card-body">
-                <div class="accordion" id="accordionExample">
-                    <div class="row">
-                        {% for task in reservation.logement.tasks %}
-                            <div class="col-md-6">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
-                                        {{ task.titre}}
-                                    </button>
-                                    </h2>
-                                    <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        {{ task.description}}
-                                    </div>
+            {% if reservation.statut == "en attente" %}
+                <h5 class="titree">Agents intéressés</h5>
+                {% for prestataire in reservation.postulers %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="d-flex  marg">
+                                                    <img src="{{ app.request.basepath }}/img/{{ prestataire.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                    <div>
+                                                    <h6 class="card-title mb-0 nom">{{ prestataire.prestataire.firstname }} {{ prestataire.prestataire.lastname }}   <span class="">
+                                                        <i class="bi bi-star-fill start"></i> 4.9
+                                                        </span></h6>
+                                                
+                                                    <div class="card-subtitle dateC">
+                                                        <span class="text-muted">14 jan. 2024 | 14:28</span>
+                                                    
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <p class="card-text mt-2 comment">{{ prestataire.comment }}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="row">
+                                                    <a href="{{ path("app_consulter_profileP",{"id":prestataire.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary">Voir profil</a>
+                                                    <a href="{{ path("checkout",{"idPresta":prestataire.prestataire.id,"idDemande":reservation.id})}}" type="button" class="btn btn-secondary">Réserver</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        {% else %}
-                            <div class="emptyReserv">
-                                <img src="/assets/img/reserEmp.png"><br>
-                                <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
-                                <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
-                            </div>
-                        {% endfor %}
+                            </div><br>
+                        </div>
                     </div>
-                </div>
-                </div>
-                </div>
+                    {% else %}
+                    <div class="card">
+                    <div class="emptyReserv" style="padding:4%;">
+                        <img src="/assets/img/bubbles.png" style="width: 64px; height: 64px;">
+                        <h5 style="font-weight: 600;font-size: 18px;">Aucun agent pour le moment</h5>
+                        <h6 style="font-size: 16px;font-weight: 500;">Gardez l'œil ouvert et revenez plus tard pour trouver les agents interessés</h6><br>
+                    </div>
+                    </div>
+                    {% endfor %}
+                {% elseif reservation.statut == "confirmer" or reservation.statut == "payer" or reservation.statut == "Annuler"%}
+                    <h5 class="titree">Agent choisi</h5>
+                    <div class="card">
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-body" style="padding-bottom: 0%;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="d-flex  marg">
+                                                    <img src="{{ app.request.basepath }}/img/{{ reservation.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                    <div>
+                                                    <h6 class="card-title mb-0 nom">{{ reservation.prestataire.firstname }} {{ reservation.prestataire.lastname }}   <span class="">
+                                                        <i class="bi bi-star-fill start"></i> 4.9
+                                                        </span></h6>
+                                                    <div class="card-subtitle dateC">
+                                                        <span class="text-muted">14 jan. 2024 | 14:28</span>
+                                                    
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-md-4"><a href="{{ path("app_consulter_profileP",{"id":reservation.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary" style="width:100%;">Voir profil</a></div>
+                                                    <div class="col-md-8"><a href="{{ path('app_conversation_id', {'id': reservation.prestataire.id}) }}" type="button" class="btn btn1 btn-primary" style="width:100%;">Envoyer un message</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                    <h5 class="titree">Tâches</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% for task in reservation.logement.tasks %}
+                                        <div class="col-md-6">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
+                                                    {{ task.titre}}
+                                                </button>
+                                                </h2>
+                                                <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    {{ task.description}}
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                            <div class="emptyReserv" style="padding:4%;">
+                                                <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
+                                                <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
+                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement <a href="{{ path('app_task_index',{'id':reservation.logement.id})}}">en cliquant içi</a></h6><br>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         </div>
+        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalconfirmer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">Confirmer l’approbation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir approuver cette demande de nettoyage? Une fois approuvé,le paiement sera envoyé au prestataire et votre réservation sera marquée comme payer.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ path('app_reservation_valider',{'id':reservation.id})}}"><button type="button"class="btn btn-secondary" >Confirmer</button></a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>   
+                                        <!-- Modal annuler -->
+                                        
     </main>
 {% endblock %}

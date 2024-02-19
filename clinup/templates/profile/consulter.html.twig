@@ -1,209 +1,137 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}détails réservation{% endblock %}
 
 {% block body %}
- <main class="main-container">
-        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-        <style>
-        .container{
-            width:100%;
-            margin-top:4%;
-            padding-left:6%;
-            padding-right:6%;
-        }
-        .space{
-            width:10%;
-        }
-        .details{
-            width:30%;
-            border:1px solid rgba(0, 0, 0, 0.16);
-            border-radius: 6px;
-            padding-left: 1%;
-            padding-right: 1%;
-            padding-top: 1%;
-            padding-bottom: 1%;
-        }
-        .detail{
-            margin-left:7%;
-        }
-        .search{
-            width: 60%;
-        }
-        .Search{
-            width: 89%;
-            margin-left: 18%;
-        }
-        .cards{
-            margin-top:4%;
-        }
-        .card{
-            width: 20rem;
-            margin-left:6%;
-            margin-bottom:7%;
-            display:contents;
-            }
-        .collapse{
-            margin-left:75%;
-        }
-        .card-title {
-            display: flex;
-            justify-content: space-between; /* Pour espacer les deux éléments autant que possible */
-        }
-
-        .card-title h4.text-end {
-            margin-left: auto; /* Déplace la deuxième h4 à la fin de la ligne */
-        }
- .stars {
-            cursor: pointer;
-        }
-        .far.fa-star {
-            font-size: 24px;
-            color: gray;
-        }
-        .fas.fa-star {
-            font-size: 24px;
-            color: gold;
-        }
-        label{
-            font-size:1.3rem;
-            position: initial !important;
-        }
-        textarea{
-            width:100%;
-        }
-        </style>
-            <div class="users">
-                <div class="cards d-flex row">
-                    <div class="card" >
-                        <div>
-                            <img src="{{app.request.basepath}}/img/{{presta.picture}}" class="card-img-top rounded-circle" alt="..." style="width: 150px; height: 150px;margin: 0 auto;margin-top:7%;">
-                        </div>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            <h5 class="titree">Profil d’agent : {{ presta.firstname }} {{ presta.lastname }}</h5>
+                <div class="card">
                         <div class="card-body">
-                            <div class="card-title">
-                                <h4>{{ presta.firstname }} {{ presta.lastname }}</h4>
-                                <h5 class="text-end">{{ presta.prix }}€/h</h5>
-                            </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>
-                                    <p class="card-text"><i class="bi bi-star-fill" style="color:rgb(255, 211, 27);"></i> {{ average | number_format(1, '.', '') }}</p>
-                                 
-                                    <p class="card-text"><i class="bi bi-patch-check-fill" style="color:green"></i> Identité vérifiée</p>
+                            <div class="row">
+                                <div class="col-md-auto">
+                                    <img src="{{app.request.basepath}}/img/{{presta.picture}}" class="card-img-top rounded-circle" alt="..." style="width: 100px; height: 100px;margin:auto;">
                                 </div>
-                                <div>
-                                    {% if demande.statut == 'en attente' %}
-                                    <a href="{{ path('checkout', {'idPresta': presta.id,'idDemande': demande.id}) }}" class="btn b2 text-end" >Continuer</a><br><br>
-                                    {% endif %}
-                                    {% if demande.statut == 'confirmer' and demande.prestataire.getId() == presta.id%}
-                                    <a href="{{ path('app_conversation_id', {'id': presta.id}) }}" class="btn b2 text-end" >Contacter</a>
-                                    {% endif %}
+                                <div class="col-md-9">
+                                    <div style="display:flex;"><h5 style="font-weight: 500;">{{ presta.firstname }} {{ presta.lastname }} </h5> <i style="margin-left: 1%;color:rgba(4, 112, 239, 1);"  class="bi bi-patch-check-fill"></i></div>
+                                    <p><i class="bi bi-star-fill" style="color:rgb(255, 211, 27);"></i> {{ average | number_format(1, '.', '') }}</p>
+                                    <p class="res-d">Je travaille dans le domaine du ménage depuis presque 4 ans</p>
+                                </div>
+                                <div class="col-md-auto" style="font-weight: 600;">
+                                    {{ presta.prix | number_format(2, '.', '') }}€/h</br>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div>
-                    <label><i class="bi bi-text-center"></i> Description:</label>
-                    <p style="margin-left:2%;">{{ presta.description }}</p>
-                    <hr >
-                    <label><i class="bi bi-patch-check"></i> Expériences:</label>
-                    {% for experience in presta.experiences %}
-                        <div style="margin-left:2%;">
-                            <strong>{{ experience.experience }}</strong> - <small>{{ experience.dtStart|date('Y-m') }} à {{ experience.dtEnd|date('Y-m') }}</small>
-                            <p>{{ experience.description }}</p>
-                        </div>
-                    {% else %}
-                        <p style="margin-left:2%;">Aucune expérience enregistrée.</p>
-                    {% endfor %}
-
-                    <hr >
-                    
-                    
-                    <div class="">
-                    <div class="row justify-content-between">
-                        <div class="col-7" style="font-size: 1.5rem;">
-                        <i class="bi bi-chat-square-text"></i> Avis et commentaires:
-                        </div>
-                        <div class="col-1" style="font-size: 1.5rem;">
-                        {% if demande.statut == 'payer' and demande.prestataire.getId() == presta.id%}
-                        <a href="{{ path('app_comment_presta_new',{'id':presta.id,'idDemande':demande.id}) }}"  ><i class="bi bi-plus-square-fill"></i></a>
-                        {% endif %}
-                        </div>
-                    </div><br>
-                    
-                    {% for comment in presta.getCommentPrestas() %}
-                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                            <!-- Afficher l'picture ou une image par défaut -->
-                            {% if comment.client.picture %}
-                                <img src="{{app.request.basepath}}/img/{{comment.client.picture}}" alt="picture" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;margin-top: -5%;">
-                            {% else %}
-                                <div style="width: 50px; height: 50px; border-radius: 50%; background-color: grey; display: flex; justify-content: center; align-items: center; margin-right: 10px;">
-                                    <span>{{ comment.client.firstname|first|upper }}</span>
+                            <div class="row" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);">
+                                 <div class="card" style="border-radius:10px;">
+                                    <div class="card-body">
+                                        <h5 style="font-weight:600;font-size:19px;margin-bottom:3%;">Expériences</h5>
+                                        {% for experience in presta.experiences %}
+                                            <div>
+                                                <strong>{{ experience.experience }}</strong> | <small class="res-d">{{ experience.dtStart|date('Y-m') }} à {{ experience.dtEnd|date('Y-m') }}</small>
+                                                <p style="font-size: 0.9rem;">{{ experience.description }}</p>
+                                            </div>
+                                            <hr>
+                                        {% else %}
+                                            <p style="margin-left:2%;">Aucune expérience enregistrée.</p>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            {% endif %}
-                            
-                            <div>
-            <!-- Nom de l'utilisateur -->
-            <strong>{{ comment.client.firstname }} {{ comment.client.lastname }}</strong>
-            <span style="font-size: 0.8em; color: grey;">{{ comment.createdAt|date('Y-m-d') }}</span>
-            
-            <!-- Évaluation en étoiles -->
-            <div>
-                {% for i in 1..5 %}
-                    {% if i <= comment.evaluation %}
-                        <span style="color: gold;">★</span>
-                    {% else %}
-                        <span style="color: grey;">★</span>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            
-            <!-- Le commentaire -->
-            <p>{{ comment.comment }}</p>
-            
-            <!-- Date du commentaire -->
-            
-        </div>
-    </div>
-{% endfor %}
+                            </div>
+                            <div class="row" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);">
+                                 <div class="card" style="border-radius:10px;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                        <div class="col-md-11">
+                                            <h5 style="font-weight:600;font-size:19px;margin-bottom:3%;">Avis et commentaires</h5>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            {% if demande.statut == 'payer' and demande.prestataire.getId() == presta.id %}
+                                                <a href="{{ path('app_comment_presta_new',{'id':presta.id,'idDemande':demande.id}) }}"><i class="bi bi-plus-square-fill"></i></a>
+                                            {% endif %}
+                                        </div>
+                                        </div>
+                                        {% for comment in presta.getCommentPrestas() %}
+                                                <div class="d-flex  marg">
+                                                    {% if comment.client.picture %}
+                                                        <img src="{{ app.request.basepath }}/img/{{ comment.client.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                    {% endif %}
+                                                    <div>
+                                                    <h6 class="card-title mb-0 nom">{{ comment.client.firstname }} {{ comment.client.lastname }}   <span class="">
+                                                        {% for i in 1..5 %}
+                                                            {% if i <= comment.evaluation %}
+                                                                <span style="color: gold;">★</span>
+                                                            {% else %}
+                                                                <span style="color: grey;">★</span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        </span></h6>
+                                                
+                                                    <div class="card-subtitle dateC">
+                                                        <span class="text-muted">{{ comment.createdAt|date('j M. Y') }} | {{ comment.createdAt|date('H:i') }}</span>
+                                                    
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <p class="card-text mt-2 comment" style="margin-left: 5%;">{{ comment.comment }}</p>
+                                                {% if comment.reponse != null %}
+                                                <div class="d-flex  marg" style="margin-left:5%;">
+                                                    {% if comment.prestataire.picture %}
+                                                        <img src="{{ app.request.basepath }}/img/{{ comment.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                    {% endif %}
+                                                    <div>
+                                                    <h6 class="card-title mb-0 nom">Réponse de l'agent</h6>
+                                                    <p class="mt-2 comment" style="margin-left: 5%;">{{ comment.reponse }}</p>
+                                                    </div>
+                                                    </div>
+                                                {% endif %}
 
-                </div>
-            </div>
-     
-        {# modal pour comment #}
+                                        {% else %}
+                                            <p style="margin-left:2%;">Aucun commentaire enregistré.</p>
+                                        {% endfor %}
+                                    </div>
+                                    {# modal pour comment #}
        {% if cible == "comment" %}
               <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content" style="margin: auto;width: 80%;">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editEventModalLabel">Commentaire</h5>
-                            <button  class="close b2" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                               
                             </button>
                         </div>
                         <div class="modal-body">
+                            <div>
+                            <h5 style="font-weight: 600;text-align: center;">Approuvé!</h5>
+                            <h6 style="text-align: center;">Vous avez approuvé l’entretien avec succès.</h6>
+                            <h6 style="text-align: center;">Prenez un instant pour noter l'agent Oumayma</h6>
+                            </div><br>
                             <form name="CommentPrestaType" method="post" enctype="multipart/form-data">
                             {{ form_row(form._token) }}
                             <div class="col-sm-12">
-                            <div class="stars">
-                        <i class="far fa-star" data-value="1"></i>
-                        <i class="far fa-star" data-value="2"></i>
-                        <i class="far fa-star" data-value="3"></i>
-                        <i class="far fa-star" data-value="4"></i>
-                        <i class="far fa-star" data-value="5"></i>
-                    </div></br>
-                    {{ form_widget(form.evaluation, {'attr': {'style': 'display: none;', 'id': 'evaluation'}}) }}
-                                
-                                {{ form_widget(form.comment, {'attr': {'placeholder': 'Votre commentaire ici...', 'class': 'ma-classe-css'}}) }}
-
-                               <!-- Ici le code pour les étoiles -->
-                    
-                           
+                        <div class="row" style="margin:auto;width:90%;">
+                            <div class="col-md-auto stars">
+                                <i class="far fa-star ap" data-value="1"></i>
+                                <i class="far fa-star ap" data-value="2"></i>
+                                <i class="far fa-star ap" data-value="3"></i>
+                                <i class="far fa-star ap" data-value="4"></i>
+                                <i class="far fa-star ap" data-value="5"></i>
+                            </div><br>
+                            <div class="col-md-auto">
+                                <img src="{{ app.request.basepath }}/img/{{ presta.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 27px; height: 27px;">
+                                {{ presta.firstname }} {{ presta.lastname }}
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit"  class="btn b2">{{ button_label|default('Enregistrer') }}</button>
+                    {{ form_widget(form.evaluation, {'attr': {'style': 'display: none;', 'id': 'evaluation'}}) }}
+                                
+                                <label style="color:black;">Écrivez votre évaluation</label>
+                                {{ form_widget(form.comment, {'attr': {'placeholder': 'Décrivez la qualité, le service, Exprimez votre expérience ...', 'class': 'form-control', 'type': 'textarea', 'style': 'font-size:0.9rem;'}}) }}
+                               <!-- Ici le code pour les étoiles -->
+                            </div>
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="submit"  class="btn btn-secondary" style="width: 33%;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Évaluer') }}</button>
                         </div>
                         </form>
                     </div>
@@ -228,6 +156,11 @@
     </script>
                     {% endblock %}
             {% endif %}
-  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </div>
     </main>
 {% endblock %}

@@ -49,7 +49,7 @@ class CommentPrestaController extends AbstractController
             $average = $commentPrestaRepository->getAverageNoteForPrestataire($id);
             $tier = 'Bronze'; 
             $tarif = 35;
-            if ($average >= 4 && $average < 4.5 && 34 >= 30) {
+            if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
                 $tier = 'Argent';
                 $tarif = 45;
             } elseif ($average > 4.5 && $numberOfMissions > 70) {
