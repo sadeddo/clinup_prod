@@ -7,7 +7,7 @@
         <div class="container" style="width:95%;height: auto;">
         <div class="row justify-content-between">
              <div class="col-auto me-auto">
-                <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
+                <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes logements</strong>
             </div>
             <div class="col-1" style="font-size: 1.5rem;">
                 <a href="{{ path('app_logement_new') }}"><i class="bi bi-plus-square-fill"></i></a>
@@ -17,21 +17,29 @@
         <div class="card mb-3" style="max-width: 1020px;">
             <div class="row">
                 <div class="col-md-3">
-                    <div>
-                        <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 41%;padding-top: 13%;"> 
+                    <div class="img-back">
+                        <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 33%;padding-top: 10%;"> 
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <div class="card-body">
-                        <h5 class="card-title">{{ logement.nom }}</h5>
-                        <p class="card-text"><i class="fa-solid fa-bed"></i> {{ logement.nbrChambre }} <i class="fa-solid fa-bath"></i> {{ logement.nbrBain }}</p>
-                        <p class="card-text"><small class="text-body-secondary">{{ logement.adresse }},{{ logement.completAdresse }}</small></p>
+                        <h5 class="card-title" style="font-size: 16px;font-weight: 500;">{{ logement.nom }}</h5>
+                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="fa-regular fa-bath"></i> {{ logement.nbrBain }}</p>
+                        <p class="card-text"><small class="text-body-secondary"><i class="bi bi-geo-alt" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.adresse }},{{ logement.completAdresse }}</small></p>
                     </div>
                 </div>
-                <div class="col-auto">
-                    <a href="{{ path('app_logement_edit', {'id': logement.id}) }}"><i class="bi bi-pencil-square"></i></a>
-                    <a href="{{ path('app_task_index', {'id': logement.id}) }}"><i class="bi bi-list-check"></i></a>
-                    <a href="#" data-logement-id="{{ logement.id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash"></i></a>
+                <div class="col-md-3" style="padding-top: 1%;padding-bottom:1%;">
+                <div class="row">
+                
+                <div class="col-md-auto" style="width:auto;">
+                    <a href="{{ path('app_task_index', {'id': logement.id}) }}"><button type="button" class="btn btn-secondary det">Voir détails</button></a>
+                </div>
+                <div class="col-md-auto" style="width:auto;">
+                <a href="{{ path('app_logement_edit',{'id':logement.id}) }}"><div class="btnM"><i class="bi bi-pencil-square"></i></div></a>
+                </div>
+                </div>
+                    <!--<a href="{{ path('app_logement_edit', {'id': logement.id}) }}"><i class="bi bi-pencil-square"></i></a>
+                    <a href="{{ path('app_task_index', {'id': logement.id}) }}"><i class="bi bi-list-check"></i></a>-->
                 </div>
             </div>
         </div>
@@ -47,7 +55,7 @@
         {% endfor %}
         <br>
     </div>
-    <!-- Modal -->
+    <!-- Modal
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -59,12 +67,11 @@
                     Êtes-vous sûr de vouloir supprimer ce logement ? Cette action est irréversible.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <a href="" id="deleteConfirmButton" class="btn btn-danger">Supprimer</a>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </main>
 <script>
     document.querySelectorAll('[data-bs-toggle="modal"]').forEach(item => {

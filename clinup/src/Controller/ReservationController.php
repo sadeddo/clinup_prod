@@ -291,18 +291,10 @@ class ReservationController extends AbstractController
     #[Route('/prestataire/consulter', name: 'app_reservation_prestataire', methods: ['GET'])]
     public function indexP(Security $security, ReservationRepository $reservationRepository): Response
     {
-        $hote = $security->getUser();
-        $allDemandes = $reservationRepository->findReservationsByHote($hote->getId());
-        $demandesParStatut = [];
-        foreach ($allDemandes as $demande) {
-            $statut = $demande->getStatut(); 
-        if (!isset($demandesParStatut[$statut])) {
-            $demandesParStatut[$statut] = [];
-        }
-        $demandesParStatut[$statut][] = $demande;
-        }
+        $prestataire = $security->getUser();
+        $allDemandes = $reservationRepository->findReservationsByHote($prestataire->getId());
         return $this->render('reservation/reservationP.html.twig', [
-            'demande_services_par_statut' => $demandesParStatut,
+            'reservations' => $allDemandes,
         ]);
     }
     //la liste des personne postuler pour une reservation:

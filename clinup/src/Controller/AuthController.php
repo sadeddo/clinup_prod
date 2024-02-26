@@ -23,7 +23,7 @@ class AuthController extends AbstractController
 {
     
     //connexion
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
@@ -56,7 +56,6 @@ class AuthController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
-    
         if ($form->isSubmitted() && $form->isValid()) {
             $selectedRole = $form->get('role')->getData();
             if (null === $selectedRole) {

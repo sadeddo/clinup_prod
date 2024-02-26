@@ -1,120 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}Réservations{% endblock %}
 
 {% block body %}
- <main class="main-container">
-  
-        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-    <div class="row justify-content-between mb-3">
-            <div class="col-11" style="font-size: 1.2rem;">
-                Réservations
-            </div>
-            
-        </div>
-
-<!-- Nav tabs -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    {% for statut, demandes in demande_services_par_statut %}
-        <li class="nav-item">
-            <a class="nav-link {{ loop.first ? 'active' : '' }}" id="tab-{{ statut }}" data-toggle="tab" href="#content-{{ statut }}" role="tab" aria-controls="content-{{ statut }}" aria-selected="{{ loop.first ? 'true' : 'false' }}">
-                {{ statut }}
-            </a>
-        </li>
-    {% endfor %}
-</ul>
-
-
-<!-- Tab panes -->
-<div class="tab-content">
-    {% for statut, demandes in demande_services_par_statut %}
-        <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" id="content-{{ statut }}" role="tabpanel" aria-labelledby="tab-{{ statut }}">
-            <!-- Contenu pour chaque statut -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Logement</th>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Nombre d'heures</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for demande_service in demandes %}
-                        <tr>
-                            <td>{{ demande_service.logement }}</td>
-                            <td>{{ demande_service.date ? demande_service.date|date('Y-m-d') : '' }}</td>
-                            <td>{{ demande_service.heure ? demande_service.heure|date('H:i') : '' }}</td>
-                            <td>{{ demande_service.nbrHeure }}</td>
-                            <td>
-                                {% if statut == "confirmer" %}
-                                <a href="{{ path('app_task_listeee', {'id': demande_service.id}) }}"><i class="bi bi-list-check"></i></a>
-                                <a href="{{ path('app_probleme_new', {'id': demande_service.id}) }}"><i class="bi bi-exclamation-triangle"></i></a>
-                                <a href="{{ path('app_reservation_annulerP',{'id': demande_service.id})}}"><i class="bi bi-x-square"></i></a>
-                                <!-- Modal -->
-                                        
-                                        {% elseif statut == "en attente" %}
-                                        <a href="{{ path('app_list_postuler',{'id': demande_service.id})}}"><button type="button" class="btn b2">Continuer</button></a>
-                                        <a  data-bs-toggle="modal" data-bs-target="#exampleModalC"><i class="bi bi-trash"></i></a>
-      <!-- Modal -->
-                                        <div class="modal fade" id="exampleModalC" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h4>Vous ne pourrez pas revenir en arrière.</h4>
-                                                <p>Toutes les informations concernant cette réservation, y compris les missions et l'historique qui lui sont associés, seront supprimées.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ path('app_reservation_delete',{ 'id':demande_service.id })}}"><button type="button" class="btn b3" >Supprimer</button></a>
-                                            </div>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+        
+                    <div class="row reservation">
+                        <div class="col-auto me-auto">
+                            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                    {% if reservations|length > 0 %}
+                    {% for reservation in reservations %}
+                       <div class="col-md-6">
+                            <a href="{{ path('app_list_postuler',{'id': reservation.id}) }}"><div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-auto me-auto">
+                                            <strong class="card-title log">{{ reservation.logement }}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            {% if reservation.statut == "en attente" %}
+                                                <div class="col-md-2 alert alert-warning attente" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 139, 60);"></i>  En attente
+                                                </div>
+                                            {% elseif reservation.statut == "confirmer" %}
+                                                <div class="col-md-2 alert alert-warning confirmer" role="alert">
+                                                   <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(7, 84, 201);"></i>  Confirmée
+                                                </div>
+                                            {% elseif reservation.statut == "Annuler" %}
+                                                <div class="col-md-2 alert alert-warning annuler" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Annulée
+                                                </div>
+                                            {% elseif reservation.statut == "payer" %}
+                                                <div class="col-md-2 alert alert-warning payer" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(60, 196, 39);"></i>  Payée
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: auto;">
+                                        <div class="col-md-auto">
+                                            <div class="card ">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Date & Heure</h6>
+                                                    <h6 class="res-d2">{{ reservation.date ? reservation.date|date('j M. Y') : '' }} | {{ reservation.heure ? reservation.heure|date('H:i') : '' }}</h6>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Nbre d'heures</h6>
+                                                    <h6 class="res-d2">{{ reservation.nbrHeure }}min</h6>
+                                                </div>
+                                            </div>
                                         </div>
-                                            
-                                        {% endif %}
-                                
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    
-                </tbody>
-            </table><br>
-            {% else %}
-                        <p class="text-center">Aucune réservation pour le moment.</p>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Agents intéressés</h6>
+                                                    <h6 class="res-d2"></h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></a>
+                        </div>
+                        {% endfor %}
+                        {% else %}                 
+                        <div class="emptyReserv">
+                            <img src="/assets/img/reserEmp.png"><br>
+                            <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
+                            <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
+                            <a href="{{ path('app_reservation_new') }}"><button type="button" class="btn btn-secondary poster">Poster une réservation</button></a>
+                        </div>
+                {% endif %}
+                </div>
         </div>
-    {% endfor %}
-</div>
+        
+    </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('#myTab a');
-    const tabPanes = document.querySelectorAll('.tab-pane');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            // Désactiver tous les onglets et panneaux
-            tabs.forEach(t => t.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('show', 'active'));
-
-            // Activer l'onglet et le panneau correspondant
-            this.classList.add('active');
-            const activePaneId = this.getAttribute('href').substring(1);
-            const activePane = document.getElementById(activePaneId);
-            if (activePane) {
-                activePane.classList.add('show', 'active');
-            }
-        });
-    });
-});
-</script>
-
-    </div>
-   </main>
 {% endblock %}

@@ -4,28 +4,74 @@
 
 {% block body %}
 <main class="main-container">
-    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;">
-        <div class="row justify-content-between mb-3">
-            <div class="col-11" style="font-size: 1.2rem;">
-                La liste des tâches pour le logement {{ logement.nom }}
+        <div class="container" style="width:95%;height: auto;">
+            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
+            <h5 class="titree">Détails du logement</h5>
+            <div class="card mb-3" style="margin-top: 2%;">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="img-back">
+                        <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 33%;padding-top: 10%;"> 
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h5 class="card-title" style="font-size: 16px;font-weight: 500;">{{ logement.nom }}</h5>
+                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="fa-regular fa-bath"></i> {{ logement.nbrBain }}</p>
+                        <p class="card-text"><small class="text-body-secondary"><i class="bi bi-geo-alt" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.adresse }},{{ logement.completAdresse }}</small></p>
+                    </div>
+                </div>
             </div>
-            <div class="col-1 text-right" style="font-size: 1.2rem;">
-                <a href="{{ path('app_task_new', {'id': logement.id}) }}"><i class="bi bi-plus-square-fill"></i></a>
-            </div>
+            <div class="row">
+                        <div class="col-md-12">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Description</h6>
+                                    <h6 class="res-d2">{{ logement.description }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         </div>
-
-        <ul class="list-group">
-        {% for task in tasks %}
-            <li class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center" style="margin-top:0%;"> 
-                    <a data-bs-toggle="collapse" href="#collapse{{ task.id }}" aria-expanded="false" aria-controls="collapse{{ task.id }}" class="text-decoration-none">
-                        <i class="bi bi-bookmark"></i> {{ task.titre }}
-                    </a>
-                    <div>
-                     <a href="{{ path('app_task_edit', {'id': task.id})}}"><span><i class="bi bi-pencil-square"></i></span></a>
-                     <a  data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash"></i></a>
-      <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="row justify-content-between">
+             <div class="col-auto me-auto">
+                <strong class="card-title" style="font-weight: bold;font-size:1.25rem;">Mes logements</strong>
+            </div>
+            <div class="col-1" style="font-size: 1.25rem;text-align: end;">
+                <a href="{{ path('app_task_new',{'id':logement.id}) }}"><i class="bi bi-plus-square-fill"></i></a>
+            </div>
+        </div><br>
+        
+        <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% for task in logement.tasks %}
+                                        <div class="col-md-6">
+                                            <div class="card m-2">
+                                                <div class="card-body b">
+                                                    <div class="row" style="margin-bottom:2%;">
+                                                        <div class="col-md-9" style="margin-top: 2%;">
+                                                            <h6 class="taskTitre">{{ task.titre }}</h6>
+                                                        </div>
+                                                        <div class="col-md-3" style="display:flex;">
+                                                            <a href="{{ path('app_task_edit',{'id':task.id}) }}"><div class="btnM"><i class="bi bi-pencil-square"></i></div></a>
+                                                            <a  data-bs-toggle="modal"  data-bs-target="#exampleModal{{task.id}}"><div class="btnM2"><i class="bi bi-trash"></i></div></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="taskDesc">{{ task.description }}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal{{task.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                             <div class="modal-header">
@@ -33,37 +79,129 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <h4>Vous ne pourrez pas revenir en arrière.</h4>
-                                                <p>Toutes les informations concernant ce logement, y compris les missions et l'historique qui lui sont associés, seront supprimées.</p>
+                                                Êtes-vous sûr de vouloir supprimer cette tâche ? Cette action est irréversible.
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="{{ path('app_task_delete', {'id': task.id})}}"><button type="button" class="btn b3" >Supprimer</button></a>
+                                                <a href="{{ path('app_task_delete',{'id':task.id}) }}"><button type="button" class="btn b3">Supprimer</button></a>
                                             </div>
                                             </div>
                                         </div>
-                                        </div>              
-                     <a href="{{ path('app_task_modifier_statut', {'id': task.id}) }}"><span>
-                        {{ task.statut ? '<i class="bi bi-toggle-on bool"></i>' : '<i class="bi bi-toggle-off bool"></i>' }}
-                    </span></a>
-                    </div>
-                </div>
-                <div class="collapse mt-2" id="collapse{{ task.id }}">
-                    <div class="card card-body">
-                        {{ task.description }}
-                        <div class="d-flex flex-wrap">
-                        {% for imgTask in task.ImgTasks %}
-                        <div class="p-2">
-                            <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 150px; height: auto;">
-                        </div>
-                        {% endfor %}
+                                        </div>   
+                                    <!--end-->
+                                    {% else %}
+                                            <div class="emptyReserv" style="padding:4%;">
+                                                <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
+                                                <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
+                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement</h6><br>
+                                                <a href="{{ path('app_task_new',{'id':logement.id}) }}"><button type="button" class="btn btn-secondary poster">Ajouter une tâche</button></a>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li><br>
-        {% else %}
-            <li class="list-group-item">Aucune tâche trouvée</li>
-        {% endfor %}
-        </ul>
+        
     </div>
 </main>
+{# modal pour modifier tâche#}
+       {% if cible == "task" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="margin: auto;width: 86%;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                               
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            <h5 style="font-weight: 600;text-align: center;">Ajouter une tâche</h5>
+                            <div class="alert alert-primary" role="alert" style="background-color:rgba(231, 247, 238, 1);border:none;">
+                                <img src="/assets/img/lamp.png" style="padding-bottom: 6px;"> Astuse
+                                <h6 style="font-size: 0.9rem;color: rgba(0, 0, 0, 0.65);">Le titre de tâche doit être simple, par exemple : Nettoyage de sol, désinfection d’un balcon etc..</h6>
+                            </div>
+                            </div>
+                            <form  method="post">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
+                                    <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre è cette tâche" required>
+                                </div>
+                            </div><br>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="description" style="color:black;font-size: 15px;">Description</label>
+                                    <textarea class="form-control" id="description" name="task[description]" placeholder="Ajouter les détails de cette tâche ..."></textarea>
+                                </div>
+                            </div>
+                                
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="submit"  class="btn btn-secondary" style="width: 33%;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Ajouter') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    {% endblock %}
+            {% endif %}
+            {#end modal ajouter#}
+
+            {# modal pour modifier#}
+       {% if cible == "taskModifier" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="margin: auto;width: 86%;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                               
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            <h5 style="font-weight: 600;text-align: center;">Modifier une tâche</h5>
+                            </div>
+                            <form  method="post">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
+                                    {{ form_widget(form.titre) }}
+                                </div>
+                            </div><br>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="description" style="color:black;font-size: 15px;">Description</label>
+                                    {{ form_widget(form.description) }}
+                                </div>
+                            </div>
+                                
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="submit"  class="btn btn-secondary" style="width: 33%;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Modifier') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity2 %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    {% endblock %}
+            {% endif %}
+            {#end modal modifier#}
 {% endblock %}

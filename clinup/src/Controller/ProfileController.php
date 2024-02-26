@@ -24,12 +24,7 @@ class ProfileController extends AbstractController
     {
         // Récupérez l'utilisateur actuel
         $user = $security->getUser();
-
-        // Assurez-vous que l'utilisateur est bien un objet User
-        if (!$user instanceof User) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
-        }
-
+        $anPic = $user->getPicture();
         // Créez le formulaire
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
@@ -38,7 +33,7 @@ class ProfileController extends AbstractController
             // Obtenez le fichier image soumis
             $PictureFile = $form->get('picture')->getData();
             // Vérifiez si un nouveau fichier a été soumis
-            if ($PictureFile != NULL) {
+            if ($PictureFile) {
                 $originalFilename = pathinfo($PictureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
                 $newFilename = $user->getFirstname()."_".$user->getLastname().'-'.uniqid().'.'.$PictureFile->guessExtension();
@@ -49,26 +44,26 @@ class ProfileController extends AbstractController
                         $this->getParameter('upload_directory_img'),
                         $newFilename
                     );
+                    if ($anPic) {
+                        $pathToFile = $this->getParameter('upload_directory_img').'/'.$anPic;
+                        if (file_exists($pathToFile)) {
+                            unlink($pathToFile);
+                        }
+                    }
+            
+                    // Mettez à jour l'entité utilisateur avec le nouveau nom de fichier
+                    $user->setPicture($newFilename);
                 } catch (FileException $e) {
                     // Gérez l'exception si le fichier ne peut pas être déplacé
                     $logger->error('Impossible d\'enregistrer l\'image : ' . $e->getMessage());
                 }
         
                 // Supprimez l'ancien fichier s'il existe
-                $pathToFile = $this->getParameter('upload_directory_img').'/'.$user->getPicture();
-                if (file_exists($pathToFile)) {
-                    unlink($pathToFile);
-                }
-        
-                // Mettez à jour l'entité utilisateur avec le nouveau nom de fichier
-                $user->setPicture($newFilename);
             }
         
             // Enregistrez les autres modifications
-            $user->setPicture($user->getPicture());
             $entityManager->persist($user);
-            $entityManager->flush();
-        
+                $entityManager->flush();
             // Ajoutez un message flash et redirigez
             $this->addFlash('success', 'Votre profil a été mis à jour.');
             return $this->redirectToRoute('app_modifier_profile_'.$page);
@@ -83,7 +78,7 @@ class ProfileController extends AbstractController
         #l'ancien mdp
         ->add('oldpassword', PasswordType::class, [
             "attr" => [
-                "value" => "Ancien mot de passe",
+                "placeholder" => "Ancien mot de passe",
                 'class' => 'form-control']
             ])
         #le nouveau mdp with confirmation
@@ -91,7 +86,7 @@ class ProfileController extends AbstractController
             'type' => PasswordType::class,
             'invalid_message' => 'Le mot de passe et sa confirmation doivent être identiques.',
             'options' => ['attr' => [
-            "value" => "Nouveau mot de passe",
+            "placeholder" => "Nouveau mot de passe",
             'class' => 'form-control']],
             'required' => true,
             'first_options'  => ['label' => ' new Password'],

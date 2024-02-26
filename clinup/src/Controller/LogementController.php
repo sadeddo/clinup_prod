@@ -35,7 +35,9 @@ class LogementController extends AbstractController
             $entityManager->persist($logement);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_logement_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre logement est ajouté avec succès!
+            Facilitez vos réservations en spécifiant toutes les tâches pour ce logement');
+            return $this->redirectToRoute('app_task_index', ['id' => $logement->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('logement/new.html.twig', [
@@ -66,15 +68,16 @@ class LogementController extends AbstractController
     public function delete(Request $request, Logement $logement, EntityManagerInterface $entityManager): Response
     {
         // Supprimer d'abord toutes les tâches et images associées au logement
-    foreach ($logement->getTasks() as $task) {
-        // Supprimer toutes les images associées à la tâche
-        foreach ($task->getImgTasks() as $imgTask) {
-            $entityManager->remove($imgTask);
-        }
+            foreach ($logement->getTasks() as $task) {
+                // Supprimer toutes les images associées à la tâche
+                foreach ($task->getImgTasks() as $imgTask) {
+                    $entityManager->remove($imgTask);
+                }
 
-        // Ensuite, supprimer la tâche elle-même
-        $entityManager->remove($task);
-    }
+                // Ensuite, supprimer la tâche elle-même
+                $entityManager->remove($task);
+            }
+
             $entityManager->remove($logement);
             $entityManager->flush();
         return $this->redirectToRoute('app_logement_index', [], Response::HTTP_SEE_OTHER);

@@ -14,7 +14,7 @@ class Postuler
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'postulers')]
+    #[ORM\ManyToOne(inversedBy: 'postulers', cascade: ["remove"])]
     private ?User $prestataire = null;
 
     #[ORM\Column(type: Types::TEXT)]

@@ -1,22 +1,166 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}Réservations{% endblock %}
 
 {% block body %}
- <main class="main-container">
-  
-        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-    <h5>Profil</h5><br>
- <form method="post" enctype="multipart/form-data">
- {% for message in app.flashes('success') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-        <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ user.picture }}" alt="Image ronde" style="width: 205px; margin-top:2%;" onclick="document.getElementById('profile_picture').click();">
- <input type="file" id="profile_picture" name="profile[picture]" style="display: none;" onchange="updateImagePreview(this);">
-<script>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+    <div class="row d-flex">
+        <div class="col-md-2" style="width: revert-layer;">
+            <!-- Liste des liens pour le Scrollspy -->
+            <div id="simple-list-example" class="d-flex flex-column gap-2 simple-list-example-scrollspy text-center">
+                <a class="p-1 rounded" href="#simple-list-item-2"><i class="bi bi-person-circle"></i>  Général</a>
+                <a class="p-1 rounded" href="#simple-list-item-3"><i class="bi bi-shield-lock"></i>  Sécurité</a>
+            </div>
+        </div>
+        <div class="col-md-10" style="width: revert-layer;">
+            <!-- Conteneur avec le contenu à espionner -->
+            <div data-bs-spy="scroll" data-bs-target="#simple-list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+                <h4 id="simple-list-item-2"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h5 style="font-weight:700;">Informations générales</h5></br>
+                            <form method="post" enctype="multipart/form-data">
+                                {% for message in app.flashes('success') %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endfor %}
+                                <div class="row align-items-center d-flex">
+                                    <div class="col-md-auto">
+                                        <div class="form-group" style="text-align: center;margin-bottom:4%;">
+                                            <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ user.picture }}" alt="Image ronde" style="width: 124px;margin-top: 2%;border-radius: 97px;">
+                                            <input type="file" id="profile_picture" name="profile[picture]" style="display: none;" onchange="updateImagePreview(this);">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 align-items-center">
+                                        <a type="button" class="updImg" onclick="document.getElementById('profile_picture').click();"><i class="bi bi-camera"></i> Modifier l'image</a>
+                                    </div>
+                                    <div class="col-md-auto">
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="surface">Nom</label>
+                                            {{ form_widget(form.lastname) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Prénom</label>
+                                            {{ form_widget(form.firstname) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">Date de naissance</label>
+                                            {{ form_widget(form.birthday) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Sexe</label>
+                                            {{ form_widget(form.gender) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">E-mail</label>
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Numéro de téléphone</label>
+                                            {{ form_widget(form.phoneNumber) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="text">Adresse</label>
+                                            {{ form_widget(form.adresse) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="text">Description</label>
+                                            {{ form_widget(form.description) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary proB">Modifier</button>
+                                    </div>
+                                </div><br>
+                                {{ form_row(form._token) }}
+                            </form>
+                        </div>
+                    </div><br>
+                <h4 id="simple-list-item-3"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h5 style="font-weight:700;">Modifier le mot de passe</h5></br>
+                            <form method="post">
+                                {% for message in app.flashes('warning') %}
+                                        <div class="alert alert-warning mt-4">
+                                    {{ message }}</div>
+                                {% endfor %}
+                                {{ form_errors(formpass) }}
+                                {% for message in app.flashes('successp') %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endfor %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Mot de passe</label>
+                                            {{ form_widget(formpass.oldpassword) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">Nouveau mot de passe</label>
+                                            {{ form_widget(formpass.plainpassword.first) }}
+                                        {{ form_errors(formpass.plainpassword.first) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Confirmer le nouveau mot de passe</label>
+                                            {{ form_widget(formpass.plainpassword.second) }}
+                                        {{ form_errors(formpass.plainpassword.second) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary proB">Modifier</button>
+                                    </div>
+                                </div><br>
+                                {{ form_row(formpass._token) }}
+                            </form>
+                        </div>
+                    </div><br><br>
+                
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </main>
+    <script>
     document.getElementById('profile_picture').addEventListener('change', function(event) {
         var reader = new FileReader();
         reader.onload = function() {
@@ -35,131 +179,4 @@
         }
     }
 </script>
-
-            </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nom">Prénom</label>
-                {{ form_widget(form.firstname) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="surface">Nom</label>
-                {{ form_widget(form.lastname) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">E-mail</label>
-                {{ form_widget(form.email) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Numéro de téléphone</label>
-                {{ form_widget(form.phoneNumber) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">Date de naissance</label>
-                {{ form_widget(form.birthday) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Sexe</label>
-                {{ form_widget(form.gender) }}
-            </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="text">Adresse</label>
-                {{ form_widget(form.adresse) }}
-            </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="text">Description</label>
-                {{ form_widget(form.description) }}
-            </div>
-        </div>
-    </div><br>
- <div class="row">
-        <div class="col-md-10"> 
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
-    </div>
-    {{ form_row(form._token) }}
-</form><br>
-<hr>
-<h5>Mot de passe</h5><br>
-{% for message in app.flashes('warning') %}
-		<div class="alert alert-warning mt-4">
-	{{ message }}</div>
-{% endfor %}
- <form method="post">
- {{ form_errors(formpass) }}
- {% for message in app.flashes('successp') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nom">Mot de passe actuel</label>
-                {{ form_widget(formpass.oldpassword) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">Nouveau mot de passe</label>
-                {{ form_widget(formpass.plainpassword.first) }}
-            {{ form_errors(formpass.plainpassword.first) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Confirmation</label>
-                {{ form_widget(formpass.plainpassword.second) }}
-            {{ form_errors(formpass.plainpassword.second) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-10"> 
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
-    </div><br>
-   
-    {{ form_row(formpass._token) }}
-</form><br>
-
-</div>
-    </main>
 {% endblock %}

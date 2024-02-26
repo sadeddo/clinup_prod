@@ -1,68 +1,100 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}Logements{% endblock %}
 
 {% block body %}
- <main class="main-container">
-  
-        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-    <h5>Modifier</h5>
+    <main class="main-container logem">
+    <a onclick="history.back()" style="margin:4%;"><i class="bi bi-arrow-left"></i> Retour</a>
+        <div class="container" style="width: 50%;height: auto;background-color: white;border: 1px solid rgba(0, 0, 0, 0.16);border-radius: 3%;padding: 3%;margin-top:3%;">
+    <strong><h5 style="font-size: 20px;">Modifier un logement</h5></strong></br>
  <form method="post">
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row" style="margin-bottom: 3%;">
+        <div class="col-md-8">
             <div class="form-group">
                 <label for="nom">Nom</label>
                 {{ form_widget(form.nom) }}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
-                <label for="surface">Surface</label>
+                <label for="surface">Surface en m2</label>
                 {{ form_widget(form.surface) }}
             </div>
         </div>
-    </div><br>
-
-    <div class="row">
+    </div>
+<div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="adresse">Adresse</label>
-                                {{ form_widget(form.adresse) }}
+                <label for="nbrChambre">Nombre des Chambres</label>
+                <div id="hour-selector" class="hour-selector">
+                    <button type="button" onclick="changeHours(-1)">-</button>
+                    <input type="number" id="hourValue" name="logement[nbrChambre]" value="{{ form.vars.value.nbrChambre}}" min="1" max="5" step="1" readonly>
+                    <button type="button" onclick="changeHours(1)">+</button>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
+            <div class="form-group">
+                <label for="nbrBain">Nombre des Salles de Bain</label>
+                <div id="hour-selector" class="hour-selector">
+                    <button type="button" onclick="changeHours1(-1)">-</button>
+                    <input type="number" id="hourValueB" name="logement[nbrBain]" value="{{ form.vars.value.nbrBain}}" min="1" max="5" step="1" readonly>
+                    <button type="button" onclick="changeHours1(1)">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="adresse">Adresse</label>
+                {{ form_widget(form.adresse) }}
+            </div>
+        </div></div>
+        <div class="row">
+        <div class="col-md-12">
             <div class="form-group">
                 <label for="completAdresse">Complément d'adresse</label>
                 {{ form_widget(form.completAdresse) }}
             </div>
         </div>
-    </div><br>
+    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nbrChambre">Nombre de Chambres</label>
-                {{ form_widget(form.nbrChambre) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nbrBain">Nombre de Salles de Bain</label>
-                {{ form_widget(form.nbrBain) }}
-            </div>
-        </div>
-    </div><br>
 
     <div class="form-group">
         <label for="description">Description</label>
         {{ form_widget(form.description) }}
     </div><br>
 
-    <div class="form-group col align-self-center">
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <div>
+        <button type="submit"  class="btn btn-secondary" style="width: 126px;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Enregistrer') }}</button>
     </div>
     {{ form_row(form._token) }}
 </form><br>
+<script>
+function changeHours(change) {
+    var currentValue = parseInt(document.getElementById('hourValue').value);
+    var totalValue = currentValue + change; // Increase or decrease the value by 1
+    
+    // Ensure the value stays within an acceptable range
+    if (totalValue < 1) totalValue = 1; // Lower limit 1
+    if (totalValue > 5) totalValue = 5; // Upper limit 5
+
+    // Update the input value
+    document.getElementById('hourValue').value = totalValue;
+}
+function changeHours1(change) {
+    var currentValue = parseInt(document.getElementById('hourValueB').value);
+    var totalValue = currentValue + change; // Increase or decrease the value by 1
+    
+    // Ensure the value stays within an acceptable range
+    if (totalValue < 1) totalValue = 1; // Lower limit 1
+    if (totalValue > 5) totalValue = 5; // Upper limit 5
+
+    // Update the input value
+    document.getElementById('hourValueB').value = totalValue;
+}
+</script>
 
 </div>
     </main>

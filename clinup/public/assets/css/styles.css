@@ -4,7 +4,7 @@ body {
     box-sizing: border-box;
     background-color: rgba(251, 253, 255, 1);
     color: #000000 !important;
-    font-family: "Montserrat", sans-serif;
+    font-family: Figtree;
   }
   
   .material-icons-outlined {
@@ -840,4 +840,121 @@ padding-bottom: 3%;
   height: 30px;
   line-height: 30px;
   margin: 0 5px;
+}
+.img-back{
+  height: 81%;
+margin: 6%;
+border-radius: 13px;
+background-color: rgba(0, 0, 0, 0.04);
+}
+.fa-regular{
+  color: rgba(0, 0, 0, 0.58);
+}
+.det{
+  width: 135px;
+margin: auto;
+background: #ffffff !important;
+color: #000;
+border-color:rgba(0, 0, 0, 0.35) !important;
+}
+.det2{
+  width: 36px;
+margin: auto;
+background: #ffffff !important;
+color: #000;
+border-color: rgba(0, 0, 0, 0.35) !important;
+}
+.btnM {
+  height: 30px;
+line-height: 30px;
+width: 30px;
+font-size: 0.9em;
+font-weight: bold;
+border-radius: 50%;
+background-color: #ffffff;
+color: black;
+text-align: center;
+cursor: pointer;
+border: 1px solid #FF385C;
+}
+
+.btnM .bi{
+  color:black;
+}
+.btnM2 {
+  height: 30px;
+line-height: 30px;
+width: 30px;
+font-size: 0.9em;
+font-weight: bold;
+border-radius: 50%;
+background-color: #ffffff;
+color: black;
+text-align: center;
+cursor: pointer;
+margin-left: 8%;
+border: 1px solid rgba(0, 0, 0, 0.38);
+}
+
+.btnM2 .bi{
+  color:rgba(0, 0, 0, 0.38);
+}
+.taskTitre{
+  color: black;
+font-weight: 600;
+}
+.taskDesc{
+  text-align: justify;
+}
+.simple-list-example-scrollspy .rounded{
+  color:rgba(72, 80, 94, 1);
+}
+.simple-list-example-scrollspy .active .bi{
+  color:white;
+}
+
+.simple-list-example-scrollspy .bi{
+  color:rgba(72, 80, 94, 1);
+}
+
+.simple-list-example-scrollspy .active{
+  width: 100%;
+  padding-bottom: 7%;
+  padding-top: 7%;
+  font-size: 17px;
+  background: rgba(2, 47, 100, 1) !important;
+  border-color: rgba(2, 47, 100, 1);
+  color: white;
+  border-radius: 50px !important;
+}
+#simple-list-example{
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+.updImg{
+  width: 100%;
+  padding: 8px 12px 8px 12px;
+  font-size: 13px;
+  background: rgb(255, 255, 255) !important;
+  border: 2px solid #FF385C;
+  color: rgb(0, 0, 0);
+  border-radius: 100px !important;
+  font-weight: 600;
+  text-align: center;
+}
+
+.updImg .bi{
+  color:black;
+  font-weight: 600;
+}
+label{
+  color: #000;
+  font-size: 16px;
+}
+.proB{
+  font-size: 16px;
+font-weight: 700;
+padding: 10px 22px 10px 22px;
+color: white;
 }

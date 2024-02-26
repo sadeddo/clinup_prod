@@ -21,11 +21,12 @@ class TaskController extends AbstractController
         return $this->render('task/index.html.twig', [
             'tasks' => $taskRepository->findBy(['logement' => $logementRepository->findBy(['id' => $id])]),
             'logement' => $logementRepository->findOneBy(['id' => $id]),
+            'cible' => ''
         ]);
     }
 
     #[Route('/tache/{id}/ajouter', name: 'app_task_new', methods: ['GET', 'POST'])]
-    public function new($id,Request $request, EntityManagerInterface $entityManager,LogementRepository $logementRepository): Response
+    public function new($id,Request $request, EntityManagerInterface $entityManager,LogementRepository $logementRepository,TaskRepository $taskRepository): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -40,9 +41,12 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('app_task_index', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('task/new.html.twig', [
+        return $this->render('task/index.html.twig', [
+            'tasks' => $taskRepository->findBy(['logement' => $logementRepository->findBy(['id' => $id])]),
+            'logement' => $logementRepository->findOneBy(['id' => $id]),
             'task' => $task,
             'form' => $form,
+            'cible' => 'task'
         ]);
     }
 
@@ -55,7 +59,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tache/{id}/modifier', name: 'app_task_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager): Response
+    public function edit($id,Request $request, Task $task, EntityManagerInterface $entityManager,LogementRepository $logementRepository,TaskRepository $taskRepository): Response
     {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
@@ -66,9 +70,12 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('app_task_index', ['id' => $task->getLogement()->getId()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('task/edit.html.twig', [
+        return $this->render('task/index.html.twig', [
+            'tasks' => $taskRepository->findBy(['logement' => $logementRepository->findBy(['id' => $task->getLogement()->getId()])]),
+            'logement' => $task->getLogement(),
             'task' => $task,
             'form' => $form,
+            'cible' => 'taskModifier'
         ]);
     }
 
