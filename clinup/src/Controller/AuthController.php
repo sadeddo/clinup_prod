@@ -8,6 +8,7 @@ use Stripe\Account;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Service\EmailSender;
+use App\Repository\InvitRepository;
 use App\Service\NotificationService;
 use Stripe\Exception\ApiErrorException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,12 +52,26 @@ class AuthController extends AbstractController
     
     //inscription
     #[Route(path: '/inscription', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService, InvitRepository $invitRepository): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            //invit
+            $codeInvitation = $form->get('code')->getData();
+            if (!empty($codeInvitation)) {
+                $invitation = $invitRepository->findOneBy(['code' => $codeInvitation]);
+                if (!$invitation || $invitation->getEtat() !== 'en attente') {
+                    $this->addFlash('error', 'Le code d\'invitation est invalide ou a déjà été utilisé.');
+                    return $this->redirectToRoute('app_register');
+                } else {
+                    $invitation->setEtat('accepter');
+                    $invitation->setPresta($user);
+                    $entityManager->persist($invitation);
+                    $entityManager->flush();
+                }
+            }
             $selectedRole = $form->get('role')->getData();
             if (null === $selectedRole) {
                 $this->addFlash('error', 'Veuillez sélectionner un rôle.');

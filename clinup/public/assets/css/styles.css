@@ -571,6 +571,7 @@ color: rgb(0, 0, 0);
     }
     .log{
         font-size: 0.9rem !important;
+        color:black !important;
     }
     .attente{
         background-color: white;
@@ -957,4 +958,7 @@ label{
 font-weight: 700;
 padding: 10px 22px 10px 22px;
 color: white;
+}
+.renv .bi{
+  color:white;
 }

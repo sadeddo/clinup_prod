@@ -49,6 +49,12 @@ class Logement
     #[ORM\OneToMany(mappedBy: 'logement', targetEntity: Probleme::class)]
     private Collection $problemes;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $booking = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $airbnb = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -248,6 +254,30 @@ class Logement
                 $probleme->setLogement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBooking(): ?string
+    {
+        return $this->booking;
+    }
+
+    public function setBooking(?string $booking): static
+    {
+        $this->booking = $booking;
+
+        return $this;
+    }
+
+    public function getAirbnb(): ?string
+    {
+        return $this->airbnb;
+    }
+
+    public function setAirbnb(?string $airbnb): static
+    {
+        $this->airbnb = $airbnb;
 
         return $this;
     }

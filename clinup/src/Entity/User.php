@@ -98,6 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $statutStripe = null;
 
+    #[ORM\OneToMany(mappedBy: 'hote', targetEntity: Invit::class)]
+    private Collection $invits;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -108,6 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifs = new ArrayCollection();
         $this->postulers = new ArrayCollection();
         $this->commentPrestas = new ArrayCollection();
+        $this->invits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -558,6 +562,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatutStripe(?bool $statutStripe): static
     {
         $this->statutStripe = $statutStripe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invit>
+     */
+    public function getInvits(): Collection
+    {
+        return $this->invits;
+    }
+
+    public function addInvit(Invit $invit): static
+    {
+        if (!$this->invits->contains($invit)) {
+            $this->invits->add($invit);
+            $invit->setHote($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvit(Invit $invit): static
+    {
+        if ($this->invits->removeElement($invit)) {
+            // set the owning side to null (unless already changed)
+            if ($invit->getHote() === $this) {
+                $invit->setHote(null);
+            }
+        }
 
         return $this;
     }

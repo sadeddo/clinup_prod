@@ -31,6 +31,9 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: ImgTask::class)]
     private Collection $imgTasks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $img = null;
+
     public function __construct()
     {
         $this->imgTasks = new ArrayCollection();
@@ -115,6 +118,18 @@ class Task
                 $imgTask->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): static
+    {
+        $this->img = $img;
 
         return $this;
     }

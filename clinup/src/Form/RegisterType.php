@@ -19,6 +19,10 @@ class RegisterType extends AbstractType
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
             ->add('firstname', TextType::class)
+            ->add('code', TextType::class,[
+                "mapped" => false,
+                'required' => false
+            ])
             ->add('lastname', TextType::class)
             ->add('role', TextType::class, [
                 'mapped' => false, // Ce champ n'est pas mappé à l'entité User

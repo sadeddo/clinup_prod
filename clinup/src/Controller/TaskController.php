@@ -34,7 +34,23 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setLogement($logementRepository->findOneBy(['id' => $id]));
-
+            $file = $form->get('img')->getData();
+            if ($file) {
+                // Générez un nom de fichier unique
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                // Déplacez le fichier dans le répertoire où sont stockées les brochures
+                try {
+                    $file->move(
+                        $this->getParameter('upload_directory_task_hote'), // Répertoire de destination
+                        $fileName // Nouveau nom du fichier
+                    );
+                } catch (FileException $e) {
+                    // ... gérer l'exception si quelque chose se passe pendant le téléchargement du fichier
+                }
+        
+                // Mettez à jour l'entité pour stocker le nouveau nom du fichier
+                $task->setImg($fileName);
+            }
             $entityManager->persist($task);
             $entityManager->flush();
 
@@ -65,6 +81,27 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('img')->getData();
+            if ($file) {
+                // Générez un nom de fichier unique
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                // Déplacez le fichier dans le répertoire où sont stockées les brochures
+                try {
+                    $file->move(
+                        $this->getParameter('upload_directory_task_hote'), // Répertoire de destination
+                        $fileName // Nouveau nom du fichier
+                    );
+                } catch (FileException $e) {
+                    // ... gérer l'exception si quelque chose se passe pendant le téléchargement du fichier
+                }
+        
+                // Mettez à jour l'entité pour stocker le nouveau nom du fichier
+                $task->setImg($fileName);
+            } // Ajoutez un else if pour conserver l'image existante si aucune nouvelle image n'est soumise
+            else if ($task->getImg() !== null) {
+                // Laissez le nom de l'image existant tel quel
+                // $task->setImg($existingFileName);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_task_index', ['id' => $task->getLogement()->getId()], Response::HTTP_SEE_OTHER);

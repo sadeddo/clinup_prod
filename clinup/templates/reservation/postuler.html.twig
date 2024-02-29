@@ -225,6 +225,18 @@
                                                 <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     {{ task.description}}
+                                                    <div class="col-md-12">
+                                                        {% if task.img %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="{{app.request.basepath}}/taskHote/{{task.img}}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
+                                                            </div>
+                                                        {% else %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                                <span>Aucune image ajoutée<span>
+                                                            </div>
+                                                        {% endif %}
+                                                        </div>
                                                 </div>
                                                 </div>
                                             </div>

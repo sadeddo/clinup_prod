@@ -9,13 +9,13 @@
     <strong><h5 style="font-size: 20px;">Ajouter un logement</h5></strong></br>
  <form method="post">
     <div class="row" style="margin-bottom: 3%;">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="nom">Nom</label>
                 <input type="text" class="form-control" id="nom" name="logement[nom]" placeholder="Donnez un nom a votre logement" required>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="surface">Surface en m2</label>
                 <input type="text" class="form-control" id="surface" name="logement[surface]" placeholder="" required>
@@ -41,6 +41,20 @@
                     <input type="number" id="hourValueB" name="logement[nbrBain]" value="1" min="1" max="5" step="1" readonly>
                     <button type="button" onclick="changeHours1(1)">+</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="adresse">Ical booking</label>
+                <input type="text" id="booking" class="form-control" name="logement[booking]" placeholder="Entrez le lien Ical de booking">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="adresse">Ical airbnb</label>
+                <input type="text" id="airbnb" class="form-control" name="logement[airbnb]" placeholder="Entrez le lien Ical d'airbnb">
             </div>
         </div>
     </div>

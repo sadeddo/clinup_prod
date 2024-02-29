@@ -175,14 +175,14 @@ class ReservationController extends AbstractController
                 'Nouvelle Candidature pour Votre Réservation',
                 'email/prestaPostule.html.twig',
                 [
-                    'user' => $security->getUser(), // Objet ou tableau contenant les informations de l'utilisateur
+                    'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
                     
                 ]
             );
             $notifService->createNotification(
-                $reservation->getLogement()->getHote()->getEmail(),
+                $reservation->getLogement()->getHote(),
                 'Nouvelle Candidature pour Votre Réservation',
-                '/reservation/hote/'.$comment->getId().'/postulers'
+                '/reservation/hote/'.$reservation->getId().'/postulers'
     
             );
             return $this->redirectToRoute('app_reservation_show', ['id' => $id], Response::HTTP_SEE_OTHER);

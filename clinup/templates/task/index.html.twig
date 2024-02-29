@@ -66,6 +66,18 @@
                                                         <div class="col-md-12">
                                                             <h6 class="taskDesc">{{ task.description }}</h6>
                                                         </div>
+                                                        <div class="col-md-12">
+                                                        {% if task.img %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="{{app.request.basepath}}/taskHote/{{task.img}}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
+                                                            </div>
+                                                        {% else %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                                <span>Aucune image ajoutée<span>
+                                                            </div>
+                                                        {% endif %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -122,12 +134,20 @@
                                 <h6 style="font-size: 0.9rem;color: rgba(0, 0, 0, 0.65);">Le titre de tâche doit être simple, par exemple : Nettoyage de sol, désinfection d’un balcon etc..</h6>
                             </div>
                             </div>
-                            <form  method="post">
+                            <form  method="post" enctype="multipart/form-data">
                             {{ form_row(form._token) }}
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
                                     <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre è cette tâche" required>
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="nom">Image</label>
+                                        {{ form_widget(form.img) }}
+                                    </div>
                                 </div>
                             </div><br>
                             <div class="col-sm-12">
@@ -171,12 +191,20 @@
                             <div>
                             <h5 style="font-weight: 600;text-align: center;">Modifier une tâche</h5>
                             </div>
-                            <form  method="post">
+                            <form  method="post" enctype="multipart/form-data">
                             {{ form_row(form._token) }}
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
                                     {{ form_widget(form.titre) }}
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="nom">Image</label>
+                                        {{ form_widget(form.img) }}
+                                    </div>
                                 </div>
                             </div><br>
                             <div class="col-sm-12">
