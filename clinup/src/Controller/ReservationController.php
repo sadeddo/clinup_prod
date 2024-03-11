@@ -151,7 +151,7 @@ class ReservationController extends AbstractController
         $postulation = $entityManager->getRepository(Postuler::class)
                     ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
                  
-        return $this->render('reservation/show.html.twig', [
+        return $this->render('reservation/showP.html.twig', [
             'reservation' => $reservation,
             'cible' => '',
             'hasApplied' => $postulation !== null
@@ -295,6 +295,7 @@ class ReservationController extends AbstractController
         $allDemandes = $reservationRepository->findReservationsByHote($prestataire->getId());
         return $this->render('reservation/reservationP.html.twig', [
             'reservations' => $allDemandes,
+            'cible' => ''
         ]);
     }
     //la liste des personne postuler pour une reservation:

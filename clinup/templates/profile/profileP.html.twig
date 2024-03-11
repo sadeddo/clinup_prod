@@ -1,22 +1,252 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}Réservations{% endblock %}
 
 {% block body %}
- <main class="main-container">
-  
-        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-    <h5>Profil</h5><br>
- <form method="post" enctype="multipart/form-data">
- {% for message in app.flashes('success') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-        <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ user.picture }}" alt="Image ronde" style="width: 205px; margin-top:2%;" onclick="document.getElementById('profile_picture').click();">
- <input type="file" id="profile_picture" name="profile[picture]" style="display: none;" onchange="updateImagePreview(this);">
-<script>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+    <div class="row d-flex " data-spy="scroll">
+        <div class="col-md-2" style="width: revert-layer;">
+            <!-- Liste des liens pour le Scrollspy -->
+            <div id="simple-list-example" class="d-flex flex-column gap-2 simple-list-example-scrollspy text-center">
+                <a class="p-1 rounded" href="#simple-list-item-2"><i class="bi bi-person-circle"></i>  Général</a>
+                <a class="p-1 rounded" href="#simple-list-item-3"><i class="bi bi-link-45deg"></i>  Justificatifs</a>
+                <a class="p-1 rounded" href="#simple-list-item-4"><i class="bi bi-briefcase"></i>  Expériences</a>
+                <a class="p-1 rounded" href="#simple-list-item-5"><i class="bi bi-shield-lock"></i>  Sécurité</a>
+            </div>
+        </div>
+        <div class="col-md-10" style="width: revert-layer;">
+            <!-- Conteneur avec le contenu à espionner -->
+            <div data-bs-spy="scroll" data-bs-target="#simple-list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+                <h4 id="simple-list-item-2"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h5 style="font-weight:700;">Informations générales</h5></br>
+                            <form method="post" enctype="multipart/form-data">
+                                {% for message in app.flashes('success') %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endfor %}
+                                <div class="row align-items-center d-flex">
+                                    <div class="col-md-auto">
+                                        <div class="form-group" style="text-align: center;margin-bottom:4%;">
+                                            <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ user.picture }}" alt="Image ronde" style="width: 124px;margin-top: 2%;border-radius: 97px;">
+                                            <input type="file" id="profile_picture" name="profile[picture]" style="display: none;" onchange="updateImagePreview(this);">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 align-items-center">
+                                        <a type="button" class="updImg" onclick="document.getElementById('profile_picture').click();"><i class="bi bi-camera"></i> Modifier l'image</a>
+                                    </div>
+                                    <div class="col-md-auto">
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="surface">Nom</label>
+                                            {{ form_widget(form.lastname) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Prénom</label>
+                                            {{ form_widget(form.firstname) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">Date de naissance</label>
+                                            {{ form_widget(form.birthday) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Sexe</label>
+                                            {{ form_widget(form.gender) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">E-mail</label>
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Numéro de téléphone</label>
+                                            {{ form_widget(form.phoneNumber) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="text">Adresse</label>
+                                            {{ form_widget(form.adresse) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="text">Description</label>
+                                            {{ form_widget(form.description) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary proB">Modifier</button>
+                                    </div>
+                                </div><br>
+                                {{ form_row(form._token) }}
+                            </form>
+                        </div>
+                    </div><br>
+                    <h4 id="simple-list-item-3"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h4 style="font-weight:700;">Justificatifs</h4>
+                            <form method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="res-d">Pour finaliser votre dossier, vous devez fournir les informations sur vos justifications et votre expérience professionnelle</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label for="text" style="font-size: 15px;">Votre pièce d'identité</label>
+                                            <a href="{{ path('app_justificatif_identity') }}"><div class="inner-addon left-addon">
+                                               <i class="bi bi-arrow-bar-up glyphicon" style="color: black;font-weight: bold;"></i>
+                                                <input type="text" class="form-control" placeholder="Choisir le fichier" style="background-color: rgba(0, 0, 0, 0.07);"/>
+                                            </div>
+                                        </div></a>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label for="text" style="font-size: 15px;">Carte vitale</label>
+                                            <a href="{{ path('app_justificatif_vitale') }}"><div class="inner-addon left-addon">
+                                               <i class="bi bi-arrow-bar-up glyphicon" style="color: black;font-weight: bold;"></i>
+                                                <input type="text" class="form-control" placeholder="Choisir le fichier" style="background-color: rgba(0, 0, 0, 0.07);"/>
+                                            </div></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label for="text" style="font-size: 15px;">Justificatif de domicile</label>
+                                            <a href="{{ path('app_justificatif_domicile') }}"><div class="inner-addon left-addon">
+                                               <i class="bi bi-arrow-bar-up glyphicon" style="color: black;font-weight: bold;"></i>
+                                                <input type="text" class="form-control" placeholder="Choisir le fichier" style="background-color: rgba(0, 0, 0, 0.07);"/>
+                                            </div></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="alert alert-primary justif-alert" role="alert">
+                                            <h6 style="font-size: 14px;font-weight: 600;"><i class="bi bi-shield-check" style="color:#0470EF !important;"></i>  Vos informations sont en sécurité!</h6>
+                                            <h6 class="res-d" >La confidentialité est notre priorité absolue. Pas d'inquiétude, vos données sont protégées.</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><br><br>
+                    <h4 id="simple-list-item-4"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h5 style="font-weight:700;">Expériences</h5>
+                            <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="res-d">Pour finaliser votre dossier, vous devez fournir les informations sur vos justifications et votre expérience professionnelle</h6>
+                                    </div>
+                                </div>
+                            {% for experience in experiences %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-auto"><p style="font-size: 16px;width:auto;">{{ experience.experience }} |</p></div>
+                                                    <div class="col-md-auto"><small class="res-d"> {{ experience.dtStart|date('Y-m') }} à {{ experience.dtEnd|date('Y-m') }}</small></div>
+                                                </div>
+                                                <p style="font-size: 0.9rem;">{{ experience.description }}</p>
+                                            </div>
+                                </div>
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <a href="{{ path('app_experience_new') }}"><button type="submit" class="btn btn-primary proB"><i class="bi bi-plus-circle" style="color: #ffffff;"></i> Ajouter une expérience</button></a>
+                                    </div>
+                                </div><br><br>
+                            </div>
+                        </div>
+                    </div><br><br>
+                <h4 id="simple-list-item-5"></h4>
+                    <div class="card">
+                        <div class="card-body b"><br>
+                            <h5 style="font-weight:700;">Modifier le mot de passe</h5></br>
+                            <form method="post">
+                                {% for message in app.flashes('warning') %}
+                                        <div class="alert alert-warning mt-4">
+                                    {{ message }}</div>
+                                {% endfor %}
+                                {{ form_errors(formpass) }}
+                                {% for message in app.flashes('successp') %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% endfor %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Mot de passe</label>
+                                            {{ form_widget(formpass.oldpassword) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="text">Nouveau mot de passe</label>
+                                            {{ form_widget(formpass.plainpassword.first) }}
+                                        {{ form_errors(formpass.plainpassword.first) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="completAdresse">Confirmer le nouveau mot de passe</label>
+                                            {{ form_widget(formpass.plainpassword.second) }}
+                                        {{ form_errors(formpass.plainpassword.second) }}
+                                        </div>
+                                    </div>
+                                </div><br>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary proB">Modifier</button>
+                                    </div>
+                                </div><br>
+                                {{ form_row(formpass._token) }}
+                            </form>
+                        </div>
+                    </div><br><br>
+                
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </main>
+    <script>
     document.getElementById('profile_picture').addEventListener('change', function(event) {
         var reader = new FileReader();
         reader.onload = function() {
@@ -35,131 +265,178 @@
         }
     }
 </script>
-
+{# modal pour identity #}
+       {% if cible == "identityCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Pièce d'identité</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(formFile._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(formFile.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nom">Prénom</label>
-                {{ form_widget(form.firstname) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="surface">Nom</label>
-                {{ form_widget(form.lastname) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">E-mail</label>
-                {{ form_widget(form.email) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Numéro de téléphone</label>
-                {{ form_widget(form.phoneNumber) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">Date de naissance</label>
-                {{ form_widget(form.birthday) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Sexe</label>
-                {{ form_widget(form.gender) }}
-            </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="text">Adresse</label>
-                {{ form_widget(form.adresse) }}
-            </div>
-        </div>
-    </div><br>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label for="text">Description</label>
-                {{ form_widget(form.description) }}
-            </div>
-        </div>
-    </div><br>
- <div class="row">
-        <div class="col-md-10"> 
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour vitale #}
+            {# modal pour exp #}
+       {% if cible == "addExp" %}
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ajouter une expérience</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form method="post">
+                <div class="alert alert-primary" role="alert" style="background-color:rgba(231, 247, 238, 1);border:none;">
+                                <img src="/assets/img/lamp.png" style="padding-bottom: 6px;"> Astuse
+                                <h6 style="font-size: 0.9rem;color: rgba(0, 0, 0, 0.65);">Parlez en détail de votre expérience</h6>
+                            </div>
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Intitulé de poste</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control"  name="experience[experience]" placeholder="Agent d'entretien d'une appartement..." required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date">Date de début</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="date" name="experience[dtStart]"required>
+                                <span class="input-group-addon"><i class="bi bi-calendar-event"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date">Date de fint</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="date" name="experience[dtEnd]"required>
+                                <span class="input-group-addon"><i class="bi bi-calendar-event"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <label for="date">Description</label>
+                            <div class="input-group">
+                                <textarea type="text" class="form-control"  name="experience[description]" placeholder="Parler de votre missions et tâches durant cette expérience" required></textarea>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row" style="justify-content: center;">
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary proB">Ajouter</button>
+                    </div>
+                </div>
+                {{ form_row(formExp._token) }}
+            </form><br>
+      </div>
     </div>
-    {{ form_row(form._token) }}
-</form><br>
-<hr>
-<h5>Mot de passe</h5><br>
-{% for message in app.flashes('warning') %}
-		<div class="alert alert-warning mt-4">
-	{{ message }}</div>
-{% endfor %}
- <form method="post">
- {{ form_errors(formpass) }}
- {% for message in app.flashes('successp') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="nom">Mot de passe actuel</label>
-                {{ form_widget(formpass.oldpassword) }}
+  </div>
+  {% block scripteditEventModalexp %}
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+</script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour vitale #}
+       {% if cible == "vitaleCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Carte vitale</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(formFile._token) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(formFile.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="text">Nouveau mot de passe</label>
-                {{ form_widget(formpass.plainpassword.first) }}
-            {{ form_errors(formpass.plainpassword.first) }}
+            {% block scripteditEventModalVitale %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour domicile #}
+       {% if cible == "domicileCanvas" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Justificatif de domicile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(formFile._token) }}
+                            <div class="col-sm-8">
+                                {{ form_widget(formFile.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="completAdresse">Confirmation</label>
-                {{ form_widget(formpass.plainpassword.second) }}
-            {{ form_errors(formpass.plainpassword.second) }}
-            </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col-md-10"> 
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
-    </div><br>
-   
-    {{ form_row(formpass._token) }}
-</form><br>
-
-</div>
-    </main>
+            {% block scripteditEventModalDomicile %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour autre #}
+            
 {% endblock %}

@@ -23,7 +23,7 @@ class ProfileType extends AbstractType
         'attr' => ['class' => 'form-control', 'placeholder' => 'Votre email'],
     ])
     ->add('picture',FileType::class, [
-        "data_class" => null,
+        "mapped" => false,
         ])
     ->add('firstname', TextType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Votre prénom'],

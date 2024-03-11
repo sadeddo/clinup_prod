@@ -7,6 +7,7 @@ use App\Form\ProfileType;
 use App\Entity\Reservation;
 use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
+use App\Repository\ExperienceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommentPrestaRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,7 +21,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfileController extends AbstractController
 {
-    private function editProfil($page,Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher,LoggerInterface $logger): Response
+    private function editProfil($page,Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher,LoggerInterface $logger,ExperienceRepository $experienceRepository): Response
     {
         // Récupérez l'utilisateur actuel
         $user = $security->getUser();
@@ -121,7 +122,9 @@ class ProfileController extends AbstractController
         return $this->render('profile/'.$page.'.html.twig', [
             'form' => $form->createView(),
             'formpass' => $formpass->createView(),
-            'user' => $user
+            'user' => $user,
+            'cible' => '',
+            'experiences' => $experienceRepository->findBy([ 'prestataire' => $user]),
         ]);
     }
     #[Route('/profile/modifier', name: 'app_modifier_profile_profileH', methods: ['GET', 'POST'])]
@@ -131,9 +134,9 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/modifier/profile', name: 'app_modifier_profile_profileP', methods: ['GET', 'POST'])]
-    public function modifierP(Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher, LoggerInterface $logger): Response
+    public function modifierP(Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher, LoggerInterface $logger, ExperienceRepository $experienceRepository): Response
     {
-        return $this->editProfil('profileP',$request,$security,$entityManager,$hasher,$logger);
+        return $this->editProfil('profileP',$request,$security,$entityManager,$hasher,$logger,$experienceRepository);
     }
     //afficher profile prestatire
     #[Route('/consulterP/{id}/{idReservation}/profile', name: 'app_consulter_profileP', methods: ['GET', 'POST'])]

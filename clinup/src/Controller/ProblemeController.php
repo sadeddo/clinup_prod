@@ -20,15 +20,17 @@ class ProblemeController extends AbstractController
     #[Route('/probleme', name: 'app_probleme_index', methods: ['GET'])]
     public function index(ProblemeRepository $problemeRepository,Security $security,LogementRepository $logementRepository): Response
     {
-        $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
+        $problemes =  $problemes = $problemeRepository->findProblemesByHoteId($security->getUser()->getId());
         return $this->render('probleme/index.html.twig', [
-            'logements' => $logements,
+            'problemes' => $problemes,
         ]);
     }
 
     #[Route('/problèmes/{id}/new', name: 'app_probleme_new', methods: ['GET', 'POST'])]
-    public function new($id,Request $request, EntityManagerInterface $entityManager,ReservationRepository $reservationRepository): Response
+    public function new($id,Request $request,Security $security, EntityManagerInterface $entityManager,ReservationRepository $reservationRepository): Response
     {
+        $prestataire = $security->getUser();
+        $allDemandes = $reservationRepository->findReservationsByHote($prestataire->getId());
         $probleme = new Probleme();
         $form = $this->createForm(ProblemeType::class, $probleme);
         $form->handleRequest($request);
@@ -42,9 +44,11 @@ class ProblemeController extends AbstractController
             return $this->redirectToRoute('app_reservation_prestataire', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('probleme/new.html.twig', [
+        return $this->render('reservation/reservationP.html.twig', [
             'probleme' => $probleme,
             'form' => $form,
+            'cible' => 'addProb',
+            'reservations' => $allDemandes
         ]);
     }
 
@@ -87,15 +91,10 @@ class ProblemeController extends AbstractController
     #[Route('/probleme/{id}/statut', name: 'app_probleme_modifier_statut', methods: ['GET', 'POST'])]
     public function modifierStatut(Request $request, Probleme $probleme, EntityManagerInterface $entityManager): Response
     {
-        if ($probleme->IsStatut() == '0' ||  $probleme->IsStatut() == NULL) {
             $probleme->setStatut('1');
             $entityManager->persist($probleme);
             $entityManager->flush();
-        }elseif($probleme->IsStatut() == '1'){
-            $probleme->setStatut('0');
-            $entityManager->persist($probleme);
-            $entityManager->flush();
-        }
+
         return $this->redirectToRoute('app_probleme_index', [], Response::HTTP_SEE_OTHER);
     }
 }

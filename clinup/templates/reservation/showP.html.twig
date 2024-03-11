@@ -1,0 +1,254 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}détails réservation{% endblock %}
+
+{% block body %}
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            {% if reservation.statut == "confirmer" %}
+            <h5 class="titree">Résultats des tâches</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% for task in reservation.logement.tasks %}
+                                        <div class="col-md-6">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
+                                                    {{ task.titre}}
+                                                </button>
+                                                </h2>
+                                                <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                {% for imgTask in task.ImgTasks %}
+                                                <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
+                                                            </div>
+                                                    {% else %}
+                                                    <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                    <a href="{{ path('app_img_task_new',{'idReservation': reservation.id , 'idTask': task.id }) }}"><span>Ajouter le résultat<span></a>
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                            <div class="emptyReserv" style="padding:4%;">
+                                                <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
+                                                <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
+                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement <a href="{{ path('app_task_index',{'id':reservation.logement.id})}}">en cliquant içi</a></h6><br>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                    {% endif %}
+            <h5 class="titree">Détails de réservation</h5>
+             <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto me-auto">
+                            <strong class="card-title log">Logement: {{ reservation.logement }}</strong>
+                        </div>
+                        <div class="col-auto">
+                            {% if reservation.statut == "en attente" %}
+                                                <div class="col-md-2 alert alert-warning attente" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 139, 60);"></i>  En attente
+                                                </div>
+                                            {% elseif reservation.statut == "confirmer" %}
+                                                <div class="col-md-2 alert alert-warning confirmer" role="alert">
+                                                   <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(7, 84, 201);"></i>  Confirmée
+                                                </div>
+                                            {% elseif reservation.statut == "Annuler" %}
+                                                <div class="col-md-2 alert alert-warning annuler" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Annulée
+                                                </div>
+                                            {% elseif reservation.statut == "payer" %}
+                                                <div class="col-md-2 alert alert-warning payer" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(60, 196, 39);"></i>  Payée
+                                                </div>
+                                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Date & Heure</h6>
+                                    <h6 class="res-d2">{{ reservation.date ? reservation.date|date('j M. Y') : '' }} | {{ reservation.heure ? reservation.heure|date('H:i') : '' }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Nombre d'heures</h6>
+                                    <h6 class="res-d2">{{ reservation.nbrHeure }}min</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Description</h6>
+                                    <h6 class="res-d2">{{ reservation.description }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if reservation.statut == "Annuler" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-dAnn"><i class="bi bi-exclamation-circle"></i> Motif d’annulation</h6>
+                                    <h6 class="res-d2">{{ reservation.description }}</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <h6 class="res-contact"><i class="bi bi-question-circle" style="color:rgba(15, 163, 75, 1);"></i> Avez-vous une question ou une demande ? Contactez l'équipe de support <a style="color:rgba(15, 163, 75, 1);">en cliquant içi</a> </h6>
+
+                    {% endif %}
+                </div>
+                </div>
+                    <h5 class="titree">Hôte</h5>
+                    <div class="card">
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-body" style="padding-bottom: 0%;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="d-flex  marg">
+                                                    <img src="{{ app.request.basepath }}/img/{{ reservation.logement.hote.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                                    <div>
+                                                    <h6 class="card-title mb-0 nom">{{ reservation.logement.hote.firstname }} {{ reservation.logement.hote.lastname }}   <span class="">
+                                                        
+                                                        </span></h6>
+                                                    <div class="card-subtitle dateC">
+                                                        <span class="text-muted">Hôte</span>
+                                                    
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row" style="justify-content: end;">
+                                                    <div class="col-md-8"><a href="{{ path('app_conversation_create', {'id': reservation.logement.hote.id}) }}" type="button" class="btn btn1 btn-primary" style="width:100%;">Envoyer un message</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="titree">Tâches</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% for task in reservation.logement.tasks %}
+                                        <div class="col-md-6">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ task.id }}" aria-expanded="false" aria-controls="collapseOne">
+                                                    {{ task.titre}}
+                                                </button>
+                                                </h2>
+                                                <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    {{ task.description}}
+                                                    <div class="col-md-12">
+                                                        {% if task.img %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="{{app.request.basepath}}/taskHote/{{task.img}}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
+                                                            </div>
+                                                        {% else %}
+                                                            <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                                <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                                <span>Aucune image ajoutée<span>
+                                                            </div>
+                                                        {% endif %}
+                                                        </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                            <div class="emptyReserv" style="padding:4%;">
+                                                <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
+                                                <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
+                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement <a href="{{ path('app_task_index',{'id':reservation.logement.id})}}">en cliquant içi</a></h6><br>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModalconfirmer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">Confirmer l’approbation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir approuver cette demande de nettoyage? Une fois approuvé,le paiement sera envoyé au prestataire et votre réservation sera marquée comme payer.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ path('app_reservation_valider',{'id':reservation.id})}}"><button type="button"class="btn btn-secondary" >Confirmer</button></a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>   
+                                        <!-- Modal annuler -->
+                                        {# modal pour identity #}
+       {% if cible == "ajouter" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Image</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+    </main>
+{% endblock %}

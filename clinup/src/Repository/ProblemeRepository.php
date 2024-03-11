@@ -21,6 +21,17 @@ class ProblemeRepository extends ServiceEntityRepository
         parent::__construct($registry, Probleme::class);
     }
 
+    public function findProblemesByHoteId($hoteId)
+    {
+    return $this->createQueryBuilder('p') // 'p' est un alias pour l'entité Probleme
+        ->innerJoin('p.logement', 'l') // Joindre la table Logement via la relation définie dans l'entité
+        ->innerJoin('l.hote', 'h') // Joindre la table Hote via la relation définie dans Logement
+        ->where('h.id = :hoteId') // Condition pour filtrer par hoteId
+        ->setParameter('hoteId', $hoteId)
+        ->getQuery()
+        ->getResult();
+    }
+
 //    /**
 //     * @return Probleme[] Returns an array of Probleme objects
 //     */

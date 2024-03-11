@@ -55,15 +55,15 @@ class ImgTaskController extends AbstractController
             $entityManager->persist($imgTask);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_task_listeee', ['id' => $idReservation ], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_reservation_show', ['id' => $idReservation ], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('task/taskP.html.twig', [
+        return $this->render('reservation/showP.html.twig', [
             'img_task' => $imgTask,
-            'tasks' => $TaskRepository->findBy(['logement' => $reservationRepository->findOneBy(['id' => $idReservation])->getLogement()]),
             'form' => $form,
             'cible' => 'ajouter',
-            'idReservation' => $idReservation
+            'idReservation' => $idReservation,
+            'reservation' => $reservationRepository->findOneBy(['id' => $idReservation])
         ]);
     }
 

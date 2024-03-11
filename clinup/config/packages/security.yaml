@@ -60,7 +60,6 @@ security:
          - { path: ^/probleme, roles: ROLE_HOTE }
          - { path: ^/reservation/hote, roles: ROLE_HOTE }
          - { path: ^/notif/hote, roles: ROLE_HOTE }
-         - { path: ^/conversation, roles: ROLE_HOTE }
          - { path: ^/comment/presta, roles: ROLE_HOTE }
          - { path: ^/consulterP, roles: ROLE_HOTE }
          - { path: ^/admin, roles: ROLE_ADMIN }

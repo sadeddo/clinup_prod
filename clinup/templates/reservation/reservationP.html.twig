@@ -15,7 +15,7 @@
                     {% if reservations|length > 0 %}
                     {% for reservation in reservations %}
                        <div class="col-md-6">
-                            <a href="{{ path('app_list_postuler',{'id': reservation.id}) }}"><div class="card">
+                            <a ><div class="card">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-auto me-auto">
@@ -61,12 +61,22 @@
                                         <div class="col-md-auto">
                                             <div class="card">
                                                 <div class="card-body b">
-                                                    <h6 class="res-d">Agents intéressés</h6>
-                                                    <h6 class="res-d2"></h6>
+                                                    <h6 class="res-d">Hôte</h6>
+                                                    <h6 class="res-d2">{{ reservation.logement.hote.firstname}} {{ reservation.logement.hote.lastname}}</h6>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div></br>
+                                    {% if reservation.statut == "confirmer" %}
+                                    <div class="row" style="justify-content: center;">
+                                        <div class="col-md-6"><a href="{{ path('app_reservation_show',{'id': reservation.id}) }}" type="button" class="btn btn1 btn-primary" style="width:100%;">Voir les tâches de réservation</a></div>
+                                        <div class="col-md-6"><a href="{{ path('app_probleme_new', {'id': reservation.id}) }}" type="button" class="btn btn1 btn-primary" style="width:100%;background:#FF385C !important;color:white !important;"> <i class="bi bi-exclamation-triangle" style="color:white;"></i> Signaler un problème</a></div>
                                     </div>
+                                    {% else %}
+                                        <div class="row" style="justify-content: center;">
+                                        <div class="col-md-6"><a href="{{ path('app_reservation_show',{'id': reservation.id}) }}" type="button" class="btn btn1 btn-primary" style="width:100%;">Voir plus</a></div>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div></a>
                         </div>
@@ -81,7 +91,53 @@
                 {% endif %}
                 </div>
         </div>
-        
+        {# modal pour probleme #}
+       {% if cible == "addProb" %}
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Signaler un problème</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form method="post">
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Titre du problème</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control"  name="probleme[titre]" placeholder="Donnez un nom à ce problème" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-12">
+                            <label for="date">Description</label>
+                            <div class="input-group">
+                                <textarea type="text" class="form-control"  name="probleme[description]" placeholder="Ajouter les détails de ce problème" required></textarea>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row" style="justify-content: center;">
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary proB">Enregistrer</button>
+                    </div>
+                </div>
+                {{ form_row(form._token) }}
+            </form><br>
+      </div>
+    </div>
+  </div>
+  {% block scripteditEventModalexp %}
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+</script>
+                    {% endblock %}
+            {% endif %}
     </main>
 
 {% endblock %}

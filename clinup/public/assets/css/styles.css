@@ -962,3 +962,168 @@ color: white;
 .renv .bi{
   color:white;
 }
+.nonRe{
+  background-color: white;
+  padding: 4px;
+  font-size: 0.7rem;
+  width: auto;
+  display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+  width: auto; /* ajuste automatiquement la largeur au contenu */
+  border-radius: 16px;
+  padding-left: 19px;
+  padding-right: 19px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #FF385C;
+  border-color: #FF385C;
+  
+}
+.resolu{
+  background-color: white;
+  padding: 4px;
+  font-size: 0.7rem;
+  width: auto;
+  display: inline-block; /* ou inline-flex si vous avez besoin de flexibilité */
+  width: auto; /* ajuste automatiquement la largeur au contenu */
+  border-radius: 16px;
+  padding-left: 19px;
+  padding-right: 19px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: black;
+  border-color: rgba(111, 114, 121, 1);
+}
+.inner-addon { 
+  position: relative; 
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+position: absolute;
+padding: 10px;
+pointer-events: none;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+.justif-alert {
+  border: none;
+background-color: rgba(230, 241, 253, 1);
+}
+.fc-toolbar-chunk .fc-today-button{
+  border-radius: 50px;
+background-color: white;
+color: black !important;
+background: white !important;
+font-size: 13px;
+padding-left: 16px;
+padding-right: 16px;
+font-weight: 600;
+border: 1px solid rgba(0, 0, 0, 0.31) !important;
+}
+.fc-toolbar-title {
+  font-size: 18px !important;
+}
+.fc-prev-button{
+border-radius: 50px !important;
+border: 1px solid #FF385C !important;
+color: black !important;
+background: white !important;
+width: 35px;
+height: 35px;
+padding:0% !important;
+margin-right: 10px !important;
+}
+.fc-icon-chevron-left{
+  font-size: 19px !important;
+}
+.fc-next-button{
+  border-radius: 50px !important;
+  border: 1px solid #FF385C !important;
+  color: black !important;
+  background: white !important;
+  width: 35px;
+  height: 35px;
+  padding:0% !important;
+  }
+  .fc-icon-chevron-right{
+    font-size: 19px !important;
+  }
+.fc-col-header-cell-cushion {
+    display: flex;
+    flex-direction: column;
+}
+
+.fc-col-header-cell .fc-day {
+    font-size: 0.85em; /* ajustez la taille de la police comme nécessaire */
+}
+
+.fc-col-header-cell .fc-date {
+    font-size: 1.25em; /* ajustez la taille de la police comme nécessaire */
+    font-weight: bold;
+}
+.fc-col-header-cell-cushion {
+  color: black !important;
+  font-size: 13px !important;
+}
+.fc .fc-timegrid-slot-minor{
+  border-top-style: none !important;
+}
+.fc-scrollgrid-sync-inner{
+  width: 34%;
+margin: auto;
+}
+.fc-v-event{
+  border-left: 5px solid #11B352 !important;
+  background-color: #92DCAF !important;
+  border:none;
+}
+.fc-event-time{
+  color: black !important;
+font-weight: 700 !important;
+font-size: 14px !important;
+}
+.days{
+  border-radius: 50px;
+border: 1px solid rgba(0, 0, 0, 0.19);
+padding-left: 17px;
+padding-right: 17px;
+padding-top: 3px;
+padding-bottom: 3px;
+font-size: 16px;
+color:black;
+text-align: center;
+margin-bottom: 2%;
+}
+.days-title{
+  font-weight: 700;
+font-size: 18px;
+text-align: center;
+margin-bottom: 5%;
+}
+.deux-image {
+  position: relative;
+  width: 200px; /* Adjust the width as needed */
+  height: 200px; /* Adjust the height as needed */
+}
+
+.deux-image .img-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36%;
+  height: 36%;
+}
+.deux-image .img-2 {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 16%;
+  height: 16%;
+}

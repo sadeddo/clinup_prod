@@ -28,7 +28,7 @@ class DispoController extends AbstractController
                 'id' =>$event->getId(),
                 'start' =>$event->getDate()->format('Y-m-d').' '.$event->getDtStart(),
                 'end' =>$event->getDate()->format('Y-m-d').' '.$event->getDtEnd(),
-                'color' => '#FF385C',
+                'color' => '#92DCAF',
             ];
         }
         $data = json_encode($rdvs);

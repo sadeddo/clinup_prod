@@ -1,395 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Admin Dashboard</title>
+{% extends 'base.html.twig' %}
 
-    <!-- Material Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+{% block title %}New Logement{% endblock %}
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/styles.css">
-  </head>
-  <body>
-    <div class="grid-container">
-
-      <!-- Header -->
-      <header class="header">
-        <div class="menu-icon" onclick="openSidebar()">
-          <i class="bi bi-list"></i>
-        </div>
-        <div class="header-left">
-          
-        </div>
-        
-        <div class="header-right">
-            <a href='{{ path('app_notif_hote')}}' class="initials-circle-notif">
-                <i class="bi bi-bell position-relative" style="color:#FF385C;">
-                </i>
-            </a>
-            <a class="initials-circle">{{ app.user.firstname|slice(0, 1) }}{{ app.user.lastname|slice(0, 1) }}</a>
-          
-        </div>
-      </header>
-      <!-- End Header -->
-
-      <!-- Sidebar -->
-      <aside id="sidebar">
-        <div class="sidebar-title">
-          <div class="sidebar-brand">
-            <a href=""><span class="material-icons-outlined"><img src="/assets/img/logo-clinup.png" alt="easyloc" width=" 110px"></span></a>
-          </div>
-          <span class="material-icons-outlined" onclick="closeSidebar()"><i class="bi bi-x"></i></span>
-        </div>
-
-        <ul class="sidebar-list">
-          <li class="sidebar-list-item">
-            <a href="" >
-              <i class="bi bi-columns-gap"></i> Dashboard 
-
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_logement_index')}}" >
-              <i class="bi bi-house"></i> Logements 
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_reservation_index')}}">
-              <i class="bi bi-calendar-event-fill"></i> Réservations
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_probleme_index')}}" >
-              <i class="bi bi-exclamation-triangle"></i>  Problèmes
-            </a>
-          </li> 
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_conversation')}}">
-              <i class="bi bi-chat-dots"></i>  Messages
-            </a>
-          </li> 
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_modifier_profile_profileH')}}" >
-              <i class="bi bi-person-circle"></i> Profil 
-            </a>
-          </li> 
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_logout') }}" >
-              <i class="bi bi-box-arrow-right"></i> Déconnexion
-            </a>
-          </li>
-        </ul>
-      </aside>
-      <!-- End Sidebar -->
-
-      <!-- Main -->
-      {% block body %}
-    <main class="main-container">
-        <div class="container" style="width:95%;height: auto;">
-            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
-            <h5 class="titree">Détails de réservation</h5>
-             <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-auto me-auto">
-                            <strong class="card-title log">Logement: Chez moi</strong>
-                        </div>
-                        <div class="col-auto">
-                            <div class="col-md-2 alert alert-warning attente" role="alert">
-                            En attente 
-                            </div>
-                        </div>
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+            <div class="main-cards">
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Evaluation:</p>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card m-2">
-                                <div class="card-body b">
-                                    <h6 class="res-d">Date & Heure</h6>
-                                    <h6 class="res-d2">14 Jan. 2024 | 13:30</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card m-2">
-                                <div class="card-body b">
-                                    <h6 class="res-d">Nombre d'heures</h6>
-                                    <h6 class="res-d2">1h:30min</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card m-2">
-                                <div class="card-body b">
-                                    <h6 class="res-d">Description</h6>
-                                    <h6 class="res-d2">Some quick example text to build on the card title and make up the bulk of the card's content.</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <span class="text-primary font-weight-bold">{{ evolution | number_format(1, '.', '') }} ★</span>
                 </div>
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Ton palier:</p>
+                    <p class="text-primary"><i data-toggle="palier" title="Bronze :Moins de 30 missions, jusqu'à 3 étoiles. |
+                    Argent :30-70 missions, 3,5 à 4,5 étoiles. |
+                    Or :Plus de 70 missions, 5 étoiles." class="bi bi-exclamation-circle update"></i></p>
+                    </div>
+                    <span class="text-primary font-weight-bold">{{ palier  }}</span>
                 </div>
-                <h5 class="titree">Agents intéressés</h5>
-             <div class="card">
-                <div class="card-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <div class="d-flex  marg">
-                                                <img src="/assets/img/logo-clinup.png" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                <div>
-                                                <h6 class="card-title mb-0 nom">Oumayma Sadeddine   <span class="">
-                                                    <i class="bi bi-star-fill start"></i> 4.9
-                                                    </span></h6>
-                                            
-                                                <div class="card-subtitle dateC">
-                                                    <span class="text-muted">14 jan. 2024 | 14:28</span>
-                                                
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <p class="card-text mt-2 comment">Je suis intéressée</p>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <button type="button" class="btn btn1 btn-primary">Voir profil</button>
-                                                <button type="button" class="btn btn-secondary">Réserver</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                <div class="card">
+                    <div class="card-inner">
+                    <p class="text-primary">Ton tarif:</p>
+                    <p class="text-primary"><i data-toggle="tarif" title="Bronze :35€/h | Argent :45€/h | Or :60€/h" class="bi bi-exclamation-circle update"></i></p>
+                    </div>
+                    <span class="text-primary font-weight-bold">{{ tarif  }} h/€</span>
+                </div>
+            </div>
+            <h4>Avis sur mon travail</h4>
+            {% for comment in comments %}
+                <div class="comment-box">
+                    <div ><img class="avatar" src="{{app.request.basepath}}/img/{{ comment.getClient().picture }}" alt="Image ronde" ></div>
+                    <div class="content">
+                        <div class="username d-flex">{{ comment.getClient().getFirstname() }}</div><div class="date">{{ comment.getCreatedAt().format('d-m-Y H:i') }}</div>
+                        <div class="evaluation">
+                            {% for i in 1..comment.getEvaluation() %}
+                                ★
+                            {% endfor %}
                         </div>
-                    </div><br>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <div class="d-flex align-items-center marg">
-                                                <img src="/assets/img/logo-clinup.png" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                <div>
-                                                <h6 class="card-title mb-0 nom">Oumayma Sadeddine   <span class="">
-                                                    <i class="bi bi-star-fill start"></i> 4.9
-                                                    </span></h6>
-                                            
-                                                <div class="card-subtitle dateC">
-                                                    <span class="text-muted">14 jan. 2024 | 14:28</span>
-                                                
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <p class="card-text mt-2 comment">Je suis intéressée</p>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="row">
-                                                <button type="button" class="btn btn1 btn-primary">Primary</button>
-                                                <button type="button" class="btn btn-secondary">Secondary</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="comment-text">{{ comment.getComment() }}</div>
+                        {% if comment.getReponse() != null %}
+                            <div class="response">
+                                <strong>Ta réponse:</strong> {{ comment.getReponse() }}
+                                <div class="date">{{ comment.getDateRep().format('d-m-Y') }}</div>
                             </div>
+                        {% else %}
+                            <a href="{{ path('app_rep',{'id':comment.getId()}) }}"><button type="submit"  class="btn btn-primary">{{ button_label|default('Répondre') }}</button></a>
+                          
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+ 
+    
+<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="palier"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+var tooltipTrigger = [].slice.call(document.querySelectorAll('[data-toggle="tarif"]'))
+var tooltipList = tooltipTrigger.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+</script>
+{# modal pour domicile #}
+       {% if cible == "rep" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                             {{ form_widget(form.reponse) }}  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                         {{ form_end(form) }}
                     </div>
                 </div>
             </div>
-        <h5 class="titree">Tâches</h5>
-             <div class="card">
-                <div class="card-body">
-                <div class="accordion" id="accordionExample">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Accordion Item #1
-                                </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 accordionc">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Accordion Item #2
-                                </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Accordion Item #2
-                                </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </div>
-                <!-- Empty reservation -->
-                <h2 class="titree" style="font-weight: bold;">Mes réservations</h2>
-                <div class="emptyReserv">
-                    <img src="/assets/img/reserEmp.png"><br>
-                    <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
-                    <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
-                    <button type="button" class="btn btn-secondary poster">Poster une réservation</button>
-                </div>
-                <!-- End -->
-                <!--reservation -->
-                    <div class="row reservation">
-                        <div class="col-auto me-auto">
-                            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
-                        </div>
-                        <div class="col-auto">
-                            <a href="{{ path('app_reservation_new') }}" type="button" class="btn btn-secondary"><i class="bi bi-plus-square-fill"></i></a>
-                        </div>
-                    </div><br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-auto me-auto">
-                                            <strong class="card-title log">Chez moi</strong>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="col-md-2 alert alert-warning confirmer" role="alert">
-                                            Confirmer 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin: auto;">
-                                        <div class="col-md-auto">
-                                            <div class="card ">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Date & Heure</h6>
-                                                    <h6 class="res-d2">14 Jan. 2024 | 13:30</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Nbre d'heures</h6>
-                                                    <h6 class="res-d2">1h:30min</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Agents intéressés</h6>
-                                                    <h6 class="res-d2">1</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-auto me-auto">
-                                            <strong class="card-title log">Chez moi</strong>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="col-md-2 alert alert-warning payer" role="alert">
-                                            Payer 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin: auto;">
-                                        <div class="col-md-auto">
-                                            <div class="card ">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Date & Heure</h6>
-                                                    <h6 class="res-d2">14 Jan. 2024 | 13:30</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Nbre d'heures</h6>
-                                                    <h6 class="res-d2">1h:30min</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Agents intéressés</h6>
-                                                    <h6 class="res-d2">1</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                    </div>              
-
-                <!-- End -->
-        </div>
-    <main>
-      {% endblock %}
-      <!-- End Main -->
-      
-    </div>
-
-    <!-- Scripts -->
-    <script 
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuDynld9yqVTXrVVT8ObLSQ0B9P4ZvW28&libraries=places&callback=initMap">
-</script>
-<script>
-var input2 = document.getElementById('adress');
-var autocomplete2 = new google.maps.places.Autocomplete(input2);
-autocomplete2.addListener('place_changed', function() {
-var place = autocomplete2.getPlace();
-
-});
-
-</script>
-    <!-- ApexCharts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
-    <script src="https://kit.fontawesome.com/7c91415ed6.js" crossorigin="anonymous"></script>
-    <!-- Custom JS -->
-    <script src="/assets/js/scripts.js"></script>
-  </body>
-</html>
+            {% block scripteditEventModalDomicile %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+  <!-- End Main -->
+</div>
+    </main>
+{% endblock %}
