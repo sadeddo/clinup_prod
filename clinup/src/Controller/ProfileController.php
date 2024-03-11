@@ -128,9 +128,9 @@ class ProfileController extends AbstractController
         ]);
     }
     #[Route('/profile/modifier', name: 'app_modifier_profile_profileH', methods: ['GET', 'POST'])]
-    public function modifierH(Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher, LoggerInterface $logger): Response
+    public function modifierH(Request $request, Security $security, EntityManagerInterface $entityManager,UserPasswordHasherInterface $hasher, LoggerInterface $logger,ExperienceRepository $experienceRepository): Response
     {
-        return $this->editProfil('profileH',$request,$security,$entityManager,$hasher,$logger);
+        return $this->editProfil('profileH',$request,$security,$entityManager,$hasher,$logger, $experienceRepository);
     }
 
     #[Route('/modifier/profile', name: 'app_modifier_profile_profileP', methods: ['GET', 'POST'])]
