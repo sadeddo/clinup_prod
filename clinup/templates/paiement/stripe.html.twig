@@ -5,21 +5,53 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
-            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Paiement</strong><br>
+            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;margin-bottom:2%;">Paiement</strong>
+
             {% for message in app.flashes('refresh') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-        {% for messages in app.flashes('return') %}
-            <div class="alert alert-success">{{ messages }}</div>
-        {% endfor %}
-        <div class="row">
-        <div class="col-md-auto">
-            <img id="imagePreview" src="/assets/img/stripe.png" alt="Image ronde" style="width: 55px;margin-top: 2%;border-radius: 97px;">
-        </div>
-        <div class="col-md-auto" style="margin-top: auto;margin-bottom: auto;">
-            <h4 style="margin: auto;font-size: 20px;font-weight: 700;">Configuration d'un compte de paiement</h4>
-        </div>
-        </div>
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {% for messages in app.flashes('return') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
+
+            {% if user.statutStripe == '0' %}
+                <div class="row" style="margin-top:2%;">
+                    <div class="col-md-auto">
+                        <img id="imagePreview" src="/assets/img/stripe.png" alt="Image ronde" style="width: 55px;margin-top: 2%;border-radius: 97px;">
+                    </div>
+                    <div class="col-md-auto" style="margin-top: auto;margin-bottom: auto;">
+                        <h4 style="margin: auto;font-size: 20px;font-weight: 700;">Configuration d'un compte de paiement</h4>
+                    </div>
+                    <div class="col-md-9" style="margin-top: auto;margin-bottom: auto;margin-top:2%;">
+                        <h4 style="margin: auto;font-size: 16px;text-align: justify;">Nous ne conservons aucune information relative à votre compte bancaire. Pour la gestion et le traitement sécurisés de tous les paiements, nous faisons confiance à Stripe, leader mondial dans le domaine des solutions de paiement sécurisées.</h4></br>
+                        <h4 style="margin: auto;font-size: 16px;text-align: justify;">Une fois que le hôte valide votre prestation, le paiement de votre client(e) sera transféré sur votre compte dans un délai d'environ 2 à 3 jours ouvrables.</h4>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-top:2%;">
+                    <div class="form-group">
+                        <a href="{{ path('app_account_link')}}" target="_blank"><button type="submit" class="btn btn-primary proB">Commencer</button></a>
+                    </div>
+                </div><br>
+            {% elseif user.statutStripe == '1'  %}
+                <div class="row" style="margin-top:2%;">
+                    <div class="col-md-auto">
+                        <img id="imagePreview" src="/assets/img/stripe.png" alt="Image ronde" style="width: 55px;margin-top: 2%;border-radius: 97px;">
+                    </div>
+                    <div class="col-md-auto" style="margin-top: auto;margin-bottom: auto;">
+                        <h4 style="margin: auto;font-size: 20px;font-weight: 700;">Compte de Paiement Configuré</h4>
+                    </div>
+                    <div class="col-md-9" style="margin-top: auto;margin-bottom: auto;margin-top:2%;">
+                        <h4 style="margin: auto;font-size: 16px;text-align: justify;">Votre compte de paiement Stripe est maintenant configuré et opérationnel. Vous pouvez gérer vos informations de paiement et consulter vos transactions en toute sécurité grâce à Stripe, notre partenaire de confiance pour les solutions de paiement sécurisées.</h4></br>
+                        <h4 style="margin: auto;font-size: 16px;text-align: justify;">Lorsque vos prestations seront validées par les hôtes, les paiements de vos clients seront traités et transférés sur votre compte Stripe. Ces fonds seront disponibles dans un délai d'environ 2 à 3 jours ouvrables après chaque transaction réussie.</h4>
+                        <h4 style="margin: auto;font-size: 16px;text-align: justify;">N'hésitez pas à consulter votre tableau de bord Stripe pour des détails supplémentaires sur vos paiements et pour mettre à jour vos informations si nécessaire.</h4>
+                    </div>
+                </div>
+                <div class="col-md-auto" style="margin-top:2%;">
+                    <div class="form-group">
+                        <a href="https://dashboard.stripe.com/login" target="_blank"><button type="submit" class="btn btn-primary proB">Accéder à Stripe</button></a>
+                    </div>
+                </div><br>
+            {% endif %}
         </div>
     </main>
 {% endblock %}

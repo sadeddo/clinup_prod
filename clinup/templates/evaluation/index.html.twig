@@ -13,11 +13,184 @@
                                 <img id="imagePreview" src="{{ app.request.basepath }}/img/{{ user.picture }}" alt="Image ronde" style="width: 75px;margin-top: 2%;border-radius: 97px;">
                             </div>
                             <h6 class="res-d" style="text-align: center;font-size: 17px;padding: 3%;">Mon palier</h6>
-                            
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                            {% if user.prix == "35" %}
+                            <div class="position-relative m-4">
+                                <div class="progress" style="height: 1px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;"><i class="fa-solid fa-circle-dollar-to-slot" style="font-size: 24px;color:rgb(255, 250, 240);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;background: rgba(214, 214, 214, 1) !important;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-solid fa-sack-dollar" style="font-size: 24px;color: rgba(102, 112, 133, 1);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 4rem; height:4rem;background: rgba(214, 214, 214, 1) !important;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-sharp fa-solid fa-medal" style="font-size: 24px;color: rgba(102, 112, 133, 1);"></i></button>
+                            </div>
+                            {% elseif user.prix == "45" %}
+                                <div class="position-relative m-4">
+                                <div class="progress" style="height: 1px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;"><i class="fa-solid fa-circle-dollar-to-slot" style="font-size: 24px;color:rgb(255, 250, 240);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-solid fa-sack-dollar" style="font-size: 24px;color:rgb(255, 250, 240);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 4rem; height:4rem;background: rgba(214, 214, 214, 1) !important;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-sharp fa-solid fa-medal" style="font-size: 24px;color: rgba(102, 112, 133, 1);"></i></button>
+                            </div>
+                            {% else %}
+                            <div class="position-relative m-4">
+                                <div class="progress" style="height: 1px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;"><i class="fa-solid fa-circle-dollar-to-slot" style="font-size: 24px;color:rgb(255, 250, 240);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 4rem; height:4rem;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-solid fa-sack-dollar" style="font-size: 24px;color:rgb(255, 250, 240);"></i></button>
+                                <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 4rem; height:4rem;
+                                    border: rgba(214, 214, 214, 1) !important;"><i class="fa-sharp fa-solid fa-medal" style="font-size: 24px;color: rgb(255, 250, 240);"></i></button>
+                            </div>
+                            {% endif %}
+                            </div>
+                            <div class="col-md-2"></div>
+                            </div>
+                            <p class="explique">Comment ça marche <i data-toggle="tarif" title="Bronze :35€/h | Argent :45€/h | Or :60€/h" class="bi bi-question-circle interro"></i></p>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-md-6">
+                    <div class="row">
+                    <div class="col-md-12">
+                        <div class="card ">
+                            <div class="card-body b">
+                            <h6 class="res-d" style="font-size: 17px;padding: 3%;">Tarif actuel</h6>
+                            <h4 style="padding-left: 3%;">{{ user.prix }} €/h</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="card-body b">
+                            <h6 class="res-d" style="font-size: 17px;padding: 3%;">Évaluation</h6>
+                            <h4>{{ evolution | number_format(1, '.', '') }} <i class="bi bi-star-fill" style="color: rgba(249, 166, 57, 1);"></i></h4>
+                            <div class="alert alert-primary justif-alert" role="alert" style="padding: 3%;background: rgba(231, 247, 238, 1);">
+                                <h6 style="font-size: 14px;font-weight: 600;margin: 0%;color: rgba(15, 163, 75, 1);">Qualifié au prochain</h6>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="card-body b">
+                            <h6 class="res-d" style="font-size: 17px;padding: 3%;">Missions acommplies</h6>
+                            <h4>{{ missions }}</h4>
+                            <div class="alert alert-primary justif-alert" role="alert" style="padding: 3%;background: rgba(240, 241, 243, 1);">
+                                <h6 style="font-size: 14px;font-weight: 600;margin: 0%;color: rgba(102, 112, 133, 1);">En progrès</h6>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="col-md-12" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);padding-left: 1%;padding-right: 1%;">
+                <div class="card" style="border-radius:10px;">
+                    <div class="card-body">  
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 style="font-weight:600;font-size:19px;margin-bottom:3%;">Avis et commentaires</h5>
+                            </div>
+                            {% for comment in comments %}
+                                <div class="marg" style="display: flex;">
+                                    {% if comment.client.picture %}
+                                        <img src="{{ app.request.basepath }}/img/{{ comment.client.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="card-title nom">{{ comment.client.firstname }} {{ comment.client.lastname }}   <span class="">
+                                            {% for i in 1..5 %}
+                                                {% if i <= comment.evaluation %}
+                                                    <span style="color: gold;">★</span>
+                                                {% else %}
+                                                    <span style="color: grey;">★</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </h6>
+                                        <div class="card-subtitle dateC">
+                                            <span class="text-muted">{{ comment.createdAt|date('j M. Y') }} | {{ comment.createdAt|date('H:i') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="card-text mt-2 comment" style="margin-left: 5%;">{{ comment.comment }}</p>
+                                    {% if comment.reponse != null %}
+                                        <div class="marg" style="margin-left:5%;display:flex;">
+                                            {% if comment.prestataire.picture %}
+                                                <img src="{{ app.request.basepath }}/img/{{ comment.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                            {% endif %}
+                                            <div>
+                                            <h6 class="card-title mb-0 nom">Réponse de l'agent</h6>
+                                            <p class="mt-2 comment" style="margin-left: 5%;">{{ comment.reponse }}</p>
+                                            </div>
+                                        </div>
+                                        {% elseif comment.reponse == null %}
+                                        <div class="d-flex  marg" style="margin-left:5%;margin-bottom: 2%;">
+                                            <div class="col-md-3 align-items-center">
+                                    <a type="button" class="updImg" href="{{ path('app_rep',{'id':comment.getId()}) }}"> Répondre à cette évaluation </a>
+                                    </div>
+                                        </div>
+                                    {% endif %}
+
+                                        {% else %}
+                                            <p style="margin-left:2%;">Aucun commentaire enregistré.</p>
+                                        {% endfor %}
+                        </div>
+                    </div>
+                </div> 
+            </div>                        
         </div>
+       <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="palier"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            var tooltipTrigger = [].slice.call(document.querySelectorAll('[data-toggle="tarif"]'))
+            var tooltipList = tooltipTrigger.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        </script>
+        {% if cible == "rep" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="margin: auto;width: 80%;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                               
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                       
+                                
+                                <label style="color:black;">Votre réponse</label></br>
+                                {{ form_widget(form.reponse, {'attr': {'placeholder': '', 'class': 'form-control', 'type': 'text', 'style': 'font-size:0.9rem;'}}) }}
+                               <!-- Ici le code pour les étoiles -->
+                            </div>
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="submit"  class="btn btn-secondary" style="width: 33%;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    {% endblock %}
+            {% endif %}
     </main>
 {% endblock %}

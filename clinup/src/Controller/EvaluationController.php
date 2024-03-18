@@ -47,6 +47,7 @@ class EvaluationController extends AbstractController
             'palier' => $tier,
             'tarif' => $tarif,
             'cible' => '',
+            'missions' =>  $numberOfMissions
         ]);
     }
     #[Route('/evaluation/{id}/reponse', name: 'app_rep')]
@@ -89,6 +90,7 @@ class EvaluationController extends AbstractController
             'cible' => 'rep',
             'palier' =>$tier,
             'tarif' => $tarif,
+            'missions' =>  $numberOfMissions
         ]);
     }
 }

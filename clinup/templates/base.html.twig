@@ -38,7 +38,6 @@
                 </i>
             </a>
             <a href="{{ path('app_chat')}}"><i class="bi bi-chat-right" style="color:#FF385C;"></i></a>
-          
         </div>
       </header>
       <!-- End Header -->
@@ -47,7 +46,7 @@
       <aside id="sidebar">
         <div class="sidebar-title">
           <div class="sidebar-brand">
-            <a href=""><span class="material-icons-outlined"><img src="/assets/img/logo-clinup.png" alt="easyloc" width=" 129px"></span></a>
+            <a href=""><span class="material-icons-outlined"><img src="/assets/img/logo-clinup.png" alt="easyloc" width=" 115px"></span></a>
           </div>
           <span class="material-icons-outlined" onclick="closeSidebar()"><i class="bi bi-x"></i></span>
         </div>
@@ -56,35 +55,38 @@
           <li class="sidebar-list-item">
             <a href="{{ path('app_fiscale')}}" >
               <i class="bi bi-columns-gap"></i> Dashboard 
-
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_modifier_profile_profileP')}}" >
-              <i class="bi bi-person"></i> Mon profil 
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_evaluation')}}" >
-              <i class="bi bi-star"></i> Evaluation 
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_dispo')}}" >
-              <i class="bi bi-calendar4-range"></i> Mes disponibilités 
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="{{ path('app_paiement')}}" >
-              <i class="bi bi-credit-card"></i> Paiement
             </a>
           </li>
           <li class="sidebar-list-item">
             <a href="{{ path('app_reservation_prestataire')}}" >
-              <i class="bi bi-check2-square"></i> Mes réservations
+              <i class="bi bi-calendar4-range"></i> Mes réservations
             </a>
           </li>
-            
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_dispo')}}" >
+              <i class="bi bi-record-circle"></i> Mes disponibilités 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_evaluation')}}" >
+              <i class="bi bi-star"></i> Évaluation 
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_paiement')}}" >
+              <i class="fa-brands fa-stripe-s" style="color: rgba(0, 0, 0, 0.61) !important;"></i> Paiement
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_chat')}}">
+              <i class="bi bi-chat-dots"></i> Messages
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{{ path('app_modifier_profile_profileP')}}" >
+              <i class="bi bi-person-circle"></i> Mon profil 
+            </a>
+          </li>
           <li class="sidebar-list-item">
             <a href="{{ path('app_logout') }}" >
               <i class="bi bi-box-arrow-right"></i> Déconnexion

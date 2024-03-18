@@ -23,9 +23,11 @@ class LogementType extends AbstractType
     ])
     ->add('booking', TextType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Entrez votre lien Ical de booking'],
+        'required' => false,
     ])
     ->add('airbnb', TextType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Entrez votre lien Ical d\'airbnb'],
+        'required' => false,
     ])
     ->add('completAdresse', TextType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Appartement, étage, etc.'],
