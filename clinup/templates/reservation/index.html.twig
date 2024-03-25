@@ -8,8 +8,10 @@
         
                     <div class="row reservation">
                         <div class="col-auto me-auto">
-                            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
-                        </div>
+                            <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes demandes de prestations</strong>
+                        </div>            {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
                         <div class="col-1">
                             <a href="{{ path('app_reservation_new') }}" type="button"><i class="bi bi-plus-square-fill"></i></a>
                         </div>
@@ -78,7 +80,7 @@
                         <div class="emptyReserv">
                             <img src="/assets/img/reserEmp.png"><br>
                             <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
-                            <h6>Initiez votre première réservation et offrez à votre maison la fraîcheur qu'elle mérite</h6><br>
+                            <h6>Initiez votre première réservation et offrez à votre logement l’entretien qu'il mérite</h6><br>
                             <a href="{{ path('app_reservation_new') }}"><button type="button" class="btn btn-secondary poster">Poster une réservation</button></a>
                         </div>
                 {% endif %}
@@ -117,7 +119,7 @@
                 <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="surface">Nombre des heures de ménage</label>
+                                <label for="surface">Durée de la prestation</label>
                                 <div id="hour-selector" class="hour-selector">
                                     <button type="button" onclick="changeHours(-1)" class="cursur">-</button>
                                     <input type="text" id="hourValue" name="reservation[nbrHeure]" value="1h30" readonly>

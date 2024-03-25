@@ -64,8 +64,15 @@ class PaiementController extends AbstractController
             'currency' => $currency,
             'payment_method_types' => ['card'],
             'capture_method' => 'manual',
-            
         ]);
+        // Vérifier si l'intention de paiement a été créée avec succès
+        if ($intent) {
+            $this->addFlash('success', 'Votre réservation a été confirmée avec succès!');
+        } else {
+            // Message d'échec
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre demande de paiement. Veuillez réessayer.');
+            return $this->redirectToRoute('checkout', ['idPresta' => $idPresta,'idDemande' => $idDemande], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('paiement/index.html.twig', [
             'clientSecret' => $intent->client_secret,
             'paymentIntentId' => $intent->id,

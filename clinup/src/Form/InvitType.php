@@ -25,6 +25,7 @@ class InvitType extends AbstractType
             ])
             ->add('message', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Message d\'invitation (facultatif)'],
+                'required' => false
             ])
         ;
     }

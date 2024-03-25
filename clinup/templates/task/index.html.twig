@@ -14,7 +14,11 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="img-back">
-                        <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 33%;padding-top: 10%;"> 
+                        {% if logement.img != null %}
+                        <img src="{{ app.request.basepath }}/log/{{ logement.img }}" class="img-fluid rounded-start" alt="Image du logement" style="width: 100%;height: 100%;border-radius: 13px;">
+                        {% else %}
+                            <img src="/assets/img/logement.png" class="img-fluid rounded-start" alt="Image du logement" style="padding-left: 33%;padding-top: 10%;"> 
+                        {% endif %} 
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -139,7 +143,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
-                                    <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre è cette tâche" required>
+                                    <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre à cette tâche" required>
                                 </div>
                             </div><br>
                             <div class="row">
@@ -153,7 +157,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="description" style="color:black;font-size: 15px;">Description</label>
-                                    <textarea class="form-control" id="description" name="task[description]" placeholder="Ajouter les détails de cette tâche ..."></textarea>
+                                    <textarea class="form-control" id="description" name="task[description]" placeholder="Ajouter les détails de cette tâche ..." required></textarea>
                                 </div>
                             </div>
                                 

@@ -32,6 +32,23 @@ class LogementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $logement->setHote($security->getUser());
+            $file = $form->get('img')->getData();
+            if ($file) {
+                // Générez un nom de fichier unique
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                // Déplacez le fichier dans le répertoire où sont stockées les brochures
+                try {
+                    $file->move(
+                        $this->getParameter('upload_directory_logement'), // Répertoire de destination
+                        $fileName // Nouveau nom du fichier
+                    );
+                } catch (FileException $e) {
+                    // ... gérer l'exception si quelque chose se passe pendant le téléchargement du fichier
+                }
+        
+                // Mettez à jour l'entité pour stocker le nouveau nom du fichier
+                $logement->setImg($fileName);
+            }
             $entityManager->persist($logement);
             $entityManager->flush();
 
@@ -53,8 +70,32 @@ class LogementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            // Vérifiez si une nouvelle image a été soumise
+            $file = $form->get('img')->getData();
+            if ($file) {
+                // Supprimer l'ancienne image si elle existe
+                $oldFileName = $logement->getImg();
+            if ($oldFileName && file_exists($this->getParameter('upload_directory_logement') . '/' . $oldFileName)) {
+                unlink($this->getParameter('upload_directory_logement') . '/' . $oldFileName);
+            }
 
+                // Générez un nom de fichier unique pour la nouvelle image
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                // Déplacez le fichier dans le répertoire où sont stockées les images
+                try {
+                    $file->move(
+                        $this->getParameter('upload_directory_logement'), // Répertoire de destination
+                        $fileName // Nouveau nom du fichier
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'exception si quelque chose se passe pendant le téléchargement du fichier
+                }
+
+                // Mettez à jour l'entité pour stocker le nouveau nom du fichier
+                $logement->setImg($fileName);
+            }
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre logement a été modifié avec succès !');
             return $this->redirectToRoute('app_logement_index', [], Response::HTTP_SEE_OTHER);
         }
 

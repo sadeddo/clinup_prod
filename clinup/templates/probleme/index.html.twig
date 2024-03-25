@@ -10,6 +10,9 @@
                         <div class="col-auto me-auto">
                             <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Problèmes</strong>
                         </div>
+                        <div class="col-1">
+                            <a type="button" href="{{ path('app_probleme_add')}}"><i class="bi bi-plus-square-fill"></i></a>
+                        </div>
                     </div><br>
                     <div class="row">
                     {% if problemes|length > 0 %}
@@ -63,6 +66,64 @@
                 {% endif %}
                 </div>
         </div>
+        {# modal pour probleme #}
+       {% if cible == "add" %}
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Signaler un problème</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form method="post">
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Titre du problème</label>
+                            <div class="input-group">
+                                {{ form_widget(form.titre) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Nom du logement</label>
+                            <div class="input-group">
+                                {{ form_widget(form.logement) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-12">
+                            <label for="date">Description</label>
+                            <div class="input-group">
+                                {{ form_widget(form.description) }}
+                            </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row" style="justify-content: center;">
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary proB">Enregistrer</button>
+                    </div>
+                </div>
+                {{ form_row(form._token) }}
+            </form><br>
+      </div>
+    </div>
+  </div>
+  {% block scripteditEventModalexp %}
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+</script>
+                    {% endblock %}
+                    {% endif %}
+
     </main>
 
 {% endblock %}

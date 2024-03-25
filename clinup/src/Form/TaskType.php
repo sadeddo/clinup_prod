@@ -27,7 +27,7 @@ class TaskType extends AbstractType
                 ])
             ->add('description', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Décrivez le logement, ses atouts, etc.'],
-                'required' => false,
+                'required' => true,
             ])
         ;
     }

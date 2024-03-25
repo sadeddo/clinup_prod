@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Probleme;
 use App\Form\ProblemeType;
 use App\Entity\Reservation;
+use App\Form\ProblemeLType;
 use App\Repository\LogementRepository;
 use App\Repository\ProblemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,11 +19,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProblemeController extends AbstractController
 {
     #[Route('/probleme', name: 'app_probleme_index', methods: ['GET'])]
-    public function index(ProblemeRepository $problemeRepository,Security $security,LogementRepository $logementRepository): Response
+    public function index(ProblemeRepository $problemeRepository,Security $security,LogementRepository $logementRepository,Request $request,EntityManagerInterface $entityManager): Response
     {
         $problemes =  $problemes = $problemeRepository->findProblemesByHoteId($security->getUser()->getId());
         return $this->render('probleme/index.html.twig', [
             'problemes' => $problemes,
+            'cible' => ''
+        ]);
+    }
+    #[Route('/probleme/ajouter', name: 'app_probleme_add', methods: ['GET', 'POST'])]
+    public function addH(ProblemeRepository $problemeRepository,Security $security,LogementRepository $logementRepository,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $problemes =  $problemes = $problemeRepository->findProblemesByHoteId($security->getUser()->getId());
+
+        $probleme = new Probleme();
+        $form = $this->createForm(ProblemeLType::class, $probleme, [
+            'user' => $security->getUser(),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $probleme->setStatut('0');
+            $entityManager->persist($probleme);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_probleme_index', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('probleme/index.html.twig', [
+            'problemes' => $problemes,
+            'form' => $form,
+            'cible' => 'add'
         ]);
     }
 

@@ -6,6 +6,7 @@
 parameters:
     upload_directory_doc: '%kernel.project_dir%/public/justifs'
     upload_directory_task: '%kernel.project_dir%/public/task'
+    upload_directory_logement: '%kernel.project_dir%/public/log'
     upload_directory_task_hote: '%kernel.project_dir%/public/taskHote'
     upload_directory_img_message: '%kernel.project_dir%/public/message'
     upload_directory_img: '%kernel.project_dir%/public/img'

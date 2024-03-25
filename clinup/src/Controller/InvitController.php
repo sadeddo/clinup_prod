@@ -59,6 +59,7 @@ class InvitController extends AbstractController
                     'invit' => $invit,
                 ]
             );
+            $this->addFlash('success', 'Votre invitation à été envoyer avec succès !');
             return $this->redirectToRoute('app_invit');
         }
         return $this->render('invit/index.html.twig', [
@@ -106,6 +107,7 @@ class InvitController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
             $this->sendNotification($user, $notificationService, $notifService, $reservation);
+            $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur la page "Réservations".');
             return $this->redirectToRoute('app_invit');
         }
         return $this->render('invit/index.html.twig', [
@@ -130,6 +132,7 @@ class InvitController extends AbstractController
             ]
         );
 
+        $this->addFlash('success', 'Votre invitation à été renvoyer avec succès !');
         return $this->redirectToRoute('app_invit');
         
     }

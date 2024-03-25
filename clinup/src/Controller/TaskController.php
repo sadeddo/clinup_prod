@@ -54,6 +54,7 @@ class TaskController extends AbstractController
             $entityManager->persist($task);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La tâche que vous avez ajoutée a été enregistrée avec succès !');
             return $this->redirectToRoute('app_task_index', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -104,6 +105,7 @@ class TaskController extends AbstractController
             }
             $entityManager->flush();
 
+            $this->addFlash('success', 'Votre modification a été enregistrée avec succès !');
             return $this->redirectToRoute('app_task_index', ['id' => $task->getLogement()->getId()], Response::HTTP_SEE_OTHER);
         }
 

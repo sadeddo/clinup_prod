@@ -55,6 +55,9 @@ class Logement
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $airbnb = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $img = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -278,6 +281,18 @@ class Logement
     public function setAirbnb(?string $airbnb): static
     {
         $this->airbnb = $airbnb;
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): static
+    {
+        $this->img = $img;
 
         return $this;
     }

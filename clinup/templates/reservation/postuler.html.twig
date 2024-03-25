@@ -6,6 +6,9 @@
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
             <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
             {% if reservation.statut == "confirmer" %}
             <h5 class="titree">Détails d’entretien</h5>
                     <div class="card">

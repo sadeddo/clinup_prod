@@ -337,7 +337,7 @@ h4{
         alert("Une erreur de traitement est survenue: " + result.error.message);
       } else {
         if (result.paymentIntent.status === 'requires_capture') {
-            var successUrl = "{{ path('app_reservation_confirmer', {'idIntent': paymentIntentId,'idPrestataire': IdPresta,'idReservation': IdDemande}) }}"; 
+            var successUrl = "{{ path('app_list_postuler', {'id': IdDemande}) }}"; 
             // Redirection vers l'URL de succès
             window.location.href = successUrl;
         }

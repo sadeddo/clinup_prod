@@ -56,8 +56,9 @@ class ReservationType extends AbstractType
         ])
         ->add('description', TextareaType::class, [
             'attr' => ['class' => 'form-control',
-            'placeholder' => 'Des détails particuliers à partager etc...'
-                                            ],
+            'placeholder' => 'Des détails particuliers à partager etc...'],
+            'required' => false
+
         ]);
 }
 

@@ -123,10 +123,10 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->createReservation($reservation, $entityManager, $security);
             $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
-        foreach($dispos as $dispo){
-            $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
-        }
-
+            foreach($dispos as $dispo){
+                $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+            }
+        $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
          return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
         $hote = $security->getUser();
@@ -280,7 +280,6 @@ class ReservationController extends AbstractController
     #[Route('/hote/{id}/postulers', name: 'app_list_postuler')]
     public function consulter(Reservation $reservation,PostulerRepository $PostulerRepository)
     {
-        
         return $this->render('reservation/postuler.html.twig', [
             'reservation' => $reservation,
             
