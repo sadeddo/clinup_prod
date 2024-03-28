@@ -18,8 +18,6 @@ class LogementController extends AbstractController
     #[Route('/', name: 'app_logement_index', methods: ['GET'])]
     public function index(LogementRepository $logementRepository, Security $security): Response
     {
-        $icalContent = file_get_contents('https://www.airbnb.fr/calendar/ical/1115296086788167902.ics?s=ce7487757e36eacd4bcad37adde40208');
-        dd($icalContent);
         return $this->render('logement/index.html.twig', [
             'logements' => $logementRepository->findBy(['hote' => $security->getUser()]),
         ]);
