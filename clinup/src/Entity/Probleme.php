@@ -23,8 +23,14 @@ class Probleme
     #[ORM\ManyToOne(inversedBy: 'problemes')]
     private ?Logement $logement = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $statut = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statut = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $num = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $criticiter = null;
 
     public function getId(): ?int
     {
@@ -67,14 +73,38 @@ class Probleme
         return $this;
     }
 
-    public function isStatut(): ?bool
+    public function getStatut(): ?string
     {
         return $this->statut;
     }
 
-    public function setStatut(?bool $statut): static
+    public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getNum(): ?string
+    {
+        return $this->num;
+    }
+
+    public function setNum(?string $num): static
+    {
+        $this->num = $num;
+
+        return $this;
+    }
+
+    public function getCriticiter(): ?string
+    {
+        return $this->criticiter;
+    }
+
+    public function setCriticiter(?string $criticiter): static
+    {
+        $this->criticiter = $criticiter;
 
         return $this;
     }

@@ -12,8 +12,8 @@
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
             </div>
-            <div class="col-1" style="font-size: 1.5rem;">
-                <a href="{{ path('app_logement_new') }}"><i class="bi bi-plus-square-fill"></i></a>
+            <div class="col-auto" style="font-size: 1.5rem;">
+                <a class="btn btn-secondary" href="{{ path('app_logement_new') }}">Ajouter un logement</a>
             </div>
         </div><br>
         {% for logement in logements %}
@@ -31,7 +31,7 @@
                 <div class="col-md-6">
                     <div class="card-body">
                         <h5 class="card-title" style="font-size: 16px;font-weight: 500;">{{ logement.nom }}</h5>
-                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="fa-regular fa-bath"></i> {{ logement.nbrBain }}</p>
+                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="bi bi-house" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.nbrBain }}</p>
                         <p class="card-text"><small class="text-body-secondary"><i class="bi bi-geo-alt" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.adresse }},{{ logement.completAdresse }}</small></p>
                     </div>
                 </div>

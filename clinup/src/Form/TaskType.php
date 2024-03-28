@@ -20,6 +20,9 @@ class TaskType extends AbstractType
             ->add('titre', TextType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Entrez le titre de la tâche'],
             ])
+            ->add('detail', TextType::class, [
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('img',FileType::class, [
                 'attr' => ['class' => 'form-control'],
                 "mapped" => false,

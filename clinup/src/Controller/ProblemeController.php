@@ -39,7 +39,9 @@ class ProblemeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $probleme->setStatut('0');
+            $uniqueId = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            $probleme->setNum($uniqueId);
+            $probleme->setStatut('Non résolu');
             $entityManager->persist($probleme);
             $entityManager->flush();
 
@@ -63,7 +65,9 @@ class ProblemeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $probleme->setLogement($reservationRepository->findOneBy(['id' => $id])->getLogement());
-            $probleme->setStatut('0');
+            $uniqueId = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            $probleme->setNum($uniqueId);
+            $probleme->setStatut('Non résolu');
             $entityManager->persist($probleme);
             $entityManager->flush();
 

@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ProblemeLType extends AbstractType
@@ -45,6 +46,15 @@ class ProblemeLType extends AbstractType
                 'placeholder' => 'Sélectionner un logement'
             ],
             ])
+            ->add('criticiter', ChoiceType::class, [
+                'choices' => [
+                    'P1 - le logement est inutilisable' => 'P1',
+                    'P2 - impacte la réservation client' => 'P2',
+                    'P3 - pas d’incidence client' => 'P3',
+                ],
+                'attr' => ['class' => 'form-control'],
+                'required' => false,
+            ]);
         ;
     }
 

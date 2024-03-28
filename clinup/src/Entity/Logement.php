@@ -58,11 +58,15 @@ class Logement
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img = null;
 
+    #[ORM\OneToMany(mappedBy: 'logement', targetEntity: Icalres::class)]
+    private Collection $icalres;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->problemes = new ArrayCollection();
+        $this->icalres = new ArrayCollection();
     }
 
     public function __toString()
@@ -293,6 +297,36 @@ class Logement
     public function setImg(?string $img): static
     {
         $this->img = $img;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Icalres>
+     */
+    public function getIcalres(): Collection
+    {
+        return $this->icalres;
+    }
+
+    public function addIcalre(Icalres $icalre): static
+    {
+        if (!$this->icalres->contains($icalre)) {
+            $this->icalres->add($icalre);
+            $icalre->setLogement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIcalre(Icalres $icalre): static
+    {
+        if ($this->icalres->removeElement($icalre)) {
+            // set the owning side to null (unless already changed)
+            if ($icalre->getLogement() === $this) {
+                $icalre->setLogement(null);
+            }
+        }
 
         return $this;
     }

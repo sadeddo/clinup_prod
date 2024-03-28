@@ -34,6 +34,9 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $detail = null;
+
     public function __construct()
     {
         $this->imgTasks = new ArrayCollection();
@@ -130,6 +133,18 @@ class Task
     public function setImg(?string $img): static
     {
         $this->img = $img;
+
+        return $this;
+    }
+
+    public function getDetail(): ?string
+    {
+        return $this->detail;
+    }
+
+    public function setDetail(?string $detail): static
+    {
+        $this->detail = $detail;
 
         return $this;
     }

@@ -24,7 +24,7 @@
                 <div class="col-md-6">
                     <div class="card-body">
                         <h5 class="card-title" style="font-size: 16px;font-weight: 500;">{{ logement.nom }}</h5>
-                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="fa-regular fa-bath"></i> {{ logement.nbrBain }}</p>
+                        <p class="card-text" style="color:rgba(0, 0, 0, 0.58);"><i class="fa-regular fa-bed"></i> {{ logement.nbrChambre }} | <i class="bi bi-house" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.nbrBain }}</p>
                         <p class="card-text"><small class="text-body-secondary"><i class="bi bi-geo-alt" style="color:rgba(0, 0, 0, 0.58);"></i> {{ logement.adresse }},{{ logement.completAdresse }}</small></p>
                     </div>
                 </div>
@@ -42,10 +42,10 @@
         </div>
         <div class="row justify-content-between">
              <div class="col-auto me-auto">
-                <strong class="card-title" style="font-weight: bold;font-size:1.25rem;">Mes logements</strong>
+                <strong class="card-title" style="font-weight: bold;font-size:1.25rem;">Tâches</strong>
             </div>
-            <div class="col-1" style="font-size: 1.25rem;text-align: end;">
-                <a href="{{ path('app_task_new',{'id':logement.id}) }}"><i class="bi bi-plus-square-fill"></i></a>
+            <div class="col-auto" style="font-size: 1.25rem;text-align: end;">
+                <a class="btn btn-secondary" href="{{ path('app_task_new',{'id':logement.id}) }}">Ajouter une tâche</a>
             </div>
         </div><br>
         
@@ -58,15 +58,17 @@
                                             <div class="card m-2">
                                                 <div class="card-body b">
                                                     <div class="row" style="margin-bottom:2%;">
-                                                        <div class="col-md-9" style="margin-top: 2%;">
+                                                        <div class="col-md-10" style="margin-top: 2%;">
                                                             <h6 class="taskTitre">{{ task.titre }}</h6>
                                                         </div>
-                                                        <div class="col-md-3" style="display:flex;">
-                                                            <a href="{{ path('app_task_edit',{'id':task.id}) }}"><div class="btnM"><i class="bi bi-pencil-square"></i></div></a>
+                                                        <div class="col-md-auto" style="display:flex;">
                                                             <a  data-bs-toggle="modal"  data-bs-target="#exampleModal{{task.id}}"><div class="btnM2"><i class="bi bi-trash"></i></div></a>
                                                         </div>
                                                     </div>
                                                     <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="taskDesc">{{ task.detail }}</h6>
+                                                        </div>
                                                         <div class="col-md-12">
                                                             <h6 class="taskDesc">{{ task.description }}</h6>
                                                         </div>
@@ -142,8 +144,28 @@
                             {{ form_row(form._token) }}
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="nom" style="color:black;font-size: 15px;">Titre de tâche</label>
-                                    <input type="text" class="form-control" id="nom" name="task[titre]" placeholder="Donnez un titre à cette tâche" required>
+                                    <label for="nom" style="color:black;font-size: 15px;">Type de tâche</label>
+                                    <select id="typeTache" name="task[titre]" class="form-control"  required>
+                                        <option value="Nettoyage des surfaces" selected>Nettoyage des surfaces</option>
+                                        <option value="Nettoyage des sols">Nettoyage des sols</option>
+                                        <option value="Nettoyage de la cuisine">Nettoyage de la cuisine</option>
+                                        <option value="Nettoyage de la salle de bain">Nettoyage de la salle de bain</option>
+                                        <option value="Nettoyage des toilettes">Nettoyage des toilettes</option>
+                                        <option value="Changement des draps et des serviettes">Changement des draps et des serviettes</option>
+                                        <option value="Organisation et rangement">Organisation et rangement</option>
+                                        <option value="Gestion des déchets">Gestion des déchets</option>
+                                        <option value="Gestion de l'odeur ">Gestion de l'odeur </option>
+                                    </select>
+                                </div>
+                            </div><br>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="nom" style="color:black;font-size: 15px;">Détails de la tâche</label>
+                                    <select id="detailsTache" name="task[detail]" class="form-control"  required>
+                                        <option value="Poussière sur les meubles" selected>Poussière sur les meubless</option>
+                                        <option value="Nettoyage des tables et autres surfaces">Nettoyage des tables et autres surfaces</option>
+                                        <option value="Nettoyage des fenêtres, des miroirs et des surfaces vitrées">Nettoyage des fenêtres, des miroirs et des surfaces vitrées</option>
+                                    </select>
                                 </div>
                             </div><br>
                             <div class="row">
@@ -156,8 +178,8 @@
                             </div><br>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="description" style="color:black;font-size: 15px;">Description</label>
-                                    <textarea class="form-control" id="description" name="task[description]" placeholder="Ajouter les détails de cette tâche ..." required></textarea>
+                                    <label for="description" style="color:black;font-size: 15px;">Avez-vous d'autre remarque? (Optionnel)</label>
+                                    <textarea class="form-control" id="description" name="task[description]" placeholder="Ajouter les détails de cette tâche ..."></textarea>
                                 </div>
                             </div>
                                 
@@ -236,4 +258,78 @@
                     {% endblock %}
             {% endif %}
             {#end modal modifier#}
+            <script>
+    // Écoute des changements dans le champ "Type de tâche"
+    document.getElementById('typeTache').addEventListener('change', function() {
+        var typeTache = this.value;
+        var detailsTacheSelect = document.getElementById('detailsTache');
+
+        // Effacer les options existantes
+        detailsTacheSelect.innerHTML = '';
+
+        // Générer et ajouter les nouvelles options en fonction du type de tâche sélectionné
+        if (typeTache === 'Nettoyage des surfaces') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Poussière sur les meubles', text: 'Poussière sur les meubles' },
+                { value: 'Nettoyage des fenêtres, des miroirs et des surfaces vitrées', text: 'Nettoyage des fenêtres, des miroirs et des surfaces vitrées' },
+                { value: 'Nettoyage des tables et autres surfaces', text: 'Nettoyage des tables et autres surfaces' }
+            ]);
+        } else if (typeTache === 'Nettoyage des sols') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Nettoyage des sols avec un aspirateur', text: 'Nettoyage des sols avec un aspirateur' },
+                { value: 'Nettoyage des sols avec une serpillère', text: 'Nettoyage des sols avec une serpillère' },
+                { value: 'Nettoyage des sols avec un balai', text: 'Nettoyage des sols avec un balai' }
+            ]);
+        } else if (typeTache === 'Nettoyage de la cuisine') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Lavage de la vaisselle', text: 'Lavage de la vaisselle' },
+                { value: 'Nettoyage de tous les appareils éléctro-ménagers', text: 'Nettoyage de tous les appareils éléctro-ménagers' },
+            ]);
+        } else if (typeTache === 'Nettoyage de la salle de bain') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Nettoyage des parois de la douche', text: 'Nettoyage des parois de la douche' },
+                { value: 'Nettoyage du pommeau de douche', text: 'Nettoyage du pommeau de douche' },
+                { value: 'Nettoyage des joints et des coins', text: 'Nettoyage des joints et des coins' },
+                { value: 'Essuyage et finitions', text: 'Essuyage et finitions' },
+            ]);
+        } else if (typeTache === 'Nettoyage des toilettes') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Nettoyage du siège et de la lunette', text: 'Nettoyage du siège et de la lunette' },
+                { value: 'Nettoyage de l\'extérieur des toilettes', text: 'Nettoyage de l\'extérieur des toilettes' },
+            ]);
+        } else if (typeTache === 'Changement des draps et des serviettes') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Remplacement des draps de lit', text: 'Remplacement des draps de lit' },
+                { value: 'Remplacement des taies d\'oreiller', text: 'Remplacement des taies d\'oreiller' },
+                { value: 'Remplacement des serviettes de bain', text: 'Remplacement des serviettes de bain' }
+            ]);
+        } else if (typeTache === 'Organisation et rangement') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Ranger les objets décoratifs', text: 'Ranger les objets décoratifs' },
+                { value: 'Ranger les articles ménagers', text: 'Ranger les articles ménagers' }
+            ]);
+        } else if (typeTache === 'Gestion des déchets') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Sortir les poubelles', text: 'Sortir les poubelles' },
+                { value: 'Nettoyer les poubelles', text: 'Nettoyer les poubelles' },
+            ]);
+        } else if (typeTache === 'Gestion de l\'odeur ') {
+            addOptions(detailsTacheSelect, [
+                { value: 'Utilisation de désodorisants', text: 'Utilisation de désodorisants' },
+                { value: 'Utilisation de bougies parfumées ', text: 'Utilisation de bougies parfumées' },
+                { value: 'Utilisation de diffuseurs pour maintenir une bonne odeur dans l\'appartement', text: 'Utilisation de diffuseurs pour maintenir une bonne odeur dans l\'appartement' }
+            ]);
+        } 
+    });
+
+    // Fonction pour ajouter plusieurs options à un select
+    function addOptions(selectElement, options) {
+        options.forEach(function(option) {
+            var optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            selectElement.appendChild(optionElement);
+        });
+    }
+</script>
 {% endblock %}

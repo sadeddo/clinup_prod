@@ -18,6 +18,8 @@ class LogementController extends AbstractController
     #[Route('/', name: 'app_logement_index', methods: ['GET'])]
     public function index(LogementRepository $logementRepository, Security $security): Response
     {
+        $icalContent = file_get_contents('https://www.airbnb.fr/calendar/ical/1115296086788167902.ics?s=ce7487757e36eacd4bcad37adde40208');
+        dd($icalContent);
         return $this->render('logement/index.html.twig', [
             'logements' => $logementRepository->findBy(['hote' => $security->getUser()]),
         ]);
@@ -51,7 +53,6 @@ class LogementController extends AbstractController
             }
             $entityManager->persist($logement);
             $entityManager->flush();
-
             $this->addFlash('success', 'Votre logement est ajouté avec succès!
             Facilitez vos réservations en spécifiant toutes les tâches pour ce logement');
             return $this->redirectToRoute('app_task_index', ['id' => $logement->getId()], Response::HTTP_SEE_OTHER);
