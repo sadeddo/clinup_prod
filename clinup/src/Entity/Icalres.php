@@ -22,6 +22,9 @@ class Icalres
     #[ORM\ManyToOne(inversedBy: 'icalres')]
     private ?Logement $logement = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statut = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Icalres
     public function setLogement(?Logement $logement): static
     {
         $this->logement = $logement;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }

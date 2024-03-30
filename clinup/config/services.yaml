@@ -12,6 +12,7 @@ parameters:
     upload_directory_img: '%kernel.project_dir%/public/img'
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
     maps_secret_key: '%env(MAPS_SECRET_KEY)%'
+    app.jwtsecret: 'fghijklmnopqrstuvwxyzABC'
 services:
     # default configuration for services in *this* file
     _defaults:

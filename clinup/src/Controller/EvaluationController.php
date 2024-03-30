@@ -79,6 +79,7 @@ class EvaluationController extends AbstractController
             $commentPrestum->setDateRep(new DateTimeImmutable());
             $entityManager->persist($commentPrestum);
             $entityManager->flush();
+            $this->addFlash('success', 'Votre réponse a été enregistrée avec succès!');
             return $this->redirectToRoute('app_evaluation', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('evaluation/index.html.twig', [

@@ -37,8 +37,9 @@ class ProblemeType extends AbstractType
                 'P2 - impacte la réservation client' => 'P2',
                 'P3 - pas d’incidence client' => 'P3',
             ],
-            'attr' => ['class' => 'form-control'],
+            'attr' => ['class' => 'form-control','placeholder' => "Selectionnez"],
             'required' => false,
+            'placeholder' => "Selectionnez"
         ]);
     }
 

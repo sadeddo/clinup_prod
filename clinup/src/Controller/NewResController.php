@@ -20,16 +20,7 @@ class NewResController extends AbstractController
     #[Route('/res', name: 'app_new_res')]
     public function index(LogementRepository $logementRepository, Security $security, IcalService $icalService, EntityManagerInterface $entityManager, IcalresRepository $reservationRepository): Response
     {
-        $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
-        foreach ($logements as $logement) {
-            if ($logement->getAirbnb()) {
-                $this->processReservationsForLink($logement, $logement->getAirbnb(), $entityManager, $icalService, $reservationRepository);
-            }
-            if ($logement->getBooking()) {
-                $this->processReservationsForLink($logement, $logement->getBooking(), $entityManager, $icalService, $reservationRepository);
-            }
-        }
-        $entityManager->flush();
+        
         
         return $this->render('new_res/index.html.twig', [
             'controller_name' => 'NewResController',

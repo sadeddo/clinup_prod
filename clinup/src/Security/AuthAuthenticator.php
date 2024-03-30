@@ -53,7 +53,7 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($this->urlGenerator->generate('app_reservation_prestataire'));
         }
         elseif(in_array("ROLE_HOTE", $user->getRoles())){
-            return new RedirectResponse($this->urlGenerator->generate('app_reservation_index'));
+            return new RedirectResponse($this->urlGenerator->generate('app_logement_index'));
         }
         elseif (in_array("ROLE_ADMIN", $user->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_admin'));

@@ -127,6 +127,7 @@ class TaskController extends AbstractController
             $entityManager->remove($task);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Votre modification a été enregistrée avec succès !');
         return $this->redirectToRoute('app_task_index', ['id' => $task->getLogement()->getId()], Response::HTTP_SEE_OTHER);
     }
 

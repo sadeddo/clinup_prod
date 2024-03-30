@@ -1,256 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Logement index{% endblock %}
+{% block title %}Logements{% endblock %}
 
 {% block body %}
- <main class="main-container">
-  
-        <div class="container d-flex" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-<style>
-    .users{
-            width:70%;
-            display: flex;
-            justify-content: center; /* Centre horizontalement */
-            align-items: center;
-        }
-        .details{
-            width:30%;
-            border:1px solid rgba(0, 0, 0, 0.16);
-            border-radius: 6px;
-            padding-left: 1%;
-            padding-right: 1%;
-            padding-top: 1%;
-            padding-bottom: 1%;
-        }
-        .conversations{
-            width:30%;
-            min-height: 100vh;
-            border:1px solid rgba(0, 0, 0, 0.16);
-        }
-        .detail{
-            margin-left:7%;
-        }
-        .search{
-            width: 60%;
-        }
-        .Search{
-            width: 89%;
-            margin-left: 18%;
-        }
-        .cards{
-            margin-top:4%;
-        }
-        .card{
-            width: 20rem;
-            margin-left:6%;
-            margin-bottom:7%;
-            display:contents;
-            }
-        .collapse{
-            margin-left:75%;
-        }
-        .card-title {
-            display: flex;
-            justify-content: space-between; /* Pour espacer les deux éléments autant que possible */
-        }
-
-        .card-title h4.text-end {
-            margin-left: auto; /* Déplace la deuxième h4 à la fin de la ligne */
-        }
-        .search-box {
-  background: rgba(38, 32, 32, 0.11);
-  padding: 10px 13px;
-}
-.search-box .input-wrapper {
-  background: #fff;
-  border-radius: 40px;
-}
-.search-box .input-wrapper i {
-  color: grey;
-  margin-left: 7px;
-  vertical-align: middle;
-}
-input {
-  border: none;
-  border-radius: 30px;
-  width: 80%;
-  margin-left: 6%;
-}
-input::placeholder {
-  color: #e3e3e3;
-  font-weight: 300;
-  margin-left: 20px;
-}
-input:focus {
-  outline: none;
-}
-.icon-button {
-    background: none; /* Supprime l'arrière-plan du bouton */
-    border: none; /* Supprime la bordure du bouton */
-    padding: 0; /* Supprime le rembourrage du bouton */
-    cursor: pointer; /* Change le curseur pour indiquer qu'il est cliquable */
-}
-.friend-drawer {
-  padding: 10px 15px;
-  display: flex;
-  vertical-align: baseline;
-  background: #fff;
-  transition: 0.3s ease;
-}
-.friend-drawer--grey {
-  background: #eee;
-}
-.friend-drawer .text {
-  margin-left: 12px;
-  width: 70%;
-}
-.friend-drawer .text h6 {
-  margin-top: 6px;
-  margin-bottom: 0;
-}
-.friend-drawer .text p {
-  margin: 0;
-}
-.friend-drawer .time {
-  color: grey;
-}
-.friend-drawer--onhover:hover {
-  background: #74b9ff;
-  cursor: pointer;
-}
-.friend-drawer--onhover:hover p,
-.friend-drawer--onhover:hover h6,
-.friend-drawer--onhover:hover .time {
-  color: #fff !important;
-}
-
-hr {
-  margin: 5px auto;
-  width: 60%;
-}
-
-.chat-bubble {
-  padding: 10px 14px;
-  background: #eee;
-  margin: 10px 30px;
-  border-radius: 9px;
-  position: relative;
-  animation: fadeIn 1s ease-in;
-}
-.chat-bubble:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border: 20px solid transparent;
-  border-bottom: 0;
-  margin-top: -10px;
-}
-.chat-bubble--left:after {
-  left: 0;
-  border-right-color: #eee;
-  border-left: 0;
-  margin-left: -20px;
-}
-.chat-bubble--right:after {
-  right: 0;
-  border-left-color: #74b9ff;
-  border-right: 0;
-  margin-right: -20px;
-}
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.profile-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 40px;
-}
-
-.offset-md-9 .chat-bubble {
-  background: #74b9ff;
-  color: #fff;
-}
-
-.chat-box-tray {
-  background: #eee;
-  display: flex;
-  align-items: baseline;
-  padding: 10px 15px;
-  align-items: center;
-  margin-top: 19px;
-  bottom: 0;
-}
-.chat-box-tray input {
-  margin: 0 10px;
-  padding: 6px 2px;
-}
-.chat-box-tray i {
-  color: grey;
-  font-size: 30px;
-  vertical-align: middle;
-}
-.chat-box-tray i:last-of-type {
-  margin-left: 25px;
-}
-.conv {
-    text-align: center; /* Centre le texte horizontalement */
-    margin:auto;
-}
-.center{
-    font-size: 21vh;
-color: rgb(3, 23, 102);
-}
-a {
-    text-decoration: none; /* Supprime le soulignement des liens */
-    /* Ajoutez d'autres styles personnalisés pour les liens si nécessaire */
-}
-.main-container{
-  padding:0% !important;
-}
-.bi {
-    color: #FF385C !important;
-}
-</style>
-        <div class="conversations">
-                
-                {% if conversations|length > 0 %}
-    {% for conversation in conversations %}
-        <a href="{{ path('app_chat_show', {'id': conversation.id,'idrecipiant': conversation.idRecipiant}) }}">
-            <div class="friend-drawer friend-drawer--onhover">
-                <img class="profile-image" src="{{app.request.basepath}}/img/{{conversation.picture}}" alt="">
-                <div class="text">
-                    <h6>{{ conversation.nom }}</h6>
-                    {% if conversation.type == 'image' %}
-                        <p class="text-muted"><i class="bi bi-image-fill"></i> Photo</p>
-                    {% else %}
-                        <p class="text-muted">{{ conversation.lastMessage }}</p>
-                    {% endif %}
-                </div>
-                <span class="time text-muted small">{{ conversation.CreatedAt|date('H:i') }}</span>
-            </div>
-        </a>
-        <hr>
-    {% endfor %}
-{% else %}
-    <p>Vous n'avez actuellement aucune conversation.</p>
-{% endif %}
-
-            </div>
-            <div class="users">
-                <div class="conv">
-                   <i class="bi bi-chat-square-text center"></i>
-                   <h4>Consultez vos messages</h4>
-                   <h6>Sélectionnez une conversation pour commencer</h6>
+<main class="main-container">
+    <div class="container" style="width: 95%; height: 100%;">
+    <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Messages</strong>
+        <div class="card" style="border: none; box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; padding: 2%; height: 90%;">
+            <div class="row">
+                <div class="col-md-4" style="margin-bottom:17%;">
+                    <p style="font-size: 18px; font-weight: 600;">Hôtes</p>
+                    <div class="overflow-auto" style="max-height: 72vh;">
+                        {% if conversations|length > 0 %}
+                        {% for conversation in conversations %}
+                        <a  href="{{ path('app_chat_show', {'id': conversation.id,'idrecipiant': conversation.idRecipiant}) }}"><div class="marg" style="display: flex;">
+                            <img src="{{app.request.basepath}}/img/{{conversation.picture}}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                            <div>
+                                <h6 class="card-title mb-0 nom" style="font-size: 1rem !important;color: black !important;">{{ conversation.nom }} <span class=""></span></h6>                     
+                                <div class="card-subtitle dateC">
+                                    {% if conversation.type == 'image' %}
+                                        <p class="text-muted"><i class="bi bi-image-fill"></i> Photo</p>
+                                    {% else %}
+                                        <p class="text-muted">{{ conversation.lastMessage }}</p>
+                                    {% endif %}                            
+                                </div>
+                            </div> 
+                        </div></a><br>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div><br>
+                <div class="col-md-8">
+                    <div class="card" style="height: 78vh;">
+                        <div class="" style="margin: auto; text-align: center;">
+                            <i class="bi bi-chat-square-text center" style="font-size: 113px;"></i>
+                            <h5 style="font-weight: 600;">Consultez vos messages</h5>
+                            <h6>Sélectionnez une conversation pour commencer</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
-</div>
-    </main>
+        </div>
+    </div>
+</main>
 {% endblock %}

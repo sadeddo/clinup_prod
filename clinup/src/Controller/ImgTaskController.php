@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\ImgTask;
+use App\Entity\Postuler;
 use App\Form\ImgTaskType;
+use App\Entity\Reservation;
 use App\Repository\TaskRepository;
 use App\Repository\ImgTaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +28,7 @@ class ImgTaskController extends AbstractController
     }
 
     #[Route('/{idReservation}/{idTask}/ajouter', name: 'app_img_task_new', methods: ['GET', 'POST'])]
-    public function new($idReservation,$idTask,Request $request, EntityManagerInterface $entityManager,TaskRepository $TaskRepository,ReservationRepository $reservationRepository): Response
+    public function new($idReservation,$idTask,Request $request, EntityManagerInterface $entityManager,TaskRepository $TaskRepository,ReservationRepository $reservationRepository,Security $security): Response
     {
         $imgTask = new ImgTask();
         $form = $this->createForm(ImgTaskType::class, $imgTask);
@@ -57,13 +60,18 @@ class ImgTaskController extends AbstractController
 
             return $this->redirectToRoute('app_reservation_show', ['id' => $idReservation ], Response::HTTP_SEE_OTHER);
         }
-
+          //verifier si l'utilisateur à deja postuler
+        $postulation = $entityManager->getRepository(Postuler::class)
+        ->findOneBy(['reservation' => $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idReservation]), 'prestataire' => $security->getUser()]);
+        
         return $this->render('reservation/showP.html.twig', [
             'img_task' => $imgTask,
             'form' => $form,
             'cible' => 'ajouter',
             'idReservation' => $idReservation,
-            'reservation' => $reservationRepository->findOneBy(['id' => $idReservation])
+            'reservation' => $reservationRepository->findOneBy(['id' => $idReservation]),
+            'hasApplied' => $postulation
+            
         ]);
     }
 

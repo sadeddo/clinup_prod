@@ -22,7 +22,7 @@
                             <h5 style="font-weight:700;">Informations générales</h5>
                             <form method="post" enctype="multipart/form-data">
                                 {% for message in app.flashes('success') %}
-                                    <div class="alert alert-danger">{{ message }}</div>
+                                    <div class="alert alert-success">{{ message }}</div>
                                 {% endfor %}
                                 <div class="row align-items-center d-flex">
                                     <div class="col-md-auto">

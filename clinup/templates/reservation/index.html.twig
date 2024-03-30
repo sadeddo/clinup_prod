@@ -13,9 +13,56 @@
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
                         <div class="col-auto">
-                            <a  class="btn btn-secondary" href="{{ path('app_reservation_new') }}" type="button">Poster une réservation</a>
                         </div>
                     </div><br>
+                    <div class="row">
+                        {% for logement in logements %}
+                            {% for res in logement.icalres %}
+                            {% if res.dtEnd > now and res.statut != "1" %}
+                            <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6 me-auto">
+                                            <strong class="card-title log">{{ logement.nom }}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a  class="btn btn-secondary" href="{{ path('app_reservation_new',{'id':res.id}) }}" type="button">Publier</a>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: auto;">
+                                        <div class="col-md-auto">
+                                            <div class="card ">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Départ</h6>
+                                                    <h6 class="res-d2">{{ res.dtEnd ? res.dtEnd|date('j M. Y') : '' }} </h6>
+                                                </div>
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Heure</h6>
+                                                    <h6 class="res-d2">11h30min</h6>
+                                                </div>
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Nombre d'heures</h6>
+                                                    <h6 class="res-d2">1h30min</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
                     <div class="row">
                     {% if reservations|length > 0 %}
                     {% for reservation in reservations %}
@@ -81,7 +128,6 @@
                             <img src="/assets/img/reserEmp.png"><br>
                             <h5 style="font-weight: bold;">Aucune réservation pour le moment</h5><br>
                             <h6>Initiez votre première réservation et offrez à votre logement l’entretien qu'il mérite</h6><br>
-                            <a href="{{ path('app_reservation_new') }}"><button type="button" class="btn btn-secondary poster">Poster une réservation</button></a>
                         </div>
                 {% endif %}
                 </div>

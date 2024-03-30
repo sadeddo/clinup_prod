@@ -134,7 +134,7 @@ class ExperienceController extends AbstractController
             $experience->setPrestataire($prestataire);
             $entityManager->persist($experience);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Votre expérience a été enregistrée avec succès.');
             return $this->redirectToRoute('app_modifier_profile_profileP', [], Response::HTTP_SEE_OTHER);
         }
 

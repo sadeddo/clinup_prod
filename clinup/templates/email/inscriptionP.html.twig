@@ -6,7 +6,7 @@
     <div style="width:60%; margin:auto;">
     <h1 style="text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</h1>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Bienvenue sur ClinUp ! Nous sommes ravis de vous compter parmi nos prestataires.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Pour commencer à recevoir des missions, n'oubliez pas de compléter votre profil. Cela nous permettra de vérifier et de valider votre compte.</p>
+    <p style="font-size: 16px; text-align: left; color: #3d4465;">Avant de pouvoir profiter pleinement de nos services, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr>
@@ -23,8 +23,8 @@
                                 display: inline-block;
                                 font-size: 16px;
                                 margin: 4px 2px;
-                                cursor: pointer;" href="https://clinup.fr" target="_blank">
-                                Compléter mon profil
+                                cursor: pointer;" href="{{ absolute_url(path('verify_user', {token: token})) }}" target="_blank">
+                                Activer
                             </a>
                         </td>
                     </tr>
@@ -33,7 +33,7 @@
         </tr>
     </tbody>
     </table>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Votre profil complet nous aidera à vous proposer des missions adaptées à vos compétences et à vos disponibilités.</p>
+    <p style="font-size: 16px; text-align: left; color: #3d4465;">Une fois votre compte activé, vous pourrez accéder à toutes les fonctionnalités de notre plateforme.</p>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Si vous avez des questions ou besoin d'aide, notre équipe est à votre disposition pour vous assister.</p>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Bien à vous,</p>
     <div style="display: flex;">

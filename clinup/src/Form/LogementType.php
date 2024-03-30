@@ -45,7 +45,6 @@ class LogementType extends AbstractType
     ])
     ->add('description', TextareaType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Décrivez le logement de manière pour que le prestataire de ménage puisse visualiser l’appartement'],
-        'required' => false,
     ])
     ->add('img',FileType::class, [
         'attr' => ['class' => 'form-control'],

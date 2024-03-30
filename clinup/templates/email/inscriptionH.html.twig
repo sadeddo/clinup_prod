@@ -6,7 +6,7 @@
     <div style="width:60%; margin:auto;">
     <h1 style="text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</h1>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Bienvenue sur ClinUp ! Nous sommes heureux de vous accueillir dans notre communauté.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Vous pouvez dès maintenant commencer à chercher des prestataires pour vos réservations.</p>
+    <p style="font-size: 16px; text-align: left; color: #3d4465;">Avant de pouvoir profiter pleinement de nos services, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr>
@@ -23,8 +23,8 @@
                                 display: inline-block;
                                 font-size: 16px;
                                 margin: 4px 2px;
-                                cursor: pointer;" href="https://clinup.fr" target="_blank">
-                                Trouver un prestataire
+                                cursor: pointer;" href="{{ absolute_url(path('verify_user', {token: token})) }}" target="_blank">
+                                Activer
                             </a>
                         </td>
                     </tr>
@@ -33,7 +33,7 @@
         </tr>
     </tbody>
     </table>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Découvrez des prestataires près de chez vous et réservez en toute simplicité et sécurité grâce à ClinUp.</p>
+    <p style="font-size: 16px; text-align: left; color: #3d4465;">Une fois votre compte activé, vous pourrez accéder à toutes les fonctionnalités de notre plateforme.</p>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Si vous avez des questions ou si vous avez besoin d'assistance, n'hésitez pas à contacter notre équipe de support.</p>
     <p style="font-size: 16px; text-align: left; color: #3d4465;">Bien à vous,</p>
     <div style="display: flex;">

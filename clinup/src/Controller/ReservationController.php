@@ -9,14 +9,20 @@ use Stripe\Transfer;
 use App\Entity\Dispo;
 use App\Entity\Notif;
 use DateTimeImmutable;
+use DateTimeInterface;
+use App\Entity\Icalres;
+use App\Entity\Logement;
 use App\Entity\Postuler;
 use Stripe\StripeClient;
 use App\Form\PostulerType;
 use App\Entity\Reservation;
 use App\Service\EmailSender;
+use App\Service\IcalService;
 use App\Form\ReservationType;
 use App\Repository\UserRepository;
 use App\Service\NotificationService;
+use App\Repository\IcalresRepository;
+use App\Repository\LogementRepository;
 use App\Repository\PostulerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
@@ -38,7 +44,7 @@ class ReservationController extends AbstractController
         $this->mapsSecretKey = $params->get('maps_secret_key');
     }
     #[Route('/hote', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(Security $security, ReservationRepository $reservationRepository): Response
+    public function index(Security $security, ReservationRepository $reservationRepository, IcalService $icalService, IcalresRepository $icalresRepository,LogementRepository $logementRepository,EntityManagerInterface $entityManager): Response
     {
         $hote = $security->getUser();
         $reservations = $reservationRepository->findReservationsByPrestataire($hote->getId());
@@ -47,11 +53,23 @@ class ReservationController extends AbstractController
         foreach ($reservations as $reservation) {
             $counts[$reservation->getId()] = count($reservation->getPostulers());
         }
-        
+        $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
+        foreach ($logements as $logement) {
+            if ($logement->getAirbnb()) {
+                $this->processReservationsForLink($logement, $logement->getAirbnb(), $entityManager, $icalService, $icalresRepository);
+            }
+            if ($logement->getBooking()) {
+                $this->processReservationsForLink($logement, $logement->getBooking(), $entityManager, $icalService, $icalresRepository);
+            }
+        }
+        $entityManager->flush();
+        $currentDate = new \DateTime();
         return $this->render('reservation/index.html.twig', [
             'reservations' => $reservations,
             'counts' => $counts,
-            'cible' => ''
+            'cible' => '',
+            'now' => $currentDate->format('Y-m-d'),
+            'logements' => $logements
         ]);
     }
     //enregistrer la reservation
@@ -112,23 +130,48 @@ class ReservationController extends AbstractController
             ->getResult();
         return $dispos;
     }
-    #[Route('/hote/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,Security $security, EmailSender $notificationService,NotificationService $notifService, ReservationRepository $reservationRepository): Response
+    private function processReservationsForLink(Logement $logement, ?string $link, EntityManagerInterface $entityManager, IcalService $icalService, IcalresRepository $reservationRepository): void
     {
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation, [
-            'user' => $security->getUser(),
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->createReservation($reservation, $entityManager, $security);
-            $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
-            foreach($dispos as $dispo){
-                $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+            $reservations = $icalService->getReservationsFromIcal($link);
+            foreach ($reservations as $reservationData) {
+                $existingReservation = $reservationRepository->findOneBy([
+                    'logement' => $logement,
+                    'dtStart' => $reservationData['start_time'],
+                    'dtEnd' => $reservationData['end_time'],
+                ]);
+                if (!$existingReservation) {
+                    $reservation = new Icalres();
+                    $reservation->setLogement($logement);
+                    $reservation->setDtStart($reservationData['start_time']);
+                    $reservation->setDtEnd($reservationData['end_time']);
+                    $reservation->setStatut('0');
+                    $entityManager->persist($reservation);
+                }
             }
-        $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
-         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/hote/{id}/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
+    public function new($id,Request $request,EntityManagerInterface $entityManager,Security $security, EmailSender $notificationService,NotificationService $notifService, ReservationRepository $reservationRepository, IcalService $icalService, IcalresRepository $icalresRepository,LogementRepository $logementRepository): Response
+    {
+
+        $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
+        $res = $icalresRepository->findOneBy(['id' => $id]);
+        $reservation = new Reservation();
+        $reservation->setLogement($res->getLogement());
+        $reservation->setDate(new DateTime($res->getDtEnd()));
+        $reservation->setHeure(new DateTime('11:00:00'));
+        $reservation->setNbrHeure('1h30');
+        $reservation->setStatut("en attente");
+        $reservation->setPrix("0");
+        $entityManager->persist($reservation);
+        $res->setStatut('1');
+        $entityManager->persist($res);
+        $entityManager->flush();
+        $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
+        foreach($dispos as $dispo){
+            $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
         }
+        $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
+         return $this->redirectToRoute('app_list_postuler', ['id'=> $reservation->getId()], Response::HTTP_SEE_OTHER);
         $hote = $security->getUser();
         $reservations = $reservationRepository->findReservationsByPrestataire($hote->getId());
         $counts = [];
@@ -138,8 +181,9 @@ class ReservationController extends AbstractController
 
         return $this->render('reservation/index.html.twig', [
             'reservations' => $reservations,
+            'logements' => $logements,
             'form' => $form,
-            'cible' => 'addReservation',
+            'cible' => '',
             'counts' => $counts,
         ]);
     }
@@ -150,11 +194,12 @@ class ReservationController extends AbstractController
         //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
                     ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
+  
                  
         return $this->render('reservation/showP.html.twig', [
             'reservation' => $reservation,
             'cible' => '',
-            'hasApplied' => $postulation !== null
+            'hasApplied' => $postulation
         ]);
     }
     //comment postuler
@@ -185,19 +230,19 @@ class ReservationController extends AbstractController
                 '/reservation/hote/'.$reservation->getId().'/postulers'
     
             );
+            $this->addFlash('success', 'Votre candidature a été envoyée avec succès ! Vous recevrez une notification dès que l\'hôte acceptera votre demande.');
             return $this->redirectToRoute('app_reservation_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
-
-        //verifier si l'utilisateur à deja postuler
+           //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
-                    ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
-                    
-        return $this->render('reservation/show.html.twig', [
+        ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
+
+        return $this->render('reservation/showP.html.twig', [
             'comment' => $comment,
             'form' => $form,
             'reservation' => $reservation,
             'cible' => 'postuler',
-            'hasApplied' => $postulation !== null
+            'hasApplied' => $postulation
         ]);
     }
     #[Route('/hote/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]

@@ -7,22 +7,29 @@ use Stripe\Stripe;
 use Stripe\Account;
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Service\JWTService;
 use App\Service\EmailSender;
+use App\Security\EmailVerifier;
+use App\Repository\UserRepository;
 use App\Repository\InvitRepository;
+use Symfony\Component\Mime\Address;
 use App\Service\NotificationService;
 use Stripe\Exception\ApiErrorException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class AuthController extends AbstractController
 {
-    
     //connexion
     #[Route(path: '/', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -52,7 +59,7 @@ class AuthController extends AbstractController
     
     //inscription
     #[Route(path: '/inscription', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService, InvitRepository $invitRepository): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService, InvitRepository $invitRepository,JWTService $jwt): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
@@ -107,7 +114,19 @@ class AuthController extends AbstractController
     
             $entityManager->persist($user);
             $entityManager->flush();
-    
+
+            $header = [
+                'typ' => 'JWT',
+                'alg' => 'HS256'
+            ];
+
+            // On crée le Payload
+            $payload = [
+                'user_id' => $user->getId()
+            ];
+
+            // On génère le token
+            $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
             //envois de mail
             if (in_array("ROLE_PRESTATAIRE", $user->getRoles())) {
                 $notificationService->sendEmail(
@@ -115,7 +134,8 @@ class AuthController extends AbstractController
                     'Bienvenue sur ClinUpe',
                     'email/inscriptionP.html.twig',
                     [
-                        'user' => $user, // Objet ou tableau contenant les informations de l'utilisateur
+                        'user' => $user,
+                        'token' => $token // Objet ou tableau contenant les informations de l'utilisateur
                     ]
                 );
                 $notifService->createNotification(
@@ -131,7 +151,8 @@ class AuthController extends AbstractController
                     'Bienvenue sur ClinUp',
                     'email/inscriptionH.html.twig',
                     [
-                        'user' => $user, // Objet ou tableau contenant les informations de l'utilisateur
+                        'user' => $user,
+                        'token' => $token // Objet ou tableau contenant les informations de l'utilisateur
                     ]
                 );
                 $notifService->createNotification(
@@ -150,11 +171,34 @@ class AuthController extends AbstractController
                 );
             }
     
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_new_res');
         }
     
         return $this->render('security/register.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+    #[Route('/verif/{token}', name: 'verify_user')]
+    public function verifyUser($token, JWTService $jwt, UserRepository $usersRepository, EntityManagerInterface $em): Response
+    {
+        //On vérifie si le token est valide, n'a pas expiré et n'a pas été modifié
+        if($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))){
+            // On récupère le payload
+            $payload = $jwt->getPayload($token);
+
+            // On récupère le user du token
+            $user = $usersRepository->find($payload['user_id']);
+
+            //On vérifie que l'utilisateur existe et n'a pas encore activé son compte
+            if($user && !$user->IsVeryEmail()){
+                $user->SetVeryEmail(true);
+                $em->flush($user);
+                $this->addFlash('success', 'Compte activé');
+                return $this->redirectToRoute('app_login');
+            }
+        }
+        // Ici un problème se pose dans le token
+        $this->addFlash('danger', 'Le token est invalide ou a expiré');
+        return $this->redirectToRoute('app_login');
     }
 }

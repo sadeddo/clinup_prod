@@ -6,6 +6,7 @@ use App\Entity\Probleme;
 use App\Form\ProblemeType;
 use App\Entity\Reservation;
 use App\Form\ProblemeLType;
+use App\Form\ProblemeEtatType;
 use App\Repository\LogementRepository;
 use App\Repository\ProblemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,6 +72,7 @@ class ProblemeController extends AbstractController
             $entityManager->persist($probleme);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le problème que vous avez signalé a été enregistré avec succès.');
             return $this->redirectToRoute('app_reservation_prestataire', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -87,6 +89,26 @@ class ProblemeController extends AbstractController
     {
         return $this->render('probleme/show.html.twig', [
             'probleme' => $probleme,
+        ]);
+    }
+
+    #[Route('/probleme/{id}/modifier', name: 'app_probleme_modifier', methods: ['GET','POST'])]
+    public function mod(Probleme $probleme,Request $request,EntityManagerInterface $entityManager,Security $security, ProblemeRepository $problemeRepository): Response
+    {
+        $problemes =  $problemes = $problemeRepository->findProblemesByHoteId($security->getUser()->getId());
+        $form = $this->createForm(ProblemeEtatType::class, $probleme);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_probleme_index', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('probleme/index.html.twig', [
+            'probleme' => $probleme,
+            'cible' => 'etat',
+            'problemes' => $problemes,
+            'form' => $form,
+
         ]);
     }
 

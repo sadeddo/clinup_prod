@@ -11,6 +11,9 @@
                             <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
                         </div>
                     </div><br>
+                    {% for messages in app.flashes('success') %}
+                        <div class="alert alert-success">{{ messages }}</div>
+                    {% endfor %}
                     <div class="row">
                     {% if reservations|length > 0 %}
                     {% for reservation in reservations %}
@@ -106,6 +109,16 @@
                             <label for="date">Titre du problème</label>
                             <div class="input-group">
                                 <input type="text" class="form-control"  name="probleme[titre]" placeholder="Donnez un nom à ce problème" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">La criticité</label>
+                            <div class="input-group">
+                                {{ form_widget(form.criticiter) }}
                             </div>
                         </div>
                     </div>

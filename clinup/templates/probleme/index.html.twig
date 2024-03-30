@@ -18,25 +18,21 @@
                     {% if problemes|length > 0 %}
                     {% for probleme in problemes %}
                        <div class="col-md-6">
-                            <a>
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-auto me-auto">
-                                            <strong class="card-title log">{{ probleme.logement.nom }}</strong>
-                                        </div>
-                                        <div class="col-auto">
-                                            {% if probleme.statut == "0" %}
-                                                <div class="col-md-2 alert alert-warning nonRe" role="alert">
-                                                    <i class="bi bi-exclamation-triangle"></i>  Non résolu
-                                                </div>
-                                            {% elseif probleme.statut == "1" %}
-                                                <div class="col-md-2 alert alert-warning resolu" role="alert">
-                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgba(111, 114, 121, 1);"></i>  Résolu
-                                                </div>
-                                            {% endif %}
+                                    <div class="row" style="margin: auto;">
+                                        <div class="col-md-12">
+                                            <h4 class="card-title log">N°{{ probleme.num }}</h4>
                                         </div>
                                     </div>
+                                    <div class="row reservation">
+                                        <div class="col-auto me-auto">
+                                            <strong class="card-title" style="font-weight: bold;font-size:1rem;">{{ probleme.logement.nom }}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a class="btn btn-secondary" type="button" >{{ probleme.criticiter}}</a>
+                                        </div>
+                                    </div><br>
                                     <div class="row" style="margin: auto;">
                                         <div class="col-md-12">
                                             <h4 class="card-title log">{{ probleme.titre }}</h4>
@@ -45,16 +41,17 @@
                                             <h6 class="res-d">{{ probleme.description }}</h6>
                                         </div>
                                         <div class="col-md-12">
-                                            {% if probleme.statut == "0" %}
+                                            <i class="bi bi-boxes"></i><h6 class="res-d">Plan d'action: {{ probleme.plan }}</h6>
+                                        </div>
+                                        <div class="col-md-12">
                                                 <div class="col-md-4">
-                                                    <a href="{{ path("app_probleme_modifier_statut",{'id':probleme.id})}}" type="button" class="btn btn-secondary renv" style="margin-bottom:1%;">C'est réglé</a>
+                                                    <a href="{{ path('app_probleme_modifier',{'id': probleme.id})}}" type="button" class="btn btn1 btn-primary" style="margin-bottom:1%;">{{ probleme.statut}}</a>
                                                 </div>
-                                            {% endif %}
                                         </div>
                                         
                                     </div>
                                 </div>
-                            </div></a>
+                            </div>
                         </div>
                         {% endfor %}
                         {% else %}                 
@@ -98,6 +95,16 @@
                     </div>
                 </div>
                 <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">La criticité</label>
+                            <div class="input-group">
+                                {{ form_widget(form.criticiter) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                         <div class="col-md-12">
                             <label for="date">Description</label>
                             <div class="input-group">
@@ -124,6 +131,65 @@
                     {% endblock %}
                     {% endif %}
 
+                     {# modal pour probleme #}
+       {% if cible == "etat" %}
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-body">
+       <form method="post">
+                <div class="row">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Statut</label>
+                            <div class="input-group">
+                                {{ form_widget(form.statut) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="second-field" style="display: none;">
+                   <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="date">Plan d'action</label>
+                            <div class="input-group">
+                                    {{ form_widget(form.plan, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="justify-content: center;">
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary proB">Enregistrer</button>
+                    </div>
+                </div>
+                {{ form_row(form._token) }}
+            </form><br>
+      </div>
+    </div>
+  </div>
+  {% block scripteditEventMo %}
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+    $(document).ready(function() {
+    $('#probleme_etat_statut').change(function() {
+        var selectedStatut = $(this).val();
+        if (selectedStatut === 'Plan d’action') {
+            $('#second-field').show();
+        } else {
+            $('#second-field').hide();
+        }
+    });
+});
+</script>
+                    {% endblock %}
+                    {% endif %}
+<script>
+
+</script>
     </main>
 
 {% endblock %}

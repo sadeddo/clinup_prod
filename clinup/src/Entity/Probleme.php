@@ -32,6 +32,9 @@ class Probleme
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $criticiter = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $plan = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Probleme
     public function setCriticiter(?string $criticiter): static
     {
         $this->criticiter = $criticiter;
+
+        return $this;
+    }
+
+    public function getPlan(): ?string
+    {
+        return $this->plan;
+    }
+
+    public function setPlan(?string $plan): static
+    {
+        $this->plan = $plan;
 
         return $this;
     }

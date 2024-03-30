@@ -101,6 +101,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'hote', targetEntity: Invit::class)]
     private Collection $invits;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $VeryEmail = null;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -592,6 +595,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $invit->setHote(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVeryEmail(): ?bool
+    {
+        return $this->VeryEmail;
+    }
+
+    public function setVeryEmail(?bool $VeryEmail): static
+    {
+        $this->VeryEmail = $VeryEmail;
 
         return $this;
     }

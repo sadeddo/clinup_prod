@@ -17,8 +17,8 @@ class IcalService {
 
         foreach ($vCalendar->VEVENT as $event) {
             $summary = $event->SUMMARY->getValue();
-            $startTime = $event->DTSTART->getDateTime()->format('Y-m-d H:i:s');
-            $endTime = $event->DTEND->getDateTime()->format('Y-m-d H:i:s');
+            $startTime = $event->DTSTART->getDateTime()->format('Y-m-d');
+            $endTime = $event->DTEND->getDateTime()->format('Y-m-d');
 
             $reservations[] = [
                 'summary' => $summary,

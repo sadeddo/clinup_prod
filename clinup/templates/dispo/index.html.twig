@@ -10,6 +10,9 @@
         {% for message in app.flashes('error') %}
                                 <div class="alert alert-danger">{{ message }}</div>
                             {% endfor %}
+                            {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
 			<!-- Colonne des jours de la semaine -->
             <h2 style="font-weight: 600;margin-bottom:2%;">Disponibilités</h2>
             <h6>Planification répétée pour chaque : </h6>
@@ -418,9 +421,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editEventModalLabel"><label>Modifier votre disponibilité</label></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             {{ form_start(form) }}
@@ -444,6 +445,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                            <a href="{{ path('app_dispo_delete',{'id':id})}}">Supprimer</a>
                         </div>
                         {{ form_end(form) }}
                     </div>

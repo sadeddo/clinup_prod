@@ -5,6 +5,9 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
+        {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
             <div class="row">
                 <div class="col-md-6">
                     <div class="card ">

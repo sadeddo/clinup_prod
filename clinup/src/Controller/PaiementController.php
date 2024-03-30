@@ -11,9 +11,13 @@ use Stripe\AccountLink;
 use Stripe\StripeClient;
 use Stripe\PaymentIntent;
 use App\Entity\Reservation;
+use App\Service\EmailSender;
 use Stripe\Checkout\Session;
 use App\Entity\DemandeService;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
+use App\Repository\CommentPrestaRepository;
 use App\Repository\NotificationsRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,16 +36,16 @@ class PaiementController extends AbstractController
         $this->stripeSecretKey = $params->get('stripe_secret_key');
     }
     #[Route('/{idPresta}/{idDemande}/checkout', name: 'checkout')]
-    public function index($idPresta,$idDemande,UrlGeneratorInterface $generator,Security $security,EntityManagerInterface $entityManager): Response
+    public function index($idPresta,$idDemande,UrlGeneratorInterface $generator,Security $security,EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,ReservationRepository $reservationRepository,CommentPrestaRepository $commentPrestaRepository): Response
     {
-        $demande = $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idDemande]);
+        $reservation = $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idDemande]);
         //details presta:
-        $presta = $entityManager->getRepository(User::class)->findOneBy(['id' => $idPresta]);
+        $prestataire = $entityManager->getRepository(User::class)->findOneBy(['id' => $idPresta]);
         
        //dd($presta);
         Stripe::setApiKey($this->stripeSecretKey);
-        $duree = $demande->getNbrHeure();
-        $prixParHeure = $presta->getPrix(); // 30 euros par heure
+        $duree = $reservation->getNbrHeure();
+        $prixParHeure = $prestataire->getPrix(); // 30 euros par heure
         // Séparation des heures et des minutes
         $parts = explode("h", $duree);
         $heures = $parts[0];
@@ -66,7 +70,43 @@ class PaiementController extends AbstractController
             'capture_method' => 'manual',
         ]);
         // Vérifier si l'intention de paiement a été créée avec succès
-        if ($intent) {
+        if ($intent['id']) {
+            $reservation->setStatut('confirmer');
+        $reservation->setIdIntent($intent['id']);
+        $reservation->setPrix($cotTotal);
+        $reservation->setPrestataire($prestataire);
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+        //modif price et palier
+        $notificationService->sendEmail(
+            $prestataire->getEmail(),
+            'Candidature Confirmée',
+            'email/confirmPresta.html.twig',
+            [
+                'user' => $prestataire, // Objet ou tableau contenant les informations de l'utilisateur
+            ]
+        );
+        $notifService->createNotification(
+            $prestataire,
+            'Candidature Confirmée',
+            '/reservation/prestataire/consulter'
+
+        );
+        $numberOfMissions =  $reservationRepository->getNombreDeMissions($prestataire->getId());
+        $average = $commentPrestaRepository->getAverageNoteForPrestataire($prestataire->getId());
+        $tier = 'Bronze'; 
+        $tarif = 35;
+        if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
+            $tier = 'Argent';
+            $tarif = 45;
+        } elseif ($average > 4.5 && $numberOfMissions > 70) {
+            $tier = 'Or';
+            $tarif = 60;
+        }
+        $prestataire->setPrix($tarif);
+        $entityManager->persist($prestataire);
+        $entityManager->flush();
+
             $this->addFlash('success', 'Votre réservation a été confirmée avec succès!');
         } else {
             // Message d'échec
@@ -77,8 +117,8 @@ class PaiementController extends AbstractController
             'clientSecret' => $intent->client_secret,
             'paymentIntentId' => $intent->id,
             "user" => $security->getUser(),
-            'demande' => $demande,
-            'presta' => $presta,
+            'demande' => $reservation,
+            'presta' => $prestataire,
             'total' => $cotTotal,
             'IdPresta' => $idPresta,
             'IdDemande' => $idDemande

@@ -82,6 +82,7 @@ class DispoController extends AbstractController
                 $date->modify('+1 week');
                 $entityManager->flush();
             }
+            $this->addFlash('success', 'Votre disponibilité a été enregistrée avec succès.');
             return $this->redirectToRoute('app_dispo', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('dispo/index.html.twig', [
@@ -152,16 +153,6 @@ class DispoController extends AbstractController
             return new JsonResponse($eventData);
         }
 
-        $form = $this->createForm(DispoType::class, $availability);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($availability);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_dispo', [], Response::HTTP_SEE_OTHER);
-        }
-        ///
         $prestataire = $security->getUser();
         $rdv[] = $prestataire->getDispos();
         $events= $rdv[0];
@@ -175,9 +166,34 @@ class DispoController extends AbstractController
             ];
         }
         $data = json_encode($rdvs);
+        $form = $this->createForm(DispoType::class, $availability);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dtStart = $availability->getDtStart();
+            $dtEnd = $availability->getDtEnd();
+            // Assurez-vous que l'heure de fin est après l'heure de début
+            if ($dtEnd <= $dtStart) {
+                $this->addFlash('error', 'L\'heure de fin doit être postérieure à l\'heure de début.');
+                return $this->render('dispo/index.html.twig', [
+                    'event' => $event,
+                    'id' => $id,
+                    'form' => $form,
+                    'data' => $data,
+                    'cible' => 'edit',
+                    "user" => $prestataire,
+        
+                ]);
+            }
+            $entityManager->persist($availability);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre disponibilité a été modifiée avec succès.');
+            return $this->redirectToRoute('app_dispo', [], Response::HTTP_SEE_OTHER);
+        }
 
         return $this->render('dispo/index.html.twig', [
             'event' => $event,
+            'id' => $id,
             'form' => $form,
             'data' => $data,
             'cible' => 'edit',
@@ -185,6 +201,23 @@ class DispoController extends AbstractController
 
         ]);
     }
+    #[Route('/{id}/delete', name: 'app_dispo_delete')]
+    public function delete($id,DispoRepository $dispoRepository,EntityManagerInterface $entityManager,Security $security): Response
+    {
+        // Récupérer la disponibilité à supprimer
+        $dispo = $dispoRepository->find($id);
+        // Vérifier si la disponibilité existe
+        if (!$dispo) {
+            throw $this->createNotFoundException('La disponibilité n\'existe pas.');
+        }
 
+        // Supprimer la disponibilité
+        $entityManager->remove($dispo);
+        $entityManager->flush();
+
+        // Rediriger vers une page appropriée après la suppression
+        $this->addFlash('success', 'Votre disponibilité a été supprimée avec succès.');
+        return $this->redirectToRoute('app_dispo');
+    }
 
 }

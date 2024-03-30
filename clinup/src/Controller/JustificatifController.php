@@ -87,6 +87,7 @@ class JustificatifController extends AbstractController
                 }
             }
             $entityManager->flush();
+            $this->addFlash('success', 'Votre document a été enregistré avec succès.');
             return $this->redirectToRoute('app_modifier_profile_profileP', [], Response::HTTP_SEE_OTHER);
         }
          // Récupérez l'utilisateur actuel

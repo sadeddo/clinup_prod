@@ -6,6 +6,14 @@
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
             <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            {% for messages in app.flashes('success') %}
+                <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
+            {% if reservation.statut == "en attente" and hasApplied != null %}
+                <div class="alert alert-warning">Vous avez déjà postulé à cette offre.</div>
+            {% elseif reservation.statut != "en attente" and hasApplied == null %}
+            <div class="alert alert-warning">Cette offre n'est plus disponible.</div>
+            {% endif %}
             {% if reservation.statut == "confirmer" %}
             <h5 class="titree">Résultats des tâches</h5>
                     <div class="card">
@@ -52,13 +60,13 @@
              <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-auto me-auto">
+                        <div class="col-10">
                             <strong class="card-title log">Logement: {{ reservation.logement }}</strong>
                         </div>
                         <div class="col-auto">
-                            {% if reservation.statut == "en attente" %}
-                                                <div class="col-md-2 alert alert-warning attente" role="alert">
-                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 139, 60);"></i>  En attente
+                            {% if reservation.statut == "en attente"  and hasApplied == null %}
+                                                <div class="col-auto" >
+                                                    <a href="{{ path('app_reservation_postuler',{'id':reservation.id })}}" type="button" class="btn btn-secondary">Postuler</a>
                                                 </div>
                                             {% elseif reservation.statut == "confirmer" %}
                                                 <div class="col-md-2 alert alert-warning confirmer" role="alert">
@@ -223,9 +231,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editEventModalLabel">Image</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form name="nom" method="post" enctype="multipart/form-data">
@@ -243,6 +249,38 @@
                 </div>
             </div>
             {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+
+            {% if cible == "postuler" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Ajouter un commentaire</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                                
+                                {{ form_widget(form.comment) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEvent %}
                 <script>
                         var myOffcanvas = document.getElementById('editEventModal')
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
