@@ -22,7 +22,7 @@ class AdminController extends AbstractController
         ]);
     }
     #[Route('/admin/{id}/valider', name: 'app_admin_valider')]
-    public function valider($id,UserRepository $prestataireRepository,EntityManagerInterface $entityManager,NotificationService $notifService) 
+    public function valider($id,UserRepository $prestataireRepository,EntityManagerInterface $entityManager,NotificationService $notifService,EmailSender $notificationService) 
     {
         $prestataire = $prestataireRepository->findOneBy(['id' => $id]);
         if ($prestataire->isIsVerified()) {
@@ -33,6 +33,15 @@ class AdminController extends AbstractController
                 $prestataire,
                 'Votre profil a été validé',
                 '/modifier/profile'
+            );
+            $notificationService->sendEmail(
+                $prestataire->getEmail(),
+                'Votre profil a été validé',
+                'email/valideProfil.html.twig',
+                [
+                    'user' => $prestataire, // Objet ou tableau contenant les informations de l'utilisateur
+                    
+                ]
             );
         }
         $entityManager->persist($prestataire);
