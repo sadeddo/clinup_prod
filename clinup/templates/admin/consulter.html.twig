@@ -29,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!-- ms-auto positionne les éléments à droite -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/chemin/de/deconnexion">Déconnexion</a> <!-- Lien de déconnexion -->
+                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a> <!-- Lien de déconnexion -->
                 </li>
             </ul>
         </div>
@@ -145,15 +145,15 @@
     {% for justif in prestataire.justifs %}
         <div class="justif">
         {% if justif.type == 'identity' %}
-            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir la pièce d'identité
             </a></li>
         {% elseif justif.type == 'vitale' %}
-            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir la carte vitale
             </a></li>
         {% elseif justif.type == 'domicile' %}
-            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" target="_blank">
+            <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir le justificatif de domicile
             </a></li>
         {% endif %}
@@ -178,7 +178,7 @@
   </li>
 </ul></br>
 
-
+<a href="{{ path('app_admin_valider',{'id': prestataire.id})}}"><button type="button" class="btn btn-primary">Valider</button></a></br>
 </div>
   </body>
 </html>
