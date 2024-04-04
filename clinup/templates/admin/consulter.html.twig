@@ -145,17 +145,23 @@
     {% for justif in prestataire.justifs %}
         <div class="justif">
         {% if justif.type == 'identity' %}
+        {% set filePath = 'justifs/' ~ justif.filePath %}
+        {% if file_exists(filePath) %}
             <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir la pièce d'identité
             </a></li>
+            {% endif %}
         {% elseif justif.type == 'vitale' %}
             <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir la carte vitale
             </a></li>
         {% elseif justif.type == 'domicile' %}
+            {% set filePath = 'justifs/' ~ justif.filePath %}
+         {% if file_exists(filePath) %}
             <li class="list-group-item"><a href="{{ asset('justifs/' ~ justif.filePath) }}" download>
                 Voir le justificatif de domicile
             </a></li>
+            {% endif %}
         {% endif %}
             
         </div>
