@@ -15,12 +15,12 @@ class DispoType extends AbstractType
         $builder
         ->add('dtStart', TimeType::class,[
             'input' => 'string',
-            'widget' => 'single_text',
+            'widget' => 'choice',
             'attr' => ['class' => 'form-control'],
         ])
         ->add('dtEnd', TimeType::class,[
             'input' => 'string',
-                'widget' => 'single_text',
+            'widget' => 'choice',
                 'attr' => ['class' => 'form-control'],
         ])
         ;

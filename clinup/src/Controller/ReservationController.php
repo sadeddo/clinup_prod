@@ -570,5 +570,43 @@ class ReservationController extends AbstractController
             );
         return $this->redirectToRoute('app_reservation_prestataire', [], Response::HTTP_SEE_OTHER);
     }
+    //demande de presta simple
+    #[Route('/hote/ajouter', name: 'app_reservation_ajouter', methods: ['GET', 'POST'])]
+    public function ajoiuter(Request $request,EntityManagerInterface $entityManager,Security $security, EmailSender $notificationService,NotificationService $notifService, ReservationRepository $reservationRepository, IcalService $icalService, IcalresRepository $icalresRepository,LogementRepository $logementRepository): Response
+    {
+
+        $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
+        $reservation = new Reservation();
+        $form = $this->createForm(ReservationType::class, $reservation, [
+            'user' => $security->getUser(),
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $reservation->setStatut("en attente");
+            $reservation->setPrix("0");
+            $entityManager->persist($reservation);
+            $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
+            foreach($dispos as $dispo){
+                $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+            }
+            $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
+            return $this->redirectToRoute('app_list_postuler', ['id'=> $reservation->getId()], Response::HTTP_SEE_OTHER);
+        }
+        $hote = $security->getUser();
+        $reservations = $reservationRepository->findReservationsByPrestataire($hote->getId());
+        $counts = [];
+        foreach ($reservations as $reservation) {
+            $counts[$reservation->getId()] = count($reservation->getPostulers());
+        }
+        $currentDate = new \DateTime();
+        return $this->render('reservation/index.html.twig', [
+            'reservations' => $reservations,
+            'logements' => $logements,
+            'form' => $form,
+            'cible' => 'addReservation',
+            'counts' => $counts,
+            'now' => $currentDate->format('Y-m-d'),
+        ]);
+    }
     
 }

@@ -5,6 +5,15 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
+        {% if user.prix == "35" %}
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Pour atteindre le palier Bronze, il est nécessaire de compléter au moins 30 missions.
+            </div>
+        {% elseif user.prix == "45" %}
+        <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Pour atteindre le palier Or, il est nécessaire de compléter au moins 70 missions.
+            </div>
+        {% endif %}
         {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
@@ -56,7 +65,7 @@
                             </div>
                             <div class="col-md-2"></div>
                             </div>
-                            <p class="explique">Comment ça marche <i data-toggle="tarif" title="Bronze :35€/h | Argent :45€/h | Or :60€/h" class="bi bi-question-circle interro"></i></p>
+                            <p class="explique">Comment ça marche <i data-toggle="tarif" title="Bronze :35€/h  Argent :45€/h | Or :60€/h" class="bi bi-question-circle interro"></i></p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +83,12 @@
                         <div class="card ">
                             <div class="card-body b">
                             <h6 class="res-d" style="font-size: 17px;padding: 3%;">Évaluation</h6>
-                            <h4>{{ evolution | number_format(1, '.', '') }} <i class="bi bi-star-fill" style="color: rgba(249, 166, 57, 1);"></i></h4>
+                            <h4>
+                            {% if evolution | number_format(1, '.', '') == "0.0" %}
+                                - -
+                            {% else %}
+                                {{ evolution | number_format(1, '.', '') }}
+                            {% endif %}<i class="bi bi-star-fill" style="color: rgba(249, 166, 57, 1);"></i></h4>
                             <div class="alert alert-primary justif-alert" role="alert" style="padding: 3%;background: rgba(231, 247, 238, 1);">
                                 <h6 style="font-size: 14px;font-weight: 600;margin: 0%;color: rgba(15, 163, 75, 1);">Qualifié au prochain</h6>
                             </div>
@@ -93,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
             <div class="col-md-12" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);padding-left: 1%;padding-right: 1%;">
                 <div class="card" style="border-radius:10px;">
                     <div class="card-body">  
