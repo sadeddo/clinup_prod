@@ -585,6 +585,7 @@ class ReservationController extends AbstractController
             $reservation->setStatut("en attente");
             $reservation->setPrix("0");
             $entityManager->persist($reservation);
+            $entityManager->flush();
             $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
             foreach($dispos as $dispo){
                 $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
