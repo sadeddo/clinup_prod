@@ -589,6 +589,7 @@ class ReservationController extends AbstractController
             $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
             foreach($dispos as $dispo){
                 $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+                dd($dispo);
             }
             $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
             return $this->redirectToRoute('app_list_postuler', ['id'=> $reservation->getId()], Response::HTTP_SEE_OTHER);
