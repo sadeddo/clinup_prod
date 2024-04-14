@@ -215,9 +215,10 @@ class ReservationController extends AbstractController
             $comment->setReservation($reservation);
             $entityManager->persist($comment);
             $entityManager->flush();
+            $currentDate = new \DateTime();
             $notificationService->sendEmail(
                 $reservation->getLogement()->getHote()->getEmail(),
-                'Nouvelle Candidature pour Votre Réservation',
+                'Nouvelle Candidature pour Votre Réservation le'.' '.$currentDate->format('Y-m-d'),
                 'email/prestaPostule.html.twig',
                 [
                     'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
@@ -226,7 +227,7 @@ class ReservationController extends AbstractController
             );
             $notifService->createNotification(
                 $reservation->getLogement()->getHote(),
-                'Nouvelle Candidature pour Votre Réservation',
+                'Nouvelle Candidature pour Votre Réservation le'.' '.$currentDate->format('Y-m-d'),
                 '/reservation/hote/'.$reservation->getId().'/postulers'
     
             );
