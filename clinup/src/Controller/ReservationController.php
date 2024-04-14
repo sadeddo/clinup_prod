@@ -544,7 +544,17 @@ class ReservationController extends AbstractController
                 '/reservation/prestataire/consulter'
     
             );
-            
+        $this->addFlash('success','Votre réservation a été annulée avec succès.');
+        return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+    }
+    //annuler reservation (en attente)
+    #[Route('/hote/{id}/annulerA', name: 'app_reservation_annulerAtt', methods: ['POST','GET'])]
+    public function annulerAtt(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $emailService,NotificationService $notifService): Response
+    {
+        $reservation->setStatut('Annuler');
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+        $this->addFlash('success','Votre réservation a été annulée avec succès.');
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
     //annuler la reservationP
@@ -589,7 +599,6 @@ class ReservationController extends AbstractController
             $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
             foreach($dispos as $dispo){
                 $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
-                dd($dispo);
             }
             $this->addFlash('success', 'Votre demande a été envoyée avec succès ! Vous pouvez suivre l\'avancement de votre réservation sur cette page');
             return $this->redirectToRoute('app_list_postuler', ['id'=> $reservation->getId()], Response::HTTP_SEE_OTHER);

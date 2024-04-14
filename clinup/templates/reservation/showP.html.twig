@@ -13,6 +13,8 @@
                 <div class="alert alert-warning">Vous avez déjà postulé à cette offre.</div>
             {% elseif reservation.statut != "en attente" and hasApplied == null %}
             <div class="alert alert-warning">Cette offre n'est plus disponible.</div>
+            {% elseif reservation.statut == "Annuler"%}
+            <div class="alert alert-warning">Cette offre n'est plus disponible.</div>
             {% endif %}
             {% if reservation.statut == "confirmer" %}
             <h5 class="titree">Résultats des tâches</h5>

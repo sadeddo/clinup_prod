@@ -5,12 +5,13 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
-            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a></br></br>
             {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
             {% if reservation.statut == "confirmer" %}
-            <h5 class="titree">Détails d’entretien</h5>
+            <a data-bs-toggle="modal" data-bs-target="#exampleModalAnnuler" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Annuler</a>
+            <h5 class="titree" style="padding-top:0px;">Détails d’entretien</h5>
                     <div class="card">
                         <div class="card-body">
                             <h6>Résultats</h6>
@@ -55,6 +56,9 @@
                         </div>
                     </div>
                     {% endif %}
+                    {% if reservation.statut == "en attente" %}
+            <a data-bs-toggle="modal" data-bs-target="#exampleModalAnnulerAtt" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Annuler</a>
+            {% endif %}
             <h5 class="titree">Détails de réservation</h5>
              <div class="card">
                 <div class="card-body">
@@ -111,7 +115,7 @@
                         </div>
                     </div>
                     {% if reservation.statut == "Annuler" %}
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="col-md-12">
                             <div class="card m-2">
                                 <div class="card-body b">
@@ -121,7 +125,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div>-->
                     <h6 class="res-contact"><i class="bi bi-question-circle" style="color:rgba(15, 163, 75, 1);"></i> Avez-vous une question ou une demande ? Contactez l'équipe de support <a style="color:rgba(15, 163, 75, 1);">en cliquant içi</a> </h6>
 
                     {% endif %}
@@ -175,7 +179,7 @@
                     </div>
                     </div>
                     {% endfor %}
-                {% elseif reservation.statut == "confirmer" or reservation.statut == "payer" or reservation.statut == "Annuler"%}
+                {% elseif reservation.statut == "confirmer" or reservation.statut == "payer"%}
                     <h5 class="titree">Agent choisi</h5>
                     <div class="card">
                     <div class="card-body">
@@ -256,7 +260,7 @@
                         </div>
                     </div>
         </div>
-        <!-- Modal -->
+                                <!-- Modal app -->
                                         <div class="modal fade" id="exampleModalconfirmer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -273,7 +277,43 @@
                                             </div>
                                         </div>
                                         </div>   
-                                        <!-- Modal annuler -->
+                                <!-- Modal FIN -->
+                                <!-- Modal annul-->
+                                        <div class="modal fade" id="exampleModalAnnuler" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">Annuler la réservation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir annuler cette réservation?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ path('app_reservation_annuler',{'id':reservation.id})}}"><button type="button"class="btn btn-secondary" >Confirmer</button></a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>   
+                                <!-- Modal annuler -->
+                                <!-- Modal annul-->
+                                        <div class="modal fade" id="exampleModalAnnulerAtt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">Annuler la réservation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir annuler cette réservation?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="{{ path('app_reservation_annulerAtt',{'id':reservation.id})}}"><button type="button"class="btn btn-secondary" >Confirmer</button></a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>   
+                                <!-- Modal annuler -->
                                         
     </main>
 {% endblock %}
