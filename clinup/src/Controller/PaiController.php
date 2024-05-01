@@ -18,9 +18,12 @@ class PaiController extends AbstractController
 {
     private $stripeSecretKey;
 
+    private $stripePublicKey;
+
     public function __construct(ParameterBagInterface $params)
     {
         $this->stripeSecretKey = $params->get('stripe_secret_key');
+        $this->stripePublicKey = $params->get('stripe_public_key');
     }
 
     #[Route('/{idPresta}/{idDemande}/checkout', name: 'checkout')]
@@ -55,6 +58,7 @@ class PaiController extends AbstractController
 
         return $this->render('paiement/index.html.twig', [
             'reservation' => $reservation,
+            'stripePublicKey' => $this->stripePublicKey,
             'prestataire' => $prestataire,
             'cotTotal' => $cotTotal
         ]);
