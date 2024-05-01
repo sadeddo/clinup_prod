@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Reservation;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -195,5 +196,45 @@ public function getNombreDeMissions(int $prestaId): int
 
     return $monthlyData;
 }
+
+//dashboard client
+public function countAndSumReservations(UserInterface $user, $logementId = null, $startDate = null, $endDate = null)
+    {
+        $qb = $this->createQueryBuilder('r')
+        ->select('l.id as logementId, l.nom as logementNom, r.statut as reservationStatut, COUNT(r.id) as nombreReservations, SUM(r.prix) as totalMontant')
+        ->join('r.logement', 'l')
+        ->where('l.hote = :user')
+        ->setParameter('user', $user);
+
+    if ($logementId) {
+        $qb->andWhere('l.id = :logementId')
+           ->setParameter('logementId', $logementId);
+    }
+
+    if ($startDate && $endDate) {
+        $qb->andWhere('r.date BETWEEN :startDate AND :endDate')
+           ->setParameter('startDate', $startDate)
+           ->setParameter('endDate', $endDate);
+    }
+
+    return $qb->groupBy('l.id, r.statut')
+              ->orderBy('l.nom', 'ASC')
+              ->addOrderBy('r.statut', 'ASC')
+              ->getQuery()
+              ->getResult();
+    }
+
+    public function countReservationsByStatus(UserInterface $user)
+    {
+    $qb = $this->createQueryBuilder('r')
+        ->select('r.statut as reservationStatut, COUNT(r.id) as nombreReservations')
+        ->join('r.logement', 'l')
+        ->where('l.hote = :user')
+        ->setParameter('user', $user)
+        ->groupBy('r.statut')
+        ->orderBy('r.statut', 'ASC');
+
+    return $qb->getQuery()->getResult();
+    }
 
 }

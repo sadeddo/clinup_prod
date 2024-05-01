@@ -35,14 +35,18 @@ class PaiementController extends AbstractController
     {
         $this->stripeSecretKey = $params->get('stripe_secret_key');
     }
-    #[Route('/{idPresta}/{idDemande}/checkout', name: 'checkout')]
+    /*#[Route('/{idPresta}/{idDemande}/', name: 'checkouklt')]
     public function index($idPresta,$idDemande,UrlGeneratorInterface $generator,Security $security,EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,ReservationRepository $reservationRepository,CommentPrestaRepository $commentPrestaRepository): Response
     {
         $reservation = $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idDemande]);
         //details presta:
         $prestataire = $entityManager->getRepository(User::class)->findOneBy(['id' => $idPresta]);
         
-       //dd($presta);
+        if (!$reservation || !$prestataire) {
+            $this->addFlash('error', 'Réservation ou prestataire introuvable.');
+            //return $this->redirectToRoute('app_reservation_index');
+        }
+       /*dd($presta);
         Stripe::setApiKey($this->stripeSecretKey);
         $duree = $reservation->getNbrHeure();
         $prixParHeure = $prestataire->getPrix(); // 30 euros par heure
@@ -62,9 +66,8 @@ class PaiementController extends AbstractController
         $cotTotal = $heuresTotales * $prixParHeure ;
         $amount = $cotTotal* 100; // 1000 centimes = 10 EUR
         $currency = 'eur';
-
         $intent = PaymentIntent::create([
-            'amount' => $amount,
+            'amount' => '50',
             'currency' => $currency,
             'payment_method_types' => ['card'],
             'capture_method' => 'manual',
@@ -113,7 +116,7 @@ class PaiementController extends AbstractController
             $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi de votre demande de paiement. Veuillez réessayer.');
             return $this->redirectToRoute('checkout', ['idPresta' => $idPresta,'idDemande' => $idDemande], Response::HTTP_SEE_OTHER);
         }
-        return $this->render('paiement/index.html.twig', [
+        return $this->render('/index.html.twig', [
             'clientSecret' => $intent->client_secret,
             'paymentIntentId' => $intent->id,
             "user" => $security->getUser(),
@@ -123,7 +126,7 @@ class PaiementController extends AbstractController
             'IdPresta' => $idPresta,
             'IdDemande' => $idDemande
         ]);
-    }
+    }*/
     #[Route('/paiement', name: 'app_paiement', methods: ['POST','GET'])]
     public function paiement(Security $security): Response
     {

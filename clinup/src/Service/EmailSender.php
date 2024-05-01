@@ -23,7 +23,7 @@ class EmailSender {
         $content = $this->twig->render($template, $context);
 
         $email = (new Email())
-            ->from('oumaimasadeddine4@gmail.com')
+            ->from('contact@clinup.fr')
             ->to($to)
             ->subject($subject)
             ->html($content);

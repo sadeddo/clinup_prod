@@ -231,6 +231,9 @@ body {
     .sidebar-title > span {
       display: inline;
     }
+    .filterB{
+      margin-top: 15px !important;
+    }
   }
   
   /* Small <= 768px */
@@ -241,12 +244,21 @@ body {
       grid-template-columns: 1fr;
       margin-top: 30px;
     }
+    .filterB{
+      margin-top: 15px !important;
+    }
   }
   
   /* Extra Small <= 576px */
   @media screen and (max-width: 576px) {
     .header-left {
       display: none;
+    }
+    .filterB{
+      margin-top: 15px !important;
+    }
+    .main-cards{
+      flex-direction: column !important;
     }
   }
   /* form */
@@ -270,6 +282,9 @@ body {
 
     .group {
         flex: 0 0 100%; /* Chaque groupe prendra toute la largeur disponible */
+    }
+    .main-cards{
+      flex-direction: column !important;
     }
 }
   input 				{
@@ -1145,4 +1160,18 @@ margin-top: 3%;
 color: rgba(93, 102, 121, 1);
 font-weight: 800;
 font-size: 14px;
+}
+.semibold {
+  font-family: 'Figtree', sans-serif; /* Ensure Figtree is loaded or adjust font */
+  font-size: 3rem;
+font-weight: 800;
+line-height: 67.8px;
+text-align: left;
+color: white;
+}
+.filterB{
+  margin-top: 50px;
+}
+.th-dash{
+  background-color: #FF385C !important;
 }

@@ -67,8 +67,12 @@
                         </div>
                         <div class="col-auto">
                             {% if reservation.statut == "en attente"  and hasApplied == null %}
-                                                <div class="col-auto" >
-                                                    <a href="{{ path('app_reservation_postuler',{'id':reservation.id })}}" type="button" class="btn btn-secondary">Postuler</a>
+                                                <div class="col-auto">
+                                                    {% if invitExists %}
+                                                        <a href="{{ path('app_reservation_postuler_invit',{'id':reservation.id })}}" type="button" class="btn btn-secondary">Postuler</a>
+                                                    {% else %}
+                                                        <a href="{{ path('app_reservation_postuler',{'id':reservation.id })}}" type="button" class="btn btn-secondary">Postuler</a>
+                                                    {% endif %}
                                                 </div>
                                             {% elseif reservation.statut == "confirmer" %}
                                                 <div class="col-md-2 alert alert-warning confirmer" role="alert">
@@ -283,6 +287,38 @@
                 </div>
             </div>
             {% block scripteditEvent %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# modal pour les invit rep #}
+            {% if cible == "postulerInvit" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Ajouter un commentaire</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                                
+                                {{ form_widget(form.comment) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventk %}
                 <script>
                         var myOffcanvas = document.getElementById('editEventModal')
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)

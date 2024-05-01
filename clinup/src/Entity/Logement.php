@@ -50,9 +50,6 @@ class Logement
     private Collection $problemes;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $booking = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $airbnb = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -261,18 +258,6 @@ class Logement
                 $probleme->setLogement(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getBooking(): ?string
-    {
-        return $this->booking;
-    }
-
-    public function setBooking(?string $booking): static
-    {
-        $this->booking = $booking;
 
         return $this;
     }

@@ -1,159 +1,93 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}New Logement{% endblock %}
+{% block title %}Logements{% endblock %}
 
 {% block body %}
-<main class="main-container">
+    <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
-  <div class="row justify-content-between mb-3">
-            <div class="col-11" style="font-size: 1.2rem;">
-                Réservations
+        <h5>Dashboard:</h5>
+        <div class="main-cards" style="display:flex;justify-content: space-around;">
+        {% for stat in reservationsStats %}
+          <div class="card " style="padding: 1%;background-color: #FF385C !important;color: white;margin-bottom: 2%;">
+            <div class="card-inner">
+              <h4 style="font-size: 1rem;">Réservations {{ stat.reservationStatut }}:</h4>
             </div>
-            <div class="col-1 text-right" style="font-size: 1.2rem;">
-                <a href="{{ path('app_reservation_new') }}"><i class="bi bi-plus-square-fill"></i></a>
-            </div>
-        </div>
-
-<!-- Nav tabs -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    {% for statut, demandes in demande_services_par_statut %}
-        <li class="nav-item">
-            <a class="nav-link {{ loop.first ? 'active' : '' }}" id="tab-{{ statut }}" data-toggle="tab" href="#content-{{ statut }}" role="tab" aria-controls="content-{{ statut }}" aria-selected="{{ loop.first ? 'true' : 'false' }}">
-                {{ statut }}
-            </a>
-        </li>
-    {% endfor %}
-</ul>
-
-
-<!-- Tab panes -->
-<div class="tab-content">
-    {% for statut, demandes in demande_services_par_statut %}
-        <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" id="content-{{ statut }}" role="tabpanel" aria-labelledby="tab-{{ statut }}">
-            <!-- Contenu pour chaque statut -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Logement</th>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Nombre d'heures</th>
-                        {% if statut == "confirmer" %}
-                            <th>Prestataire</th>
-                            {% endif %}
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for demande_service in demandes %}
-                        <tr>
-                            <td>{{ demande_service.logement }}</td>
-                            <td>{{ demande_service.date ? demande_service.date|date('Y-m-d') : '' }}</td>
-                            <td>{{ demande_service.heure ? demande_service.heure|date('H:i') : '' }}</td>
-                            <td>{{ demande_service.nbrHeure }}</td>
-                            {% if statut == "confirmer" %}
-                            <td>  <a href="{{ path('app_consulter_profileP',{'id': demande_service.prestataire.id,'idReservation':demande_service.id})}}">{{ demande_service.prestataire.firstname }}</a></td>
-                            {% endif %}
-                            <td>
-                                {% if statut == "confirmer" %}
-                                <a href="{{ path('app_task_index',{'id': demande_service.logement.id})}}"><i class="bi bi-list-check"></i></a>
-                                <a  data-bs-toggle="modal" data-bs-target="#exampleModal{{demande_service.id}}"><i class="bi bi-check-square"></i></a>
-                                <a  data-bs-toggle="modal"  data-bs-target="#exampleModalAnn{{demande_service.id}}"><i class="bi bi-x-square"></i></a>
-                                <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal{{demande_service.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Avant de cliquer sur 'Valider', veuillez vérifier attentivement la liste des tâches réalisées et confirmer que le prestataire a bien effectué son travail. Une fois la validation effectuée, le paiement sera envoyé au prestataire et la réservation sera clôturée. Il est important de s'assurer que tout a été effectué conformément à vos attentes.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ path('app_reservation_valider',{'id':demande_service.id})}}"><button type="button" class="btn b3" >Valider</button></a>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>   
-                                        <!-- Modal annuler -->
-                                        <div class="modal fade" id="exampleModalAnn{{demande_service.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Voulez-vous vraiment annuler cette réservation ? En procédant à l'annulation, vous perdrez la réservation et un remboursement vous sera effectué.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ path('app_reservation_annuler',{'id': demande_service.id})}}"><button type="button" class="btn b3" >Annuler</button></a>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>      
-                                        {% elseif statut == "en attente" %}
-                                        <a href="{{ path('app_list_postuler',{'id': demande_service.id})}}"><button type="button" class="btn b2">Continuer</button></a>
-                                        <a  data-bs-toggle="modal" data-bs-target="#exampleModalC"><i class="bi bi-trash"></i></a>
-      <!-- Modal -->
-                                        <div class="modal fade" id="exampleModalC" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i></h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h4>Vous ne pourrez pas revenir en arrière.</h4>
-                                                <p>Toutes les informations concernant cette réservation, y compris les missions et l'historique qui lui sont associés, seront supprimées.</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a href="{{ path('app_reservation_delete',{ 'id':demande_service.id })}}"><button type="button" class="btn b3" >Supprimer</button></a>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                            
-                                        {% endif %}
-                                
-                            </td>
-                        </tr>
+            <span class=" font-weight-bold">{{ stat.nombreReservations }} </span>
+          </div>
+          {% endfor %}
+        </div><br>
+        <h5>Filtrer par:</h5>
+        <form method="get" action="{{ path('dashboard_logements') }}" class="row g-3">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                <label for="logementId" class="form-label">Logement:</label>
+                <select id="logementId" name="logementId" class="form-select">
+                    <option value="">Tous les logements</option>
+                    {% for logement in logements %}
+                        <option value="{{ logement.id }}">{{ logement.nom }}</option>
                     {% endfor %}
-                    
-                </tbody>
-            </table><br>
-            {% else %}
-                        <p class="text-center">Aucune réservation pour le moment.</p>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Date de début:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">Date de fin:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control">
+            </div>
+            <div class="col-2 filterB" >
+                <button type="submit" class="btn btn-secondary">Filtrer</button>
+            </div>
+        </form>
+
+
+        <div class="container">
+    <div class="row align-items-center mt-5"> <!-- Align items vertically center -->
+        <div class="col-md-10">
+            <h4>Résultats</h4>
         </div>
-    {% endfor %}
+        <div class="col-md-2">
+            <form method="get" action="{{ path('dashboard_logements') }}" class="row g-3">
+                <input type="hidden" name="logementId" value="{{ app.request.query.get('logementId') }}">
+                <input type="hidden" name="startDate" value="{{ app.request.query.get('startDate') }}">
+                <input type="hidden" name="endDate" value="{{ app.request.query.get('endDate') }}">
+                <div class="col-auto">
+                    <select id="format" name="format" class="form-select" style="font-size: 12px !important;">
+                        <option value="csv">CSV</option>
+                        <option value="xlsx">XLSX</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <i class="bi bi-cloud-arrow-down-fill" style="font-size: 26px;"></i>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('#myTab a');
-    const tabPanes = document.querySelectorAll('.tab-pane');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            // Désactiver tous les onglets et panneaux
-            tabs.forEach(t => t.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('show', 'active'));
-
-            // Activer l'onglet et le panneau correspondant
-            this.classList.add('active');
-            const activePaneId = this.getAttribute('href').substring(1);
-            const activePane = document.getElementById(activePaneId);
-            if (activePane) {
-                activePane.classList.add('show', 'active');
-            }
-        });
-    });
-});
-</script>
-
-    </div>
-   </main>
+        <table class="table table-striped table-hover">
+            <thead class="table-dark" style="background-color: pink !important;">
+                <tr>
+                    <th class="th-dash">Logement</th>
+                    <th class="th-dash">Statut</th>
+                    <th class="th-dash">Nbre de Réservations</th>
+                    <th class="th-dash">Montant(€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in logementsData %}
+                    {% if reservation.reservationStatut != 'en attente' and reservation.reservationStatut != 'Annuler' %}
+                        <tr>
+                            <td>{{ reservation.logementNom }}</td>
+                            <td>{{ reservation.reservationStatut }}</td>
+                            <td>{{ reservation.nombreReservations }}</td>
+                            <td>{{ reservation.totalMontant }} €</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </main>
 {% endblock %}

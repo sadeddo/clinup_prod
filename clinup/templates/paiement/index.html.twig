@@ -3,9 +3,7 @@
 {% block title %}Logement index{% endblock %}
 
 {% block body %}
-<main class="main-container">
-    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
-    <style>
+<style>
    .container {
     margin-top:3%;
  width: 32%;/* or the width you prefer */
@@ -273,77 +271,92 @@ h4{
   color:black;
 }
     </style>
-        <h4>Réservation:</h4>
+<main class="main-container">
+    <div class="container" style="width:95%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+     <h4>Réservation:</h4>
         <div class="detail">
-                    <p><i class="bi bi-calendar-event"></i> {{demande.date|date('d M y')}} à {{demande.heure|date('H:i')}}</p>
-                    <p><i class="bi bi-clock"></i> {{demande.nbrHeure}} de service</p>
+                    <p><i class="bi bi-calendar-event"></i> {{reservation.date|date('d M y')}} à {{reservation.heure|date('H:i')}}</p>
+                    <p><i class="bi bi-clock"></i> {{reservation.nbrHeure}} de service</p>
                 </div>
          <h4>Prestataire:</h4>
         <div class="detail">
-                    <p><i class="bi bi-person-fill"></i> {{presta.firstname}} {{presta.lastname}}</p>
-                    <p><i class="bi bi-currency-exchange"></i> {{presta.prix}}€/h</p>
+                    <p><i class="bi bi-person-fill"></i> {{prestataire.firstname}} {{prestataire.lastname}}</p>
+                    <p><i class="bi bi-currency-exchange"></i> {{prestataire.prix}}€/h</p>
                 </div>
-        <h4>Total: {{total}}€</h4>
-        <form id="payment-form">
-  <div id="card-element">
-    <!-- Un div vide dans lequel Stripe.js insère un élément de carte. -->
-  </div>
-  <div><p>Ceci est un prépaiement, le montant est remboursé en cas d'annulation.</p></div>
+        <h4>Total: {{cotTotal}}€</h4>
+
+    <form id="payment-form">
+        <div id="card-element">
+            <!-- Stripe Elements will go here -->
+        </div>
+        <div><p>Ceci est un prépaiement, le montant est remboursé en cas d'annulation.</p></div>
   <button class="b2" id="submit">Payer</button>
-</form>
-</div>
+    </form>
+    </div>
+</main>
+
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-  var stripe = Stripe('pk_test_51Ke2wVHCyStsmkOIMW5BLFoLz47CzFqdaXgGr0HwCe4RTY5UZEvVXH4gR6CQ0GW0NmRqucM33XBIrCYC3YQCKYzJ00Dcaagm3r'); // Utilisez votre clé publique
-  var elements = stripe.elements();
-  var style = {
-            base: {
-                iconColor: '#c4f0ff',
-                color: '#000',
-                fontWeight: 500,
-                fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-                fontSize: '16px',
-                fontSmoothing: 'antialiased',
-                
-                ':-webkit-autofill': {
-                color: '#FF385C',
-                },
-                '::placeholder': {
-                color: '#FF385C',
-                },
-            },
-            invalid: {
-                iconColor: '#FF385C',
-                color: '#FF385C',
-            },
-            complete: {
-                iconColor: '#FF385C',
-            },
-        };
-  var card = elements.create('card', {style: style});
-  card.mount('#card-element');
+    var stripe = Stripe('pk_live_51Ke2wVHCyStsmkOIh3PSM0cuBCOLwH4Q1zEaRGXF3L7nadruHqeA1tcJQJfASZc5esS4usIkL528RI0PngpwqOpn00HnonY5gs'); // Utilisez votre clé publique Stripe
+    var elements = stripe.elements();
+    var card = elements.create('card');
+    card.mount('#card-element');
 
-  var form = document.getElementById('payment-form');
-  form.addEventListener('submit', function(ev) {
-    ev.preventDefault();
-    stripe.confirmCardPayment("{{ clientSecret }}", {
-      payment_method: {
-        card: card,
-      }
-    }).then(function(result) {
-      if (result.error) {
-        // Affichez les erreurs dans le frontend
-        console.error(result.error.message);
-        alert("Une erreur de traitement est survenue: " + result.error.message);
-      } else {
-        if (result.paymentIntent.status === 'requires_capture') {
-            var successUrl = "{{ path('app_list_postuler', {'id': IdDemande}) }}"; 
-            // Redirection vers l'URL de succès
-            window.location.href = successUrl;
-        }
-      }
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({amount: {{ 1 * 100 }}})
+        }).then(function(result) {
+            return result.json();
+        }).then(function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                stripe.confirmCardPayment(data.clientSecret, {
+                    payment_method: {
+                        card: card,
+                        billing_details: {
+                            name: '{{ prestataire.firstname }}'
+                        }
+                    }
+                }).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    } else {
+                        if (result.paymentIntent.status === 'succeeded') {
+                            // Envoyer une requête au serveur pour gérer le succès du paiement
+                          fetch('/payment-success', {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'Accept': 'application/json',
+                                  'X-Requested-With': 'XMLHttpRequest',
+                              },
+                              body: JSON.stringify({
+                                  paymentIntentId: result.paymentIntent.id,
+                                  reservationId: {{ reservation.id }}, // Vous devez obtenir ces ID à partir de votre contexte
+                                  prestataireId: {{ prestataire.id }},
+                                  cotTotal: {{ cotTotal }}
+                              })
+                          }).then(function(response) {
+                              return response.json(); // ou gérer la réponse directement si elle n'est pas en JSON
+                          }).then(function(data) {
+                              // Redirection après la confirmation du paiement
+                              window.location.href = "{{ path('app_reservation_index') }}?payment=success"; // Modifier avec votre URL de redirection
+                          }).catch(function(error) {
+                              console.error('Error:', error);
+                          });
+                        }
+                    }
+                });
+            }
+        });
     });
-  });
 </script>
-</main>
 {% endblock %}

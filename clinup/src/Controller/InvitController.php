@@ -51,7 +51,7 @@ class InvitController extends AbstractController
 
             $notificationService->sendEmail(
                 $invit->getEmail(),
-                ' '.  $hote->getFirstname() .'vous a invité(e) à rejoindre Clinup ',
+                ' '.  $hote->getFirstname() .' vous a invité(e) à rejoindre Clinup ',
                 'email/invit.html.twig',
                 [
                     'hote' => $hote,

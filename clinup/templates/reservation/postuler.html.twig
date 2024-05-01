@@ -133,6 +133,7 @@
                 </div>
             {% if reservation.statut == "en attente" %}
                 <h5 class="titree">Agents intéressés</h5>
+                <a href="{{ path('app_reservation_envoyerAutre',{'id':reservation.id })}}" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Envoyer aux autres prestataires</a>
                 {% for prestataire in reservation.postulers %}
                 <div class="card">
                     <div class="card-body">
@@ -142,15 +143,13 @@
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-10">
-                                                <div class="d-flex  marg">
+                                                <div class="marg" style="display:flex;">
                                                     <img src="{{ app.request.basepath }}/img/{{ prestataire.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
                                                     <div>
-                                                    <h6 class="card-title mb-0 nom">{{ prestataire.prestataire.firstname }} {{ prestataire.prestataire.lastname }}   <span class="">
-                                                        <i class="bi bi-star-fill start"></i> 4.9
-                                                        </span></h6>
+                                                    <h6 class="card-title mb-0 nom">{{ prestataire.prestataire.firstname }} {{ prestataire.prestataire.lastname }} </h6>
                                                 
                                                     <div class="card-subtitle dateC">
-                                                        <span class="text-muted">14 jan. 2024 | 14:28</span>
+                                                        <span class="text-muted">{{ prestataire.createdAt|date('j M. Y') }} | {{ prestataire.createdAt|date('H:i') }}</span>
                                                     
                                                     </div>
                                                     </div>
@@ -158,10 +157,12 @@
                                                 <p class="card-text mt-2 comment">{{ prestataire.comment }}</p>
                                             </div>
                                             <div class="col-md-2">
+                                            {% if  prestataire.comment != 'Je ne suis pas disponible'  %}
                                                 <div class="row">
                                                     <a href="{{ path("app_consulter_profileP",{"id":prestataire.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary">Voir profil</a>
                                                     <a href="{{ path("checkout",{"idPresta":prestataire.prestataire.id,"idDemande":reservation.id})}}" type="button" class="btn btn-secondary">Réserver</a>
                                                 </div>
+                                            {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -189,16 +190,11 @@
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <div class="d-flex  marg">
+                                                <div class="marg"  style="display: flex;">
                                                     <img src="{{ app.request.basepath }}/img/{{ reservation.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                    <div>
-                                                    <h6 class="card-title mb-0 nom">{{ reservation.prestataire.firstname }} {{ reservation.prestataire.lastname }}   <span class="">
-                                                        <i class="bi bi-star-fill start"></i> 4.9
-                                                        </span></h6>
-                                                    <div class="card-subtitle dateC">
-                                                        <span class="text-muted">14 jan. 2024 | 14:28</span>
+                                                    <div style="margin-top: 2%;">
+                                                    <h6 class="card-title mb-0 nom">{{ reservation.prestataire.firstname }} {{ reservation.prestataire.lastname }}<h6>
                                                     
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>

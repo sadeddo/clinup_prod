@@ -45,4 +45,15 @@ class InvitRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function existsInvit($hoteId, $prestataireId)
+    {
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->where('i.hote = :hoteId AND i.presta = :prestataireId')
+            ->setParameter('hoteId', $hoteId)
+            ->setParameter('prestataireId', $prestataireId)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+    }
 }

@@ -12,6 +12,9 @@
                         </div>            {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
+            {% for messages in app.flashes('error') %}
+                <div class="alert alert-danger">{{ messages }}</div>
+            {% endfor %}
                         <div class="col-auto" style="font-size: 1.5rem;">
                 <a class="btn btn-secondary" href="{{ path('app_reservation_ajouter') }}">Poster une réservation</a>
             </div>

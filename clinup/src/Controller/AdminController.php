@@ -25,6 +25,19 @@ class AdminController extends AbstractController
     public function valider($id,UserRepository $prestataireRepository,EntityManagerInterface $entityManager,NotificationService $notifService,EmailSender $notificationService) 
     {
         $prestataire = $prestataireRepository->findOneBy(['id' => $id]);
+
+        if ($prestataire->isStatutStripe() != 1 || !$prestataire->getAdresse()) {  // Supposons que 1 signifie 'configuré'
+            $message = "";
+            if ($prestataire->isStatutStripe() != 1) {
+                $message .= "Le compte Stripe du prestataire n'est pas configuré. ";
+            }
+            if (!$prestataire->getAdresse()) {
+                $message .= "L'adresse du prestataire n'est pas renseignée. ";
+            }
+            $message .= "Vous ne pouvez pas valider ce profil.";
+            $this->addFlash('danger', $message);
+            return $this->redirectToRoute('app_admin_consulter', ['id' => $id]);
+        }
         if ($prestataire->isIsVerified()) {
             $prestataire->setIsVerified(false);
         }else{
@@ -43,6 +56,7 @@ class AdminController extends AbstractController
                     
                 ]
             );
+            $this->addFlash('success', 'Le profil de ' . $prestataire->getFirstname().' '.$prestataire->getLastname() . ' a été validé avec succès.');
         }
         $entityManager->persist($prestataire);
         $entityManager->flush();
