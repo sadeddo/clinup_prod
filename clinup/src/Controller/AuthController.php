@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class AuthController extends AbstractController
 {
     //connexion
-    #[Route(path: '/', name: 'app_login')]
+    #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
