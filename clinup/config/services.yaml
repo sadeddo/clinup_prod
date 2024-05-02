@@ -10,7 +10,6 @@ parameters:
     upload_directory_task_hote: '%kernel.project_dir%/public/taskHote'
     upload_directory_img_message: '%kernel.project_dir%/public/message'
     upload_directory_img: '%kernel.project_dir%/public/img'
-    stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
     stripe_public_key: '%env(STRIPE_PUBLIC_KEY)%'
     maps_secret_key: '%env(MAPS_SECRET_KEY)%'
     app.jwtsecret: 'fghijklmnopqrstuvwxyzABC'

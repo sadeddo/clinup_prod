@@ -23,7 +23,6 @@ class PaiController extends AbstractController
     public function __construct(ParameterBagInterface $params)
     {
         $this->stripeSecretKey = $params->get('stripe_secret_key');
-        $this->stripePublicKey = $params->get('stripe_public_key');
     }
 
     #[Route('/{idPresta}/{idDemande}/checkout', name: 'checkout')]
