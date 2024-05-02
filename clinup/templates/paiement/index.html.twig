@@ -297,7 +297,7 @@ h4{
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    var stripe = Stripe({{ stripePublicKey }}); // Utilisez votre clé publique Stripe
+    var stripe = Stripe('pk_live_51Ke2wVHCyStsmkOIh3PSM0cuBCOLwH4Q1zEaRGXF3L7nadruHqeA1tcJQJfASZc5esS4usIkL528RI0PngpwqOpn00HnonY5gs'); // Utilisez votre clé publique Stripe
     var elements = stripe.elements();
     var card = elements.create('card');
     card.mount('#card-element');
