@@ -50,7 +50,11 @@
                                     {% endfor %}
                                 </div></br>
                                 <h5 style="font-size: 14px;font-weight: 550;">L’agent a confirmé l’entretien de toutes les tâches assignées. Êtes-vous satisfait du résultat ?</h5>
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModalconfirmer" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
+                                {% if reservation.idIntent == "invit" %}
+                                    <a href="{{ path('checkoutI',{'idPresta':reservation.prestataire.id,'idDemande':reservation.id})}}" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
+                                {% else %}
+                                    <a data-bs-toggle="modal" data-bs-target="#exampleModalconfirmer" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
+                                {% endif %}
                                 <a href="" type="button" class="btn btn1 btn-secondary" style="margin-bottom:1%;">Je ne suis pas satisfait</a>
                             </div>
                         </div>

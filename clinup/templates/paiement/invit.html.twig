@@ -331,7 +331,7 @@ h4{
                     } else {
                         if (result.paymentIntent.status === 'succeeded') {
                             // Envoyer une requête au serveur pour gérer le succès du paiement
-                          fetch('/payment-success', {
+                          fetch('/payment-success-invit', {
                               method: 'POST',
                               headers: {
                                   'Content-Type': 'application/json',
@@ -350,7 +350,8 @@ h4{
                               // Redirection après la confirmation du paiement
                               window.location.href = "{{ path('app_reservation_index') }}?payment=success"; // Modifier avec votre URL de redirection
                           }).catch(function(error) {
-                              console.error('Error:', error);
+                             console.error('Error during the payment process:', error);
+                             alert('Une erreur est survenue pendant le traitement de votre paiement. Veuillez réessayer ou contacter le support.');
                           });
                         }
                     }

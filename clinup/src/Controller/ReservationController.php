@@ -16,6 +16,7 @@ use App\Entity\Icalres;
 use App\Entity\Logement;
 use App\Entity\Postuler;
 use Stripe\StripeClient;
+use Stripe\PaymentIntent;
 use App\Form\PostulerType;
 use App\Entity\Reservation;
 use App\Form\PostInvitType;
@@ -35,6 +36,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -279,43 +281,85 @@ class ReservationController extends AbstractController
     }
     //comment postuler par invit (choix)
     #[Route('/invit/{id}/postuler', name: 'app_reservation_postuler_invit', methods: ['GET','POST'])]
-    public function postulerInvit($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService): Response
+    public function postulerInvit($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,ReservationRepository $reservationRepository, CommentPrestaRepository $commentPrestaRepository): Response
     {
         $comment = new Postuler();
         $form = $this->createForm(PostInvitType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            ///les modiif
             $rep = $form->getData()->getComment();
             if ($rep == 'Je ne suis pas disponible') {
                 $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
                 foreach($dispos as $dispo){
                     $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
                 }
+                $date = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+                $comment->setCreatedAt($date);
+                $comment->setPrestataire($security->getUser());
+                $comment->setReservation($reservation);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                $currentDate = new \DateTime();
+                $notificationService->sendEmail(
+                    $reservation->getLogement()->getHote()->getEmail(),
+                    'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
+                    'email/prestaPostule.html.twig',
+                    [
+                        'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
+                        
+                    ]
+                );
+                $notifService->createNotification(
+                    $reservation->getLogement()->getHote(),
+                    'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
+                    '/reservation/hote/'.$reservation->getId().'/postulers'
+        
+                );
+                $this->addFlash('success', 'Votre réponse a été envoyée avec succès !');
+            }elseif ($rep == 'Je suis disponible') {
+                $prestataire = $security->getUser();
+                $reservation->setStatut('confirmer');
+                $reservation->setIdIntent('invit');
+                $reservation->setPrix($security->getUser()->getPrix());
+                $reservation->setPrestataire($security->getUser());
+                $entityManager->persist($reservation);
+                $entityManager->flush();
+                //mail
+                $currentDate = new \DateTime();
+                $notificationService->sendEmail(
+                    $reservation->getLogement()->getHote()->getEmail(),
+                    'Réservation confirmée par votre prestataire le'.' '.$currentDate->format('d-m-Y'),
+                    'email/confirmeInvit.html.twig',
+                    [
+                        'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
+                        
+                    ]
+                );
+                $notifService->createNotification(
+                    $reservation->getLogement()->getHote(),
+                    'Réservation confirmée par votre prestataire le'.' '.$currentDate->format('d-m-Y'),
+                    '/reservation/hote/'.$reservation->getId().'/postulers'
+        
+                );
+                $numberOfMissions =  $reservationRepository->getNombreDeMissions($prestataire->getId());
+                $average = $commentPrestaRepository->getAverageNoteForPrestataire($prestataire->getId());
+                $tier = 'Bronze'; 
+                $tarif = 35;
+                if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
+                    $tier = 'Argent';
+                    $tarif = 45;
+                } elseif ($average > 4.5 && $numberOfMissions > 70) {
+                    $tier = 'Or';
+                    $tarif = 60;
+                }
+                $prestataire->setPrix($tarif);
+                $entityManager->persist($prestataire);
+                $entityManager->flush();
+                $this->addFlash('success', 'Réservation confirmée avec succès !');
             }
-            $date = new \DateTime('now', new DateTimeZone('Europe/Paris'));
-            $comment->setCreatedAt($date);
-            $comment->setPrestataire($security->getUser());
-            $comment->setReservation($reservation);
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            $currentDate = new \DateTime();
-            $notificationService->sendEmail(
-                $reservation->getLogement()->getHote()->getEmail(),
-                'Nouvelle Candidature pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
-                'email/prestaPostule.html.twig',
-                [
-                    'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
-                    
-                ]
-            );
-            $notifService->createNotification(
-                $reservation->getLogement()->getHote(),
-                'Nouvelle Candidature pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
-                '/reservation/hote/'.$reservation->getId().'/postulers'
-    
-            );
-            $this->addFlash('success', 'Votre réponse a été envoyée avec succès !');
+            
             return $this->redirectToRoute('app_reservation_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
            //verifier si l'utilisateur à deja postuler
@@ -557,7 +601,7 @@ class ReservationController extends AbstractController
     public function valider(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService): Response
     {
         $stripe = new StripeClient($this->stripeSecretKey);
-    
+        //les modiiiiiiiiif
         try {
             $montantEuro = $reservation->getPrix();
             $montantCentimes = $montantEuro * 100; // Convertir en centimes
@@ -613,7 +657,89 @@ class ReservationController extends AbstractController
             $this->addFlash('error', 'Erreur: ' . $e->getMessage());
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
-    }    
+    }  
+    
+    #[Route('/payment-success-invit', name: 'app_reservation_valider_payer', methods: ['POST','GET'])]
+public function payerInvit(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository, EmailSender $notificationService, NotificationService $notifService): Response
+{
+    Stripe::setApiKey($this->stripeSecretKey);
+    $data = json_decode($request->getContent(), true);
+
+    if (!$data || !isset($data['paymentIntentId'], $data['reservationId'], $data['prestataireId'], $data['cotTotal'])) {
+        $this->addFlash('error', 'Données de paiement manquantes ou invalides');
+        return $this->redirectToRoute('app_reservation_index');
+    }
+
+    $paymentIntentId = $data['paymentIntentId'];
+    $reservation = $reservationRepository->find($data['reservationId']);
+
+    if (!$reservation) {
+        $this->addFlash('error', 'Réservation non trouvée');
+        return $this->redirectToRoute('app_reservation_index');
+    }
+
+    try {
+        $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+
+        if ($paymentIntent->status !== 'succeeded') {
+            $this->addFlash('error', 'Le paiement n\'a pas réussi ou est encore en attente');
+            return $this->redirectToRoute('app_reservation_index');
+        }
+
+        $montantCentimes = $data['cotTotal'] * 100;
+        $transfer = Stripe::transfers()->create([
+            'amount' => $montantCentimes,
+            'currency' => 'eur',
+            'destination' => $reservation->getPrestataire()->getIdStripe(),
+        ]);
+
+        if ($transfer->status !== 'succeeded') {
+            throw new \Exception("Échec du transfert des fonds.");
+        }
+
+        $reservation->setStatut('payé');
+        $reservation->setIdIntent($paymentIntentId);
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        // Suppression des tâches liées et notifications
+        $this->finalizeReservation($reservation, $entityManager, $notificationService, $notifService);
+
+        $this->addFlash('success', 'La prestation a été validée et le paiement transféré avec succès.');
+        return $this->redirectToRoute('app_reservation_index');
+    } catch (\Stripe\Exception\ApiErrorException $e) {
+        $this->addFlash('error', 'Erreur Stripe: ' . $e->getMessage());
+        return $this->redirectToRoute('app_reservation_index');
+    } catch (\Exception $e) {
+        $this->addFlash('error', 'Erreur: ' . $e->getMessage());
+        return $this->redirectToRoute('app_reservation_index');
+    }
+}
+
+private function finalizeReservation(Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService)
+{
+    $tasks = $reservation->getLogement()->getTasks();
+    foreach ($tasks as $task) {
+        foreach ($task->getImgTasks() as $imgTask) {
+            $entityManager->remove($imgTask);
+        }
+    }
+    $entityManager->flush();
+
+    $notificationService->sendEmail(
+        $reservation->getPrestataire()->getEmail(),
+        'Prestation Validée',
+        'email/validePrestation.html.twig',
+        ['user' => $reservation->getPrestataire()]
+    );
+
+    $notifService->createNotification(
+        $reservation->getPrestataire(),
+        'Prestation Validée',
+        '/reservation/prestataire/consulter'
+    );
+}
+
 
     //annuler la réservation
     #[Route('/hote/{id}/annuler', name: 'app_reservation_annuler', methods: ['POST','GET'])]

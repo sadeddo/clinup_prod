@@ -52,10 +52,48 @@ class PaiController extends AbstractController
 
         if (!$reservation || !$prestataire) {
             $this->addFlash('error', 'Réservation ou prestataire introuvable.');
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_reservation_index');
         }
 
         return $this->render('paiement/index.html.twig', [
+            'reservation' => $reservation,
+            'stripePublicKey' => $this->stripePublicKey,
+            'prestataire' => $prestataire,
+            'cotTotal' => $cotTotal
+        ]);
+    }
+    //checkout invit
+    #[Route('/{idPresta}/{idDemande}/checkoutI', name: 'checkoutI')]
+    public function checkoutInvit(int $idPresta, int $idDemande, EntityManagerInterface $entityManager): Response
+    {
+        // Ici, vous récupérez vos données de réservation et de prestataire de la base de données
+        // Assurez-vous que les entités et leurs propriétés sont correctement configurées
+        $reservation = $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idDemande]);
+        $prestataire = $entityManager->getRepository(User::class)->findOneBy(['id' => $idPresta]);
+
+        $duree = $reservation->getNbrHeure();
+        $prixParHeure = $prestataire->getPrix(); // 30 euros par heure
+        // Séparation des heures et des minutes
+        $parts = explode("h", $duree);
+        $heures = $parts[0];
+        $minutes = $parts[1];
+
+        // Convertir en minutes totales
+        $minutesTotales = $heures * 60 + $minutes;
+
+        // Calcul du coût
+        // Convertissez les minutes en heures (car le prix est par heure)
+        $heuresTotales = $minutesTotales / 60;
+
+        // Calcul du coût total
+        $cotTotal = $heuresTotales * $prixParHeure ;
+
+        if (!$reservation || !$prestataire) {
+            $this->addFlash('error', 'Réservation ou prestataire introuvable.');
+            return $this->redirectToRoute('app_reservation_index');
+        }
+
+        return $this->render('paiement/invit.html.twig', [
             'reservation' => $reservation,
             'stripePublicKey' => $this->stripePublicKey,
             'prestataire' => $prestataire,
