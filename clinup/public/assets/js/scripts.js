@@ -28,3 +28,9 @@ document.getElementById('toggle-products').addEventListener('click', function(ev
   
 // ---------- CHARTS ----------
 
+window.addEventListener('pageshow', function(event) {
+  // Vérifie si la page a été chargée à partir du cache
+  if (event.persisted) {
+    window.location.reload();  // Rafraîchit la page si elle vient du cache
+  }
+});

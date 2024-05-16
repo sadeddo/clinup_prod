@@ -349,10 +349,10 @@ class ReservationController extends AbstractController
                 $tarif = 35;
                 if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
                     $tier = 'Argent';
-                    $tarif = 45;
+                    $tarif = 40;
                 } elseif ($average > 4.5 && $numberOfMissions > 70) {
                     $tier = 'Or';
-                    $tarif = 60;
+                    $tarif = 45;
                 }
                 $prestataire->setPrix($tarif);
                 $entityManager->persist($prestataire);
@@ -537,23 +537,9 @@ class ReservationController extends AbstractController
             $entityManager->persist($newDispoApres);
             $entityManager->flush();
         }
-        //calculer le prix
-        $duree = $reservation->getNbrHeure();
-        $prixParHeure = $prestataire->getPrix(); // 30 euros par heure
-        // Séparation des heures et des minutes
-        $parts = explode("h", $duree);
-        $heures = $parts[0];
-        $minutes = $parts[1];
-
-        // Convertir en minutes totales
-        $minutesTotales = $heures * 60 + $minutes;
-
-        // Calcul du coût
-        // Convertissez les minutes en heures (car le prix est par heure)
-        $heuresTotales = $minutesTotales / 60;
-
+    
         // Calcul du coût total
-        $cotTotal = $heuresTotales * $prixParHeure ;
+        $cotTotal = $prestataire->getPrix(); 
         $amount = $cotTotal* 100; // 1000 centimes = 10 EUR
         $currency = 'eur';
         $entityManager->remove($dispo);
@@ -584,10 +570,10 @@ class ReservationController extends AbstractController
         $tarif = 35;
         if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
             $tier = 'Argent';
-            $tarif = 45;
+            $tarif = 40;
         } elseif ($average > 4.5 && $numberOfMissions > 70) {
             $tier = 'Or';
-            $tarif = 60;
+            $tarif = 45;
         }
         $prestataire->setPrix($tarif);
         $entityManager->persist($prestataire);
@@ -601,21 +587,17 @@ class ReservationController extends AbstractController
     public function valider(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService): Response
     {
         $stripe = new StripeClient($this->stripeSecretKey);
-        //les modiiiiiiiiif
         try {
-            $montantEuro = $reservation->getPrix();
-            $montantCentimes = $montantEuro * 100; // Convertir en centimes
             
             // Effectuer le transfert des fonds vers le compte Stripe du prestataire
             $transfer = $stripe->transfers->create([
-                'amount' => $montantCentimes,
+                'amount' => $reservation->getPrix() * 100 - 1000,
                 'currency' => 'eur',
                 'destination' => $reservation->getPrestataire()->getIdStripe(),
-            ]);
-    
-            if ($transfer->status == 'succeeded') {
+                'source_transaction' => $reservation->getIdIntent(),
+              ]);
                 // Mettre à jour le statut de la réservation
-                $reservation->setStatut('payé');
+                $reservation->setStatut('payer');
                 $entityManager->persist($reservation);
                 
                 // Suppression des tâches liées si nécessaire
@@ -645,9 +627,6 @@ class ReservationController extends AbstractController
                 // Redirection vers la page d'index avec message de succès
                 $this->addFlash('success', 'La prestation a été validée et le paiement transféré avec succès.');
                 return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
-            } else {
-                throw new \Exception("Le transfert n'a pas réussi, statut: " . $transfer->status);
-            }
         } catch (\Stripe\Exception\ApiErrorException $e) {
             // Gestion des erreurs Stripe
             $this->addFlash('error', 'Erreur Stripe: ' . $e->getMessage());

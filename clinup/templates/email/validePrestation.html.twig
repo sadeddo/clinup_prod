@@ -1,23 +1,51 @@
-<html>
-    <head>
-       <title>Prestation Validée et Paiement en Cours</title>
-    </head>
-    <body>
-    <div style="width:60%; margin:auto;">
-    <h1 style="text-align: left; color: #3d4465;">Confirmation de Votre Prestation</h1>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous sommes ravis de vous informer que votre prestation a été validée avec succès par le hôte.</p>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Le paiement pour cette prestation a été initié et devrait être crédité sur votre compte dans les prochains jours.</p>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous tenons à vous remercier pour votre engagement et la qualité de votre travail. Votre professionnalisme est grandement apprécié par nos clients et par nous-mêmes.</p>
-    
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous espérons continuer à travailler avec vous sur de futures prestations.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Cordialement,</p>
-    <div style="display: flex;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">L'équipe de </p>
-    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestation Validée et Paiement en Cours</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1, p {
+            text-align: left;
+        }
+        h2 {
+            color: rgb(255, 56, 92);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1, p, h2 {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Confirmation de Votre Prestation</h1>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Nous sommes ravis de vous informer que votre prestation a été validée avec succès par le hôte.</p>
+    <p>Le paiement pour cette prestation a été initié et devrait être crédité sur votre compte dans les prochains jours.</p>
+    <p>Nous tenons à vous remercier pour votre engagement et la qualité de votre travail. Votre professionnalisme est grandement apprécié par nos clients et par nous-mêmes.</p>
+    <p>Nous espérons continuer à travailler avec vous sur de futures prestations.</p>
+    <p>Cordialement,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2>ClinUp</h2>
     </div>
-    </div>
-    </body>
+</div>
+</body>
 </html>

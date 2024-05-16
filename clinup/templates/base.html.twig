@@ -16,7 +16,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/styles.css">
   </head>
-  <body>
+  <body onload="window.setTimeout(3000);">
     <div class="grid-container">
 
       <!-- Header -->
@@ -121,5 +121,13 @@ var place = autocomplete2.getPlace();
     <script src="https://kit.fontawesome.com/7c91415ed6.js" crossorigin="anonymous"></script>
     <!-- Custom JS -->
     <script src="/assets/js/scripts.js"></script>
+    <script>
+  window.addEventListener('pageshow', function(event) {
+    // Vérifie si la page a été chargée à partir du cache
+    if (event.persisted) {
+      window.location.reload();  // Rafraîchit la page si elle vient du cache
+    }
+  });
+</script>
   </body>
 </html>

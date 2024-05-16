@@ -51,10 +51,10 @@ class CommentPrestaController extends AbstractController
             $tarif = 35;
             if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
                 $tier = 'Argent';
-                $tarif = 45;
+                $tarif = 40;
             } elseif ($average > 4.5 && $numberOfMissions > 70) {
                 $tier = 'Or';
-                $tarif = 60;
+                $tarif = 45;
             }
             $user->setPrix($tarif);
             $entityManager->persist($user);

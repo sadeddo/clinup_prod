@@ -283,81 +283,46 @@ h4{
                     <p><i class="bi bi-person-fill"></i> {{prestataire.firstname}} {{prestataire.lastname}}</p>
                     <p><i class="bi bi-currency-exchange"></i> {{prestataire.prix}}€</p>
                 </div>
-        <h4>Total: {{cotTotal}}€</h4>
 
     <form id="payment-form">
-        <div id="card-element">
-            <!-- Stripe Elements will go here -->
-        </div>
-        <div><p>Ceci est un prépaiement, le montant est remboursé en cas d'annulation.</p></div>
-  <button class="b2" id="submit">Payer</button>
+      
+  <button class="b2">Payer</button>
     </form>
     </div>
 </main>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    var stripe = Stripe('pk_live_51PC23OGrwysY3nEfmZwem3Pk7fGolrLWWdjtah91j4GjCj0IFZ0O5hxa13udeUV8cxsmC1VQZy8Z81EIe1LCceYC00OrESWmRo'); // Utilisez votre clé publique Stripe
+    var stripe = Stripe('pk_test_51PC23OGrwysY3nEfKzPhtsCMxudBmcgUNrjzxPNCJYk5LPdxrjLTcz4LD9DAiVHJe62DmFFerQnKBzTQmskNG1kX0053s31F6s');
     var elements = stripe.elements();
-    var card = elements.create('card');
-    card.mount('#card-element');
 
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
+        var reservationId = {{ reservation.id|json_encode }};
 
-        fetch('/create-payment-intent', {
+        fetch(`/create-checkout-session/${reservationId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({amount: {{ 1 * 100 }}})
-        }).then(function(result) {
-            return result.json();
+            body: JSON.stringify() // Montant en centimes
+        }).then(function(response) {
+            return response.json();
         }).then(function(data) {
             if (data.error) {
                 alert(data.error);
             } else {
-                stripe.confirmCardPayment(data.clientSecret, {
-                    payment_method: {
-                        card: card,
-                        billing_details: {
-                            name: '{{ reservation.logement.hote.firstname }}'
-                        }
-                    }
+                stripe.redirectToCheckout({
+                    sessionId: data.id
                 }).then(function(result) {
                     if (result.error) {
                         alert(result.error.message);
-                    } else {
-                        if (result.paymentIntent.status === 'succeeded') {
-                            // Envoyer une requête au serveur pour gérer le succès du paiement
-                          fetch('/payment-success-invit', {
-                              method: 'POST',
-                              headers: {
-                                  'Content-Type': 'application/json',
-                                  'Accept': 'application/json',
-                                  'X-Requested-With': 'XMLHttpRequest',
-                              },
-                              body: JSON.stringify({
-                                  paymentIntentId: result.paymentIntent.id,
-                                  reservationId: {{ reservation.id }}, // Vous devez obtenir ces ID à partir de votre contexte
-                                  prestataireId: {{ prestataire.id }},
-                                  cotTotal: {{ cotTotal }}
-                              })
-                          }).then(function(response) {
-                              return response.json(); // ou gérer la réponse directement si elle n'est pas en JSON
-                          }).then(function(data) {
-                              // Redirection après la confirmation du paiement
-                              window.location.href = "{{ path('app_reservation_index') }}?payment=success"; // Modifier avec votre URL de redirection
-                          }).catch(function(error) {
-                             console.error('Error during the payment process:', error);
-                             alert('Une erreur est survenue pendant le traitement de votre paiement. Veuillez réessayer ou contacter le support.');
-                          });
-                        }
                     }
                 });
             }
         });
     });
 </script>
+
 {% endblock %}

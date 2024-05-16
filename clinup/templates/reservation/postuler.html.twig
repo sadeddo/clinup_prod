@@ -5,9 +5,12 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
-            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a></br></br>
+            <a  href="javascript:history.back();"><i class="bi bi-arrow-left"></i> Retour</a></br></br>
             {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
+            {% endfor %}
+            {% for messages in app.flashes('error') %}
+                <div class="alert alert-danger">{{ messages }}</div>
             {% endfor %}
             {% if reservation.statut == "confirmer" %}
             <a data-bs-toggle="modal" data-bs-target="#exampleModalAnnuler" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Annuler</a>
@@ -51,11 +54,14 @@
                                 </div></br>
                                 <h5 style="font-size: 14px;font-weight: 550;">L’agent a confirmé l’entretien de toutes les tâches assignées. Êtes-vous satisfait du résultat ?</h5>
                                 {% if reservation.idIntent == "invit" %}
-                                    <a href="{{ path('checkoutI',{'idPresta':reservation.prestataire.id,'idDemande':reservation.id})}}" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
+                                <form id="payment-form">
+      
+                                    <button  class="btn btn-secondary" style="margin-bottom:1%;" id="submit">Oui, j’approuve l’entretien</button>
+                                </form>
                                 {% else %}
                                     <a data-bs-toggle="modal" data-bs-target="#exampleModalconfirmer" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Oui, j’approuve l’entretien</a>
                                 {% endif %}
-                                <a href="" type="button" class="btn btn1 btn-secondary" style="margin-bottom:1%;">Je ne suis pas satisfait</a>
+                                <a href="" type="button" class="btn btn1 btn-secondary" style="margin-bottom:1%;" href="mailto:contact@clinup.fr">Je ne suis pas satisfait</a>
                             </div>
                         </div>
                     </div>
@@ -164,7 +170,6 @@
                                             {% if  prestataire.comment != 'Je ne suis pas disponible'  %}
                                                 <div class="row">
                                                     <a href="{{ path("app_consulter_profileP",{"id":prestataire.prestataire.id,"idReservation":reservation.id})}}" type="button" class="btn btn1 btn-primary">Voir profil</a>
-                                                    <a href="{{ path("checkout",{"idPresta":prestataire.prestataire.id,"idDemande":reservation.id})}}" type="button" class="btn btn-secondary">Réserver</a>
                                                 </div>
                                             {% endif %}
                                             </div>
@@ -316,4 +321,37 @@
                                 <!-- Modal annuler -->
                                         
     </main>
+    <script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('pk_test_51PC23OGrwysY3nEfKzPhtsCMxudBmcgUNrjzxPNCJYk5LPdxrjLTcz4LD9DAiVHJe62DmFFerQnKBzTQmskNG1kX0053s31F6s');
+    var elements = stripe.elements();
+
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var reservationId = {{ reservation.id|json_encode }};
+        fetch(`/create-checkout-session/${reservationId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({amount: 1000}) // Montant en centimes
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                stripe.redirectToCheckout({
+                    sessionId: data.id
+                }).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                });
+            }
+        });
+    });
+</script>
 {% endblock %}

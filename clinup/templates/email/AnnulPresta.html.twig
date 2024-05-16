@@ -1,23 +1,51 @@
-<html>
-    <head>
-       <title>Réservation Annulée</title>
-    </head>
-    <body>
-    <div style="width:60%; margin:auto;">
-    <h1 style="text-align: left; color: #3d4465;">Notification d'Annulation de Réservation</h1>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous vous informons que la réservation à laquelle vous étiez assigné(e) sur ClinUp a été annulée par l'hôte.</p>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous comprenons que les annulations peuvent être décevantes, mais des opportunités similaires peuvent se présenter prochainement. Nous vous encourageons à rester actif(ve) sur la plateforme pour découvrir de nouvelles demandes.</p>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter.</p>
-    
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Merci pour votre compréhension et votre flexibilité.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Cordialement,</p>
-    <div style="display: flex;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">L'équipe de </p>
-    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation Annulée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box; /* Assure que padding ne déborde pas la largeur */
+        }
+        h1, p {
+            text-align: left;
+        }
+        h2 {
+            color: rgb(255, 56, 92);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1, p, h2 {
+                font-size: 14px; /* Ajuste la taille du texte pour les petits écrans */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Notification d'Annulation de Réservation</h1>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Nous vous informons que la réservation à laquelle vous étiez assigné(e) sur ClinUp a été annulée par l'hôte.</p>
+    <p>Nous comprenons que les annulations peuvent être décevantes, mais des opportunités similaires peuvent se présenter prochainement. Nous vous encourageons à rester actif(ve) sur la plateforme pour découvrir de nouvelles demandes.</p>
+    <p>Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter.</p>
+    <p>Merci pour votre compréhension et votre flexibilité.</p>
+    <p>Cordialement,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2>ClinUp</h2>
     </div>
-    </div>
-    </body>
+</div>
+</body>
 </html>

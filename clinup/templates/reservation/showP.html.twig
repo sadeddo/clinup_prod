@@ -5,16 +5,12 @@
 {% block body %}
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
-            <a onclick="history.back()"><i class="bi bi-arrow-left"></i> Retour</a>
+            <a href="javascript:history.back();"><i class="bi bi-arrow-left"></i> Retour</a>
             {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
             {% if reservation.statut == "en attente" and hasApplied != null %}
                 <div class="alert alert-warning">Vous avez déjà postulé à cette offre.</div>
-            {% elseif reservation.statut != "en attente" and hasApplied == null %}
-            <div class="alert alert-warning">Cette offre n'est plus disponible.</div>
-            {% elseif reservation.statut == "Annuler"%}
-            <div class="alert alert-warning">Cette offre n'est plus disponible.</div>
             {% endif %}
             {% if reservation.statut == "confirmer" %}
             <h5 class="titree">Résultats des tâches</h5>

@@ -9,7 +9,7 @@
             <div class="alert alert-danger" role="alert">
                 <i class="bi bi-exclamation-triangle"></i> Pour atteindre le palier Bronze, il est nécessaire de compléter au moins 30 missions.
             </div>
-        {% elseif user.prix == "45" %}
+        {% elseif user.prix == "40" %}
         <div class="alert alert-danger" role="alert">
                 <i class="bi bi-exclamation-triangle"></i> Pour atteindre le palier Or, il est nécessaire de compléter au moins 70 missions.
             </div>
@@ -39,7 +39,7 @@
                                 <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 4rem; height:4rem;background: rgba(214, 214, 214, 1) !important;
                                     border: rgba(214, 214, 214, 1) !important;"><i class="fa-sharp fa-solid fa-medal" style="font-size: 24px;color: rgba(102, 112, 133, 1);"></i></button>
                             </div>
-                            {% elseif user.prix == "45" %}
+                            {% elseif user.prix == "40" %}
                                 <div class="position-relative m-4">
                                 <div class="progress" style="height: 1px;">
                                     <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -75,7 +75,7 @@
                         <div class="card ">
                             <div class="card-body b">
                             <h6 class="res-d" style="font-size: 17px;padding: 3%;">Tarif actuel</h6>
-                            <h4 style="padding-left: 3%;">{{ user.prix }} €/h</h4>
+                            <h4 style="padding-left: 3%;">{{ user.prix }} €</h4>
                             </div>
                         </div>
                     </div>

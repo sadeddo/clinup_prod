@@ -1,45 +1,70 @@
-<html>
-    <head>
-       <title>Bienvenue sur ClinUp</title>
-    </head>
-    <body>
-    <div style="width:60%; margin:auto;">
-    <h1 style="text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</h1>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bienvenue sur ClinUp ! Nous sommes ravis de vous compter parmi nos prestataires.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Avant de pouvoir profiter pleinement de nos services, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur ClinUp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1, p, a {
+            text-align: left;
+        }
+        a {
+            background-color: rgb(255, 56, 92);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1, p, a {
+                font-size: 14px;
+            }
+            a {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Bonjour {{ user.firstname }},</h1>
+    <p>Bienvenue sur ClinUp ! Nous sommes ravis de vous compter parmi nos prestataires.</p>
+    <p>Avant de pouvoir profiter pleinement de nos services, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr>
-            <td align="center">
-                <table border="0" cellspacing="0" cellpadding="0">
-                    <tbody><tr>
-                        <td align="center" style="border-radius:3px">
-                            <a style="background-color: rgb(255, 56, 92);
-                                border: none;
-                                color: white;
-                                padding: 15px 32px;
-                                text-align: center;
-                                text-decoration: none;
-                                display: inline-block;
-                                font-size: 16px;
-                                margin: 4px 2px;
-                                cursor: pointer;" href="{{ absolute_url(path('verify_user', {token: token})) }}" target="_blank">
-                                Activer
-                            </a>
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
+                <td align="center">
+                    <a href="{{ absolute_url(path('verify_user', {token: token})) }}" target="_blank">Activer</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Une fois votre compte activé, vous pourrez accéder à toutes les fonctionnalités de notre plateforme.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Si vous avez des questions ou besoin d'aide, notre équipe est à votre disposition pour vous assister.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bien à vous,</p>
-    <div style="display: flex;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">L'équipe de </p>
-    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+    <p>Une fois votre compte activé, vous pourrez accéder à toutes les fonctionnalités de notre plateforme.</p>
+    <p>Si vous avez des questions ou besoin d'aide, notre équipe est à votre disposition pour vous assister.</p>
+    <p>Bien à vous,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
     </div>
-    </div>
-    </body>
+</div>
+</body>
 </html>

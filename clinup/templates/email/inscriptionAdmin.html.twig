@@ -1,50 +1,78 @@
-<html>
-    <head>
-       <title>Nouveau Prestataire sur ClinUp</title>
-    </head>
-    <body>
-    <div style="width:60%; margin:auto;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bonjour Équipe Administrateur,</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous sommes heureux de vous informer qu'un nouveau prestataire s'est inscrit sur ClinUp. Voici les détails de son profil :</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Prestataire sur ClinUp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        p, ul, li, a {
+            text-align: left;
+            font-size: 16px;
+        }
+        ul {
+            padding-left: 20px; /* Assure un bon décalage pour la liste */
+        }
+        a {
+            background-color: rgb(255, 56, 92);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            p, ul, li, a {
+                font-size: 14px;
+            }
+            a {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p>Bonjour Équipe Administrateur,</p>
+    <p>Nous sommes heureux de vous informer qu'un nouveau prestataire s'est inscrit sur ClinUp. Voici les détails de son profil :</p>
     <ul>
         <li>Nom : {{ user.firstname }}</li>
         <li>Prénom : {{ user.lastname }}</li>
         <li>Email : {{ user.email }}</li>
-        Autres informations pertinentes -->
+        <!-- Autres informations pertinentes -->
     </ul>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous vous invitons à examiner et à valider son profil afin qu'il puisse commencer à proposer ses services sur notre plateforme.</p>
+    <p>Nous vous invitons à examiner et à valider son profil afin qu'il puisse commencer à proposer ses services sur notre plateforme.</p>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr>
-            <td align="center">
-                <table border="0" cellspacing="0" cellpadding="0">
-                    <tbody><tr>
-                        <td align="center" style="border-radius:3px">
-                            <a style="background-color: rgb(255, 56, 92);
-                                border: none;
-                                color: white;
-                                padding: 15px 32px;
-                                text-align: center;
-                                text-decoration: none;
-                                display: inline-block;
-                                font-size: 16px;
-                                margin: 4px 2px;
-                                cursor: pointer;" href="https://clinup.fr" target="_blank">
-                                Voir le Profil
-                            </a>
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
+                <td align="center">
+                    <a href="https://clinup.fr" target="_blank">Voir le Profil</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Merci de contribuer à maintenir la qualité et la sécurité de notre plateforme.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Cordialement,</p>
-    <div style="display: flex;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">L'équipe de </p>
-    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+    <p>Merci de contribuer à maintenir la qualité et la sécurité de notre plateforme.</p>
+    <p>Cordialement,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
     </div>
-    </div>
-    </body>
+</div>
+</body>
 </html>

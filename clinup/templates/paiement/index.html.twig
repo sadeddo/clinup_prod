@@ -283,7 +283,6 @@ h4{
                     <p><i class="bi bi-person-fill"></i> {{prestataire.firstname}} {{prestataire.lastname}}</p>
                     <p><i class="bi bi-currency-exchange"></i> {{prestataire.prix}}€</p>
                 </div>
-        <h4>Total: {{cotTotal}}€</h4>
 
     <form id="payment-form">
         <div id="card-element">
@@ -297,7 +296,7 @@ h4{
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    var stripe = Stripe('pk_live_51PC23OGrwysY3nEfmZwem3Pk7fGolrLWWdjtah91j4GjCj0IFZ0O5hxa13udeUV8cxsmC1VQZy8Z81EIe1LCceYC00OrESWmRo'); // Utilisez votre clé publique Stripe
+    var stripe = Stripe('pk_test_51PC23OGrwysY3nEfKzPhtsCMxudBmcgUNrjzxPNCJYk5LPdxrjLTcz4LD9DAiVHJe62DmFFerQnKBzTQmskNG1kX0053s31F6s'); // Utilisez votre clé publique Stripe
     var elements = stripe.elements();
     var card = elements.create('card');
     card.mount('#card-element');
@@ -311,7 +310,8 @@ h4{
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({amount: {{ 1 * 100 }}})
+            body: JSON.stringify({cotTotal: {{ cotTotal }},
+            prestataire: {{ prestataire.id }}})
         }).then(function(result) {
             return result.json();
         }).then(function(data) {
@@ -328,8 +328,7 @@ h4{
                 }).then(function(result) {
                     if (result.error) {
                         alert(result.error.message);
-                    } else {
-                        if (result.paymentIntent.status === 'succeeded') {
+                    } else {if (result.paymentIntent.status === 'succeeded') {
                             // Envoyer une requête au serveur pour gérer le succès du paiement
                           fetch('/payment-success', {
                               method: 'POST',

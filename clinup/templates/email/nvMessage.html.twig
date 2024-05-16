@@ -1,35 +1,68 @@
-<html>
-    <head>
-       <title>Nouveau Message sur ClinUp</title>
-    </head>
-    <body>
-    <div style="width:60%; margin:auto;">
-    <h1 style="text-align: left; color: #3d4465;">Vous avez un nouveau message !</h1>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Bonjour {{ user.firstname }},</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Vous avez reçu un nouveau message sur ClinUp. Ne manquez pas cette opportunité de communiquer avec d'autres membres de notre communauté.</p>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Pour lire votre message, veuillez cliquer sur le lien ci-dessous et vous connecter à votre compte.</p>
-    <div style="text-align: center;">
-        <a style="background-color: rgb(255, 56, 92);
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Message sur ClinUp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1, p, a {
+            text-align: left;
+        }
+        a {
+            background-color: rgb(255, 56, 92);
             border: none;
             color: white;
             padding: 15px 32px;
-            text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
-            cursor: pointer;" href="https://clinup.fr" target="_blank">
-            Consulter mes messages
-        </a>
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .button-container {
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1, p, a {
+                font-size: 14px;
+            }
+            a {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Vous avez un nouveau message !</h1>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Vous avez reçu un nouveau message sur ClinUp. Ne manquez pas cette opportunité de communiquer avec d'autres membres de notre communauté.</p>
+    <p>Pour lire votre message, veuillez cliquer sur le lien ci-dessous et vous connecter à votre compte.</p>
+    <div class="button-container">
+        <a href="https://clinup.fr" target="_blank">Consulter mes messages</a>
     </div>
-
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Nous vous souhaitons d'agréables échanges sur ClinUp.</p>
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">Cordialement,</p>
-    <div style="display: flex;">
-    <p style="font-size: 16px; text-align: left; color: #3d4465;">L'équipe de </p>
-    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+    <p>Nous vous souhaitons d'agréables échanges sur ClinUp.</p>
+    <p>Cordialement,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
     </div>
-    </div>
-    </body>
+</div>
+</body>
 </html>
