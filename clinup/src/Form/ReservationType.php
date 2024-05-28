@@ -32,16 +32,6 @@ class ReservationType extends AbstractType
             'widget' => 'single_text',
             'attr' => ['class' => 'form-control'],
         ])
-        ->add('nbrHeure', ChoiceType::class, [
-            'choices' => [
-                '1h30' => '1h30',
-                '1h30' => '1h30',
-                '2h00' => '2h00',
-                '2h30' => '2h30',
-                '2h30' => '2h30',
-            ],
-            'attr' => ['class' => 'form-control',],
-        ])
         ->add('logement', EntityType::class, [
             'class' => Logement::class,
             'query_builder' => function (EntityRepository $er) use ($user) {

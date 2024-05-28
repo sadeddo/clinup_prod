@@ -832,6 +832,7 @@ public function annuler(Request $request, Reservation $reservation, EntityManage
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $reservation->setNbrHeure('1h30');
             $reservation->setStatut("en attente");
             $reservation->setPrix("0");
             $entityManager->persist($reservation);
