@@ -256,8 +256,8 @@ try {
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => 'http://localhost:8000/success?session_id={CHECKOUT_SESSION_ID}&id_reservation='. urlencode($reservation->getId()),
-                'cancel_url' => 'http://localhost:8000/cancel?id_reservation='. urlencode($reservation->getId()),
+                'success_url' => 'https://clinup.fr/success?session_id={CHECKOUT_SESSION_ID}&id_reservation='. urlencode($reservation->getId()),
+                'cancel_url' => 'https://clinup.fr/cancel?id_reservation='. urlencode($reservation->getId()),
                 'payment_intent_data' => [
                     'transfer_data' => [
                         'destination' => $reservation->getPrestataire()->getIdStripe(),  // Transférer au compte connecté
