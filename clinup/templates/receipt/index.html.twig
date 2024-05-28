@@ -1,0 +1,55 @@
+{# templates/receipt/receipt.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+        .receipt {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .receipt h1 {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .receipt p {
+            margin: 10px 0;
+        }
+        .receipt .total {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <h1>Reçu</h1>
+        <p><strong>N°:</strong> {{ receipt.receiptNumber }}</p>
+        <p><strong>Date de paiement:</strong> {{receipt.paymentDate}}</p>
+        <p><strong>Prestataion de ménage:</strong> {{ receipt.amount }}€</p>
+        <div class="total">
+            <p>TOTAL: {{ receipt.amount }}€</p>
+        </div>
+        <div class="footer">
+            <p>Merci</p>
+        </div>
+    </div>
+</body>
+</html>

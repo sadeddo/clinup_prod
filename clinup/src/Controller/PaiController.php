@@ -10,6 +10,7 @@ use App\Entity\Reservation;
 use App\Service\EmailSender;
 use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
+use App\Service\PdfGenerator;
 use Symfony\Component\Uid\Uuid;
 use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -272,7 +273,7 @@ try {
     }
     //success paiement invit
     #[Route('/success', name: 'payment_successes')]
-    public function paymentSuccesses(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService): Response
+    public function paymentSuccesses(Request $request, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService,PdfGenerator $pdfGenerator): Response
     {
         $sessionId = $request->query->get('session_id');
         $idReservation = $request->query->get('id_reservation');
@@ -307,7 +308,8 @@ try {
                 }
             }
             $entityManager->flush();
-
+            //reçu
+            $pdfGenerator->createReceipt($reservation->getId(),$entityManager);
             $notificationService->sendEmail(
                 $reservation->getPrestataire()->getEmail(),
                 'Prestation Validée',

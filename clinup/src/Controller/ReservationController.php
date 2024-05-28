@@ -23,6 +23,7 @@ use App\Form\PostInvitType;
 use App\Service\EmailSender;
 use App\Service\IcalService;
 use App\Form\ReservationType;
+use App\Service\PdfGenerator;
 use App\Repository\UserRepository;
 use App\Service\NotificationService;
 use App\Repository\IcalresRepository;
@@ -584,8 +585,14 @@ class ReservationController extends AbstractController
     return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
     #[Route('/hote/{id}/valider', name: 'app_reservation_valider', methods: ['POST','GET'])]
-    public function valider(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService): Response
+    public function valider(Request $request, int $id, EntityManagerInterface $entityManager, EmailSender $notificationService, NotificationService $notifService,PdfGenerator $pdfGenerator): Response
     {
+        // Récupérer l'entité Reservation par son ID
+        $reservation = $entityManager->getRepository(Reservation::class)->find($id);
+        
+        if (!$reservation) {
+            throw $this->createNotFoundException('Aucune réservation trouvée pour l\'id '.$id);
+        }
         $stripe = new StripeClient($this->stripeSecretKey);
         try {
             
@@ -610,6 +617,8 @@ class ReservationController extends AbstractController
                 }
                 $entityManager->flush();
                 
+                //reçu
+                $pdfGenerator->createReceipt($reservation->getId(),$entityManager);
                 // Envoyer les notifications par email et sur la plateforme
                 $notificationService->sendEmail(
                     $reservation->getPrestataire()->getEmail(),
@@ -633,7 +642,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         } catch (\Exception $e) {
             // Gestion des autres erreurs
-            $this->addFlash('error', 'Erreur: ' . $e->getMessage());
+            $this->addFlash('error', 'Erreurr: ' . $e->getMessage());
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
     }  
@@ -720,47 +729,63 @@ private function finalizeReservation(Reservation $reservation, EntityManagerInte
 }
 
 
-    //annuler la réservation
-    #[Route('/hote/{id}/annuler', name: 'app_reservation_annuler', methods: ['POST','GET'])]
-    public function annuler(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $emailService,NotificationService $notifService): Response
-    {
-            $idIntent = $reservation->getIdIntent();
-            $stripe = new StripeClient($this->stripeSecretKey);
+    // annuler la réservation
+#[Route('/hote/{id}/annuler', name: 'app_reservation_annuler', methods: ['POST','GET'])]
+public function annuler(Request $request, Reservation $reservation, EntityManagerInterface $entityManager, EmailSender $emailService, NotificationService $notifService): Response
+{
+    $idIntent = $reservation->getIdIntent();
+    $stripe = new \Stripe\StripeClient($this->stripeSecretKey);
 
-        try {
-            $stripe->refunds->create(['payment_intent' => $idIntent]);
-            // modifier le statut
-            $reservation->setStatut('Annuler');
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-            // envoyer un email au prestataire pour l'informer
-            $emailService->sendEmail(
-                $reservation->getPrestataire()->getEmail(),
-                'Réservation Annulée',
-                'email/AnnulPresta.html.twig',
-                [
-                    'user' => $reservation->getPrestataire(),
-                ]
-            );
-            // envoyer une notif sur l'app
-            $notifService->createNotification(
-                $reservation->getPrestataire(),
-                'Réservation Annulée',
-                '/reservation/prestataire/consulter'
-    
-            );
-        $this->addFlash('success','Votre réservation a été annulée avec succès.');
-        return $this->redirectToRoute('app_reservation_index');
-    } catch (ApiErrorException $e) {
-        // Gestion des erreurs de l'API Stripe
-        $this->addFlash('error', 'Erreur lors du remboursement : ' . $e->getMessage());
+    try {
+        // Vérifier si l'identifiant de l'intent n'est pas nul et n'est pas égal à 'invit'
+        if ($idIntent && $idIntent != 'invit') {
+            try {
+                // Faire un remboursement partiel de 10 euros (1000 centimes)
+                $refund = $stripe->refunds->create([
+                    'charge' => $idIntent, // Utilisez 'charge' au lieu de 'payment_intent'
+                    'amount' => 1000, // Montant en centimes
+                ]);
+                // Ajouter un message flash pour le remboursement
+                $this->addFlash('success', 'Vous allez bientôt recevoir un remboursement partiel de 10 euros.');
+            } catch (\Stripe\Exception\ApiErrorException $e) {
+                // Gestion des erreurs de l'API Stripe
+                $this->addFlash('error', 'Erreur lors du remboursement : ' . $e->getMessage());
+                return $this->redirectToRoute('app_reservation_index');
+            }
+        }
+
+        // Modifier le statut de la réservation
+        $reservation->setStatut('Annuler');
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        // Envoyer un email au prestataire pour l'informer
+        $emailService->sendEmail(
+            $reservation->getPrestataire()->getEmail(),
+            'Réservation Annulée',
+            'email/AnnulPresta.html.twig',
+            [
+                'user' => $reservation->getPrestataire(),
+            ]
+        );
+
+        // Envoyer une notification sur l'application
+        $notifService->createNotification(
+            $reservation->getPrestataire(),
+            'Réservation Annulée',
+            '/reservation/prestataire/consulter'
+        );
+
+        // Ajouter un message flash pour l'annulation
+        $this->addFlash('success', 'Votre réservation a été annulée avec succès.');
         return $this->redirectToRoute('app_reservation_index');
     } catch (\Exception $e) {
         // Gestion des erreurs générales
         $this->addFlash('error', 'Une erreur inattendue est survenue : ' . $e->getMessage());
         return $this->redirectToRoute('app_reservation_index');
     }
-    }
+}
+
 
     //annuler reservation (en attente)
     #[Route('/hote/{id}/annulerA', name: 'app_reservation_annulerAtt', methods: ['POST','GET'])]

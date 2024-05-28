@@ -6,6 +6,11 @@
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
             <a  href="javascript:history.back();"><i class="bi bi-arrow-left"></i> Retour</a></br></br>
+            <!-- templates/your_template.html.twig -->
+{% if reservation.statut == "payer" %}
+<a href="{{ path('generate_receipt', {'id':reservation.id }) }}" class="btn btn-primary">Générer le PDF</a>
+{% endif %}
+
             {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
