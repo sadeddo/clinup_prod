@@ -43,23 +43,31 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
-        $user = $token->getUser();
-        if (in_array("ROLE_PRESTATAIRE", $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_reservation_prestataire'));
-        }
-        elseif(in_array("ROLE_HOTE", $user->getRoles())){
-            return new RedirectResponse($this->urlGenerator->generate('app_logement_index'));
-        }
-        elseif (in_array("ROLE_ADMIN", $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_admin'));
-        }
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+{
+    if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        error_log('Redirecting to target path: ' . $targetPath);
+        return new RedirectResponse($targetPath);
     }
+
+    $user = $token->getUser();
+    $roles = $user->getRoles();
+
+    // Ajout de logs pour vérifier les rôles de l'utilisateur
+    error_log('User roles: ' . implode(', ', $roles));
+
+    if (in_array("ROLE_PRESTATAIRE", $roles)) {
+        error_log('Redirecting to prestataire route');
+        return new RedirectResponse($this->urlGenerator->generate('app_reservation_prestataire'));
+    } elseif (in_array("ROLE_HOTE", $roles)) {
+        error_log('Redirecting to hote route');
+        return new RedirectResponse($this->urlGenerator->generate('app_logement_index'));
+    } elseif (in_array("ROLE_ADMIN", $roles)) {
+        error_log('Redirecting to admin route');
+        return new RedirectResponse($this->urlGenerator->generate('app_admin'));
+    }
+
+    throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
+}
 
     protected function getLoginUrl(Request $request): string
     {
