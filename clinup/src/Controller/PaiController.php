@@ -379,8 +379,8 @@ try {
                   'transfer_group' => $uuid,
                 ],
                 'mode' => 'payment',
-                'success_url' => 'http://localhost:8000/success-nInv?session_id={CHECKOUT_SESSION_ID}&id_reservation='. urlencode($reservation->getId()).'&grp='.$uuid.'&prestataire='.$prestataireId,
-                'cancel_url' => 'http://localhost:8000/cancel?id_reservation='. urlencode($reservation->getId()),
+                'success_url' => 'https://clinup.fr/success-nInv?session_id={CHECKOUT_SESSION_ID}&id_reservation='. urlencode($reservation->getId()).'&grp='.$uuid.'&prestataire='.$prestataireId,
+                'cancel_url' => 'https://clinup.fr/cancel?id_reservation='. urlencode($reservation->getId()),
               ]);
             return new JsonResponse(['id' => $session->id]); // Renvoyer l'ID de la session au client
         } catch (\Stripe\Exception\ApiErrorException $e) {
