@@ -16,7 +16,7 @@
                                 <div class="col-md-9">
                                     <div style="display:flex;"><h5 style="font-weight: 500;">{{ presta.firstname }} {{ presta.lastname }} </h5> <i style="margin-left: 1%;color:rgba(4, 112, 239, 1);"  class="bi bi-patch-check-fill"></i></div>
                                     <p><i class="bi bi-star-fill" style="color:rgb(255, 211, 27);"></i> {{ average | number_format(1, '.', '') }}</p>
-                                    <p class="res-d">Je travaille dans le domaine du ménage depuis presque 4 ans</p>
+                                    <p class="res-d">{{ presta.description}}</p>
                                 </div>
                                 <div class="col-md-auto" style="font-weight: 600;">
                                     {{ presta.prix | number_format(2, '.', '') }}€</br>
