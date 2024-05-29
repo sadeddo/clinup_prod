@@ -23,8 +23,9 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, Security $security)
     {
+        $this->security = $security;
     }
 
     public function authenticate(Request $request): Passport
@@ -43,14 +44,14 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName,Security $security): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
 {
     if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
         error_log('Redirecting to target path: ' . $targetPath);
         return new RedirectResponse($targetPath);
     }
 
-    $user = $security->getUser();
+    $user = $this->security->getUser();
     $roles = $user->getRoles();
 
     // Ajout de logs pour vérifier les rôles de l'utilisateur
