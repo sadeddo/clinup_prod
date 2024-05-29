@@ -49,7 +49,7 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
         return new RedirectResponse($targetPath);
     }
 
-    $user = $token->getUser();
+    $user = $this->getUser();
     $roles = $user->getRoles();
 
     // Ajout de logs pour vérifier les rôles de l'utilisateur
