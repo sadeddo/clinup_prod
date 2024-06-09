@@ -259,10 +259,10 @@ try {
                 'success_url' => 'https://clinup.fr/success?session_id={CHECKOUT_SESSION_ID}&id_reservation='. urlencode($reservation->getId()),
                 'cancel_url' => 'https://clinup.fr/cancel?id_reservation='. urlencode($reservation->getId()),
                 'payment_intent_data' => [
+                    'application_fee_amount' => $reservation->getPrix() * 100 * 0.90,
                     'transfer_data' => [
                         'destination' => $reservation->getPrestataire()->getIdStripe(),  // Transférer au compte connecté
                     ],
-                    'application_fee_amount' => $reservation->getPrix() * 100 * 0,90,
                 ],
             ]);
 
