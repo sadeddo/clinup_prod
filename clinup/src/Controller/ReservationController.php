@@ -598,7 +598,7 @@ class ReservationController extends AbstractController
             
             // Effectuer le transfert des fonds vers le compte Stripe du prestataire
             $transfer = $stripe->transfers->create([
-                'amount' => $reservation->getPrix() * 100 * 0.90,
+                'amount' => $reservation->getPrix() * 100 * 0.95,
                 'currency' => 'eur',
                 'destination' => $reservation->getPrestataire()->getIdStripe(),
                 'source_transaction' => $reservation->getIdIntent(),
