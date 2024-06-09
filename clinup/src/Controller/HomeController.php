@@ -15,4 +15,11 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+    #[Route('/pricing', name: 'app_pricing')]
+    public function pricing(): Response
+    {
+        return $this->render('home/pricing.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
 }

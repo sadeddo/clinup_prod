@@ -1,0 +1,108 @@
+{# templates/subscription/subscription_needed.html.twig #}
+{% extends 'base1.html.twig' %}
+
+{% block title %}Abonnement Nécessaire{% endblock %}
+
+{% block body %}
+    <style>
+        .pricing-table {
+            margin: 50px auto;
+        }
+        .pricing-card {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .pricing-card .card-header {
+            background-color: #f8f9fa;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .pricing-card .card-body {
+            padding: 1.5rem;
+        }
+        .pricing-card .plan-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #FF385C !important;
+            margin-bottom: 15px;
+        }
+        .pricing-card .plan-action {
+            margin: 20px 0;
+        }
+    </style>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+            <div class="row reservation">
+                <div class="col-auto me-auto">
+                    <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Abonnement actif</strong>
+                </div>            
+                {% for messages in app.flashes('success') %}
+                    <div class="alert alert-success">{{ messages }}</div>
+                {% endfor %}
+                {% for messages in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ messages }}</div>
+                {% endfor %}
+            </div><br>
+            <div class="pricing-table">
+                {% if subscription and subscription.status == 'active' %}
+                    <div class="row">
+                        <div class="col-md-6" style="margin: auto;">
+                            <div class="card pricing-card">
+                                <div class="card-header text-center">
+                                    {% if subscription.type =='log2' %}
+                                        2 logements
+                                    {% elseif subscription.type =='log3' %}
+                                        3+ logements
+                                    {% endif %}
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="plan-price">
+                                        {% if subscription.type =='log2' %}
+                                            9,89€ / mois
+                                        {% elseif subscription.type =='log3' %}
+                                            11,97€ / mois
+                                        {% endif %}
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <p><strong>Date de début:</strong></p>
+                                        <p>{{ subscription.dtStart|date('j M. Y') }}</p>
+                                    </ul>
+                                    <a data-bs-toggle="modal" data-bs-target="#exampleModalAnnulerAtt" class="btn btn-success plan-action">Annuler l'abonnement</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Modal annul-->
+        <div class="modal fade" id="exampleModalAnnulerAtt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight:600;">Confirmer le désabonnement</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir vous désabonner ? Cette action est irréversible.
+            </div>
+            <div class="modal-footer">
+                <a href="{{ path('subscription_cancel',{'id':subscription.id})}}"><button type="button"class="btn btn-secondary" >Confirmer</button></a>
+            </div>
+            </div>
+            </div>
+            </div>   
+    <!-- Modal annuler -->
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-6" style="margin: auto;">
+                            <div class="card pricing-card">
+                                <div class="card-body text-center">
+                                    <p>Vous n'avez aucun abonnement actif pour l'instant.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}

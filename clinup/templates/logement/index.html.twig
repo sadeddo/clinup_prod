@@ -11,6 +11,9 @@
                 {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
+            {% for messages in app.flashes('error') %}
+                <div class="alert alert-danger">{{ messages }}</div>
+            {% endfor %}
             </div>
             <div class="col-auto" style="font-size: 1.5rem;">
                 <a class="btn btn-secondary" href="{{ path('app_logement_new') }}">Ajouter un logement</a>

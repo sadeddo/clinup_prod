@@ -104,6 +104,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $VeryEmail = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Subscription::class)]
+    private Collection $subscriptions;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -115,6 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->postulers = new ArrayCollection();
         $this->commentPrestas = new ArrayCollection();
         $this->invits = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -607,6 +611,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVeryEmail(?bool $VeryEmail): static
     {
         $this->VeryEmail = $VeryEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'abonnement</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .subscription-details {
+            margin: 50px auto;
+            max-width: 600px;
+        }
+        .subscription-card, .payment-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .subscription-card .card-header, .payment-card .card-header {
+            background-color: #f8f9fa;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-bottom: none;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .btn-cancel {
+            color: red;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="subscription-details">
+            <h1>Abonnement</h1>
+            <div class="subscription-card">
+                <div class="card-header">
+                    Détails de l'offre
+                </div>
+                <div class="card-body">
+                    <p><strong>Offre Standard avec pub</strong></p>
+                    <p>Résolution vidéo 1080p. Sur l'appareil de votre choix. Courtes pauses pub.</p>
+                    <a href="#" class="btn btn-link">Changer d'offre</a>
+                </div>
+            </div>
+            <div class="payment-card">
+                <div class="card-header">
+                    Informations de paiement
+                </div>
+                <div class="card-body">
+                    <p><strong>Prochain paiement</strong></p>
+                    <p>18 juin 2024</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://via.placeholder.com/30" alt="Visa" class="mr-2">
+                        <p>**** **** **** 2523</p>
+                    </div>
+                    <a href="#" class="btn btn-link">Gérer votre mode de paiement</a><br>
+                    <a href="#" class="btn btn-link">Utiliser un cadeau ou un code promotionnel</a><br>
+                    <a href="#" class="btn btn-link">Voir l'historique de paiement</a>
+                </div>
+            </div>
+            <form action="/subscription_cancel/1" method="post">
+                <button type="submit" class="btn btn-link btn-cancel">Annuler l'abonnement</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

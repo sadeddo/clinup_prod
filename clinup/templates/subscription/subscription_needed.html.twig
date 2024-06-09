@@ -1,0 +1,94 @@
+{# templates/subscription/subscription_needed.html.twig #}
+{% extends 'base1.html.twig' %}
+
+{% block title %}Abonnement Nécessaire{% endblock %}
+
+{% block body %}
+    <style>
+        .pricing-table {
+            margin: 50px auto;
+        }
+        .pricing-card {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .pricing-card .card-header {
+            background-color: #f8f9fa;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .pricing-card .card-body {
+            padding: 1.5rem;
+        }
+        .pricing-card .plan-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #FF385C !important;
+            margin-bottom: 15px;
+        }
+        .pricing-card .plan-action {
+            margin: 20px 0;
+        }
+    </style>
+    <main class="main-container">
+        <div class="container" style="width:95%;height: auto;">
+        <div class="pricing-table">
+            <div class="row">
+                <div class="col-md-6" style="margin: auto;">
+                    <div class="card pricing-card">
+                        <div class="card-header text-center">
+                            2 LOGEMENTS
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="plan-price">9,89€ / mois</div>
+                            <ul class="list-unstyled">
+                                <li>&#x2714; Le plus grand réseau d'agents d'entretien de locations saisonnières</li>
+                                <li>&#x2714; Synchronisation avec vos calendriers de réservations pour une planification automatique</li>
+                                <li>&#x2714; Un Service Client à votre écoute 24h/24</li>
+                                <li>&#x2714; Gestion des stocks et notifications de maintenance</li>
+                                <li>&#x2714; Rapports et chat intégré</li>
+                            </ul>
+                            <form id="payment-form">
+                                <button class="btn btn-success plan-action">Passer à Clinup +</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    </main>
+    <script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('pk_test_51PC23OGrwysY3nEfKzPhtsCMxudBmcgUNrjzxPNCJYk5LPdxrjLTcz4LD9DAiVHJe62DmFFerQnKBzTQmskNG1kX0053s31F6s');
+    var elements = stripe.elements();
+
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetch(`/logement/checkout-session`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify() // Montant en centimes
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                stripe.redirectToCheckout({
+                    sessionId: data.id
+                }).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

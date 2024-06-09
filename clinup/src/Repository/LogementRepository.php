@@ -45,4 +45,14 @@ class LogementRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+// Ajoutez cette méthode pour compter les logements par hôte
+public function countLogementsByHote($hote): int
+{
+    return $this->createQueryBuilder('l')
+        ->select('count(l.id)')
+        ->where('l.hote = :hote')
+        ->setParameter('hote', $hote)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
 }

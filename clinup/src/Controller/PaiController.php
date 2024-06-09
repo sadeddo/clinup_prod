@@ -217,7 +217,7 @@ try {
                 'product_data' => [
                     'name' => 'Paiement pour service',
                 ],
-                'unit_amount' => 100, // 200,00 EUR
+                'unit_amount' => $reservation->getPrix() * 100 * 1.05, // 200,00 EUR
             ],
             'quantity' => 1,
         ]],
@@ -225,7 +225,7 @@ try {
         'success_url' => 'https://clinup.fr?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => 'https://clinup.fr',
         'payment_intent_data' => [
-            'application_fee_amount' => 10, // 15,00 EUR de frais de plateforme
+            'application_fee_amount' => 0, // 15,00 EUR de frais de plateforme
             'transfer_data' => [
                 'destination' => 'acct_1PBmcfHKYhHd54cE' // ID du compte connecté du prestataire
             ],
@@ -251,7 +251,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $reservation->getPrix() * 100,
+                        'unit_amount' => $reservation->getPrix() * 100 * 1.05,
                     ],
                     'quantity' => 1,
                 ]],
@@ -261,7 +261,7 @@ try {
                 'payment_intent_data' => [
                     'transfer_data' => [
                         'destination' => $reservation->getPrestataire()->getIdStripe(),  // Transférer au compte connecté
-                        'amount' => $reservation->getPrix() * 100 - 1000,
+                        'amount' => $reservation->getPrix() * 100 * 0,90,
                     ],
                 ],
             ]);
@@ -370,7 +370,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $prestataire->getPrix() * 100,
+                        'unit_amount' => $prestataire->getPrix() * 100 * 1.05,
                     ],
                     'quantity' => 1,
                   ],

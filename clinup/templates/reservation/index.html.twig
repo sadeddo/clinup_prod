@@ -9,15 +9,16 @@
                     <div class="row reservation">
                         <div class="col-auto me-auto">
                             <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes demandes de prestations</strong>
-                        </div>            {% for messages in app.flashes('success') %}
-                <div class="alert alert-success">{{ messages }}</div>
-            {% endfor %}
-            {% for messages in app.flashes('error') %}
-                <div class="alert alert-danger">{{ messages }}</div>
-            {% endfor %}
+                        </div>            
+                        {% for messages in app.flashes('success') %}
+                            <div class="alert alert-success">{{ messages }}</div>
+                        {% endfor %}
+                        {% for messages in app.flashes('error') %}
+                            <div class="alert alert-danger">{{ messages }}</div>
+                        {% endfor %}
                         <div class="col-auto" style="font-size: 1.5rem;">
-                <a class="btn btn-secondary" href="{{ path('app_reservation_ajouter') }}">Poster une réservation</a>
-            </div>
+                            <a class="btn btn-secondary" href="{{ path('app_reservation_ajouter') }}">Poster une réservation</a>
+                        </div>
                     </div><br>
                     <div class="row">
                         {% for logement in logements %}
