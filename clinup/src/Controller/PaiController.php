@@ -225,7 +225,7 @@ try {
         'success_url' => 'https://clinup.fr?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => 'https://clinup.fr',
         'payment_intent_data' => [
-            'application_fee_amount' => 0, // 15,00 EUR de frais de plateforme
+            'application_fee_amount' => $reservation->getPrix() * 100 * 0.10, // 15,00 EUR de frais de plateforme
             'transfer_data' => [
                 'destination' => 'acct_1PBmcfHKYhHd54cE' // ID du compte connecté du prestataire
             ],
