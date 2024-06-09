@@ -261,7 +261,7 @@ try {
                 'payment_intent_data' => [
                     'transfer_data' => [
                         'destination' => $reservation->getPrestataire()->getIdStripe(),  // Transférer au compte connecté
-                        'amount' => $reservation->getPrix() * 100 * 0.90,
+                        'amount' => $reservation->getPrix() * 100 * 0.95,
                     ],
                 ],
             ]);
