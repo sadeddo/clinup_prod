@@ -8,6 +8,9 @@
             {% for messages in app.flashes('success') %}
                 <div class="alert alert-success">{{ messages }}</div>
             {% endfor %}
+              {% for messages in app.flashes('error') %}
+                <div class="alert alert-danger">{{ messages }}</div>
+            {% endfor %}
             {% if reservation.statut == "en attente" and hasApplied != null %}
                 <div class="alert alert-warning">Vous avez déjà postulé à cette offre.</div>
             {% endif %}
@@ -52,6 +55,19 @@
                                 </div>
                         </div>
                     </div>
+                    <h5 class="titree">Résultat de la prestation complète</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
+                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                    <a href="{{ path('app_video_upload',{'id': reservation.id}) }}"><span>Merci d'insérer une vidéo complète du logement une fois la prestation terminée<span></a>
+                                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
                     {% endif %}
             <h5 class="titree">Détails de réservation</h5>
              <div class="card">
@@ -85,7 +101,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card m-2">
                                 <div class="card-body b">
                                     <h6 class="res-d">Date & Heure</h6>
@@ -93,11 +109,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="card m-2">
                                 <div class="card-body b">
                                     <h6 class="res-d">Nombre d'heures</h6>
                                     <h6 class="res-d2">{{ reservation.nbrHeure }}min</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Montant</h6>
+                                    <h6 class="res-d2">{{ reservation.prix }}€</h6>
                                 </div>
                             </div>
                         </div>
@@ -112,6 +136,9 @@
                             </div>
                         </div>
                     </div>
+                    {% if reservation.statut == "confirmer" and reservation.prestataire.id == app.user.id %}
+                        <p class="card-text"><small class="text-body-secondary"> Accès au logement: {{ reservation.logement.acces }}</small></p>
+                     {% endif %}
                     {% if reservation.statut == "Annuler" %}
                     <!--<div class="row">
                         <div class="col-md-12">
@@ -249,6 +276,38 @@
                 </div>
             </div>
             {% block scripteditEventModalIdentity %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+             {# modal pour ajouter une VIDEO #}
+       {% if cible == "ajouterVideo" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Vidéo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="nom" method="post" enctype="multipart/form-data">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(form.filePath) }}        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalIdentityviid %}
                 <script>
                         var myOffcanvas = document.getElementById('editEventModal')
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)

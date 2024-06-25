@@ -37,6 +37,9 @@ class CommentPresta
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $dateRep = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $recommandation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +125,18 @@ class CommentPresta
     public function setDateRep(?\DateTimeImmutable $dateRep): static
     {
         $this->dateRep = $dateRep;
+
+        return $this;
+    }
+
+    public function getRecommandation(): ?string
+    {
+        return $this->recommandation;
+    }
+
+    public function setRecommandation(?string $recommandation): static
+    {
+        $this->recommandation = $recommandation;
 
         return $this;
     }

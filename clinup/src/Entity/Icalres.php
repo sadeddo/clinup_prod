@@ -25,6 +25,12 @@ class Icalres
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $statut = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nbrHeure = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $prix = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +80,30 @@ class Icalres
     public function setStatut(?string $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getNbrHeure(): ?string
+    {
+        return $this->nbrHeure;
+    }
+
+    public function setNbrHeure(?string $nbrHeure): static
+    {
+        $this->nbrHeure = $nbrHeure;
+
+        return $this;
+    }
+
+    public function getPrix(): ?string
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?string $prix): static
+    {
+        $this->prix = $prix;
 
         return $this;
     }

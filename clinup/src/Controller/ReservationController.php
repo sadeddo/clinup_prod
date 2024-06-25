@@ -153,6 +153,8 @@ class ReservationController extends AbstractController
                     $reservation->setLogement($logement);
                     $reservation->setDtStart($reservationData['start_time']);
                     $reservation->setDtEnd($reservationData['end_time']);
+                    $reservation->setNbrHeure("1h30");
+                    $reservation->setPrix("35");
                     $reservation->setStatut('0');
                     $entityManager->persist($reservation);
                 }
@@ -168,9 +170,17 @@ class ReservationController extends AbstractController
         $reservation->setLogement($res->getLogement());
         $reservation->setDate(new DateTime($res->getDtEnd()));
         $reservation->setHeure(new DateTime('11:00:00'));
-        $reservation->setNbrHeure('1h30');
+        if ($res->getNbrHeure() === null) {
+            $reservation->setNbrHeure('1h30');
+        }else{
+            $reservation->setNbrHeure($res->getNbrHeure());
+        }
         $reservation->setStatut("en attente");
-        $reservation->setPrix("0");
+        if ($res->getPrix() === null) {
+            $reservation->setPrix('35');
+        }else{
+            $reservation->setPrix($res->getPrix());
+        }
         $entityManager->persist($reservation);
         $res->setStatut('1');
         $entityManager->persist($res);
@@ -323,7 +333,6 @@ class ReservationController extends AbstractController
                 $prestataire = $security->getUser();
                 $reservation->setStatut('confirmer');
                 $reservation->setIdIntent('invit');
-                $reservation->setPrix($security->getUser()->getPrix());
                 $reservation->setPrestataire($security->getUser());
                 $entityManager->persist($reservation);
                 $entityManager->flush();
@@ -832,9 +841,7 @@ public function annuler(Request $request, Reservation $reservation, EntityManage
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $reservation->setNbrHeure('1h30');
             $reservation->setStatut("en attente");
-            $reservation->setPrix("0");
             $entityManager->persist($reservation);
             $entityManager->flush();
             // Envoyer d'abord aux prestataires invités

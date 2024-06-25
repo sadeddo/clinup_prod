@@ -32,9 +32,12 @@
                                             <strong class="card-title log">{{ logement.nom }}</strong>
                                         </div>
                                         <div class="col-auto">
+                                            <a  class="btn btn1 btn-secondary" href="{{ path('app_icalres_edit',{'id':res.id}) }}" type="button">Modifier</a>
+                                        </div>
+                                        <div class="col-auto">
                                             <a  class="btn btn-secondary" href="{{ path('app_reservation_new',{'id':res.id}) }}" type="button">Publier</a>
                                         </div>
-                                    </div>
+                                    </div></br>
                                     <div class="row" style="margin: auto;">
                                         <div class="col-md-auto">
                                             <div class="card ">
@@ -55,8 +58,16 @@
                                         <div class="col-md-auto">
                                             <div class="card">
                                                 <div class="card-body b">
-                                                    <h6 class="res-d">Nombre d'heures</h6>
-                                                    <h6 class="res-d2">1h30min</h6>
+                                                    <h6 class="res-d">Durée</h6>
+                                                    <h6 class="res-d2">{{ res.nbrHeure is not null ? res.nbrHeure : '1h30'}}min</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            <div class="card">
+                                                <div class="card-body b">
+                                                    <h6 class="res-d">Montant</h6>
+                                                    <h6 class="res-d2">{{ res.prix is not null ? res.prix : '35'}}€</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -142,6 +153,53 @@
                 {% endif %}
                 </div>
         </div>
+        {# modal modifier#}
+                {% if cible == "modifierIcal" %}
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="margin: auto;width: 86%;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                            <h5 style="font-weight: 600;text-align: center;">Modifier</h5>
+                            </div>
+                            <form  method="post">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="nom" style="color:black;font-size: 15px;">Nombre d'heure :</label>
+                                    {{ form_widget(form.nbrHeure) }}
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="nom">Montant de la prestation : </label>
+                                        {{ form_widget(form.prix) }}
+                                    </div>
+                                </div>
+                            </div><br>
+                                
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="submit"  class="btn btn-secondary" style="width: 33%;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Envoyer') }}</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block scripteditEventModalmodifier %}
+                <script>
+                        var myOffcanvas = document.getElementById('editEventModal')
+                        var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
+                        bsOffcanvas.toggle()
+                    </script>
+                    {% endblock %}
+            {% endif %}
+            {# end modal modififer#}
         {% if cible == "addReservation" %}
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="padding:2%;">
@@ -172,8 +230,8 @@
                         </div>
                     </div>
                 </div><br>
-                <!--<div class="row">
-                        <div class="col-md-12">
+                <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="surface">Durée de la prestation</label>
                                 <div id="hour-selector" class="hour-selector">
@@ -183,7 +241,15 @@
                                 </div>
                             </div>
                         </div>
-                </div><br>-->
+                        <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="surface">Montant</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="prix" name="reservation[prix]" placeholder="Montant de la prestation" required>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
                 <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -227,8 +293,8 @@ function changeHours(change) {
     var totalMinutes = hours * 60 + minutes + (change * 30); // changez par pas de 30 minutes
 
     // Assurez-vous que la valeur reste dans un intervalle acceptable
-    if (totalMinutes < 90) totalMinutes = 90;  // Limite inférieure 1h30
-    if (totalMinutes > 150) totalMinutes = 150; // Limite supérieure 2h30
+    if (totalMinutes < 60) totalMinutes = 60;  // Limite inférieure 1h30
+    if (totalMinutes > 300) totalMinutes = 300; // Limite supérieure 2h30
 
     // Convertissez de nouveau en heures et minutes
     var newHours = Math.floor(totalMinutes / 60);

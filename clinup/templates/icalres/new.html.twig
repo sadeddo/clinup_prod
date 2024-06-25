@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Icalres{% endblock %}
+
+{% block body %}
+    <h1>Create new Icalres</h1>
+
+    {{ include('icalres/_form.html.twig') }}
+
+    <a href="{{ path('app_icalres_index') }}">back to list</a>
+{% endblock %}

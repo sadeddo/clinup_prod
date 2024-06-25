@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Icalres{% endblock %}
+
+{% block body %}
+    <h1>Icalres</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ icalre.id }}</td>
+            </tr>
+            <tr>
+                <th>DtStart</th>
+                <td>{{ icalre.dtStart }}</td>
+            </tr>
+            <tr>
+                <th>DtEnd</th>
+                <td>{{ icalre.dtEnd }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ icalre.statut }}</td>
+            </tr>
+            <tr>
+                <th>NbrHeure</th>
+                <td>{{ icalre.nbrHeure }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ icalre.prix }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_icalres_index') }}">back to list</a>
+
+    <a href="{{ path('app_icalres_edit', {'id': icalre.id}) }}">edit</a>
+
+    {{ include('icalres/_delete_form.html.twig') }}
+{% endblock %}

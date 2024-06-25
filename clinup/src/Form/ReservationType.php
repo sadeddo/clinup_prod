@@ -32,6 +32,24 @@ class ReservationType extends AbstractType
             'widget' => 'single_text',
             'attr' => ['class' => 'form-control'],
         ])
+        ->add('nbrHeure', ChoiceType::class, [
+            'choices' => [
+                '1h00' => '1h00',
+                '1h30' => '1h30',
+                '2h00' => '2h00',
+                '2h30' => '2h30',
+                '3h00' => '3h00',
+                '3h30' => '3h30',
+                '4h00' => '4h00',
+                '4h30' => '4h30',
+                '5h00' => '5h00',
+            ],
+            'placeholder' => 'Choisir la durée',
+            'attr' => ['class' => 'form-control'],
+        ])
+            ->add('prix',TextType::class,[
+                'attr' => ['class' => 'form-control'],
+            ])
         ->add('logement', EntityType::class, [
             'class' => Logement::class,
             'query_builder' => function (EntityRepository $er) use ($user) {
@@ -47,6 +65,12 @@ class ReservationType extends AbstractType
         ->add('description', TextareaType::class, [
             'attr' => ['class' => 'form-control',
             'placeholder' => 'Des détails particuliers à partager etc...'],
+            'required' => false
+
+        ])
+        ->add('prix', TextType::class, [
+            'attr' => ['class' => 'form-control',
+            'placeholder' => 'Montant de la prestation'],
             'required' => false
 
         ]);

@@ -103,7 +103,6 @@ class InvitController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $reservation->setStatut("en attente");
-            $reservation->setPrix("0");
             $entityManager->persist($reservation);
             $entityManager->flush();
             $this->sendNotification($user, $notificationService, $notifService, $reservation);
@@ -116,7 +115,7 @@ class InvitController extends AbstractController
             'cible' => 'reserver',
         ]);
     }
-
+    
     #[Route('/invit/{id}/relance', name: 'app_invit_relance', methods: ['GET' , 'POST'])]
     public function relancer(Invit $invit,Security $security, EmailSender $notificationService): Response
     {
@@ -136,6 +135,21 @@ class InvitController extends AbstractController
         return $this->redirectToRoute('app_invit');
         
     }
+
+    #[Route('/invit/{id}/supprimer', name: 'app_invit_supprimer', methods: ['GET' , 'POST'])]
+    public function supprimer(Invit $invit, Security $security, EmailSender $notificationService, EntityManagerInterface $entityManager): Response
+    {
+        // Suppression de l'invitation
+        $entityManager->remove($invit);
+        $entityManager->flush();
+    
+        // Ajout d'un message flash pour informer l'utilisateur
+        $this->addFlash('success', 'Votre relation avec ce prestataire a été supprimée avec succès !');
+    
+        // Redirection vers la liste des invitations
+        return $this->redirectToRoute('app_invit');
+    }
+    
 
     
 }

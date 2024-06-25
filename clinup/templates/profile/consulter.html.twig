@@ -18,7 +18,7 @@
                                     <p class="res-d">{{ presta.description}}</p>
                                 </div>
                                 <div class="col-md-auto" style="font-weight: 600;">
-                                    {{ presta.prix | number_format(2, '.', '') }}€</br>
+                                   
                                     <form id="payment-form">
                                         <button  id="submit" class="btn btn-secondary">Réserver</button>
                                     </form>
@@ -110,7 +110,7 @@
                             <form name="CommentPrestaType" method="post" enctype="multipart/form-data">
                             {{ form_row(form._token) }}
                             <div class="col-sm-12">
-                        <div class="row" style="margin:auto;width:90%;">
+                        <div class="row" style="margin:auto;width:100%;">
                             <div class="col-md-auto stars">
                                 <i class="far fa-star ap" data-value="1"></i>
                                 <i class="far fa-star ap" data-value="2"></i>

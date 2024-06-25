@@ -54,10 +54,10 @@
         {{ form_widget(form.img) }}
     </div><br>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group">
-                <label for="adresse">Ical airbnb</label>
-                <input type="text" id="airbnb" class="form-control" name="logement[airbnb]" placeholder="Entrez le lien Ical d'airbnb">
+                <label for="adresse">Lien Ical</label>
+                <input type="text" id="airbnb" class="form-control" name="logement[airbnb]" placeholder="Entrez le lien Ical d'airbnb, booking...">
             </div>
         </div>
     </div>
@@ -73,6 +73,14 @@
             <div class="form-group">
                 <label for="completAdresse">Complément d'adresse</label>
                 <input type="text" class="form-control" id="completAdresse" name="logement[completAdresse]" placeholder="Appartement, étage, etc.">
+            </div>
+        </div>
+    </div>
+     <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="completAdresse">Accès au logement</label>
+                <input type="text" class="form-control" id="acces" name="logement[acces]" placeholder="Précisez toutes les informations nécessaires pour entrer dans le logement (code du portail, code boîte à clé, numéro de l'étage, numéro de l'appartement, etc). Soyez le plus précis possible !">
             </div>
         </div>
     </div>

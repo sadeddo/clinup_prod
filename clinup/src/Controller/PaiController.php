@@ -370,7 +370,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $prestataire->getPrix() * 100 * 1.05,
+                        'unit_amount' => $reservation->getPrix() * 100 * 1.05,
                     ],
                     'quantity' => 1,
                   ],
@@ -423,7 +423,6 @@ try {
             $reservation->setIdIntent($paymentIntent->latest_charge);
             $reservation->setStatut('confirmer');
             $reservation->setPrestataire($prestataire);
-            $reservation->setPrix($prestataire->getPrix());
 
             $entityManager->flush();
 
@@ -439,7 +438,7 @@ try {
                 'Prestation confirmée',
                 '/reservation/prestataire/consulter'
             );
-            $numberOfMissions =  $reservationRepository->getNombreDeMissions($prestataire->getId());
+            /*$numberOfMissions =  $reservationRepository->getNombreDeMissions($prestataire->getId());
             $average = $commentPrestaRepository->getAverageNoteForPrestataire($prestataire->getId());
             $tier = 'Bronze'; 
             $tarif = 35;
@@ -450,9 +449,8 @@ try {
                 $tier = 'Or';
                 $tarif = 45;
             }
-            $prestataire->setPrix($tarif);
             $entityManager->persist($prestataire);
-            $entityManager->flush();
+            $entityManager->flush();*/
             $this->addFlash(
                 'success',
                 'Paiement et réservation confirmés.'

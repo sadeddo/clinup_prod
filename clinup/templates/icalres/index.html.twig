@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Icalres index{% endblock %}
+
+{% block body %}
+    <h1>Icalres index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DtStart</th>
+                <th>DtEnd</th>
+                <th>Statut</th>
+                <th>NbrHeure</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for icalre in icalres %}
+            <tr>
+                <td>{{ icalre.id }}</td>
+                <td>{{ icalre.dtStart }}</td>
+                <td>{{ icalre.dtEnd }}</td>
+                <td>{{ icalre.statut }}</td>
+                <td>{{ icalre.nbrHeure }}</td>
+                <td>{{ icalre.prix }}</td>
+                <td>
+                    <a href="{{ path('app_icalres_show', {'id': icalre.id}) }}">show</a>
+                    <a href="{{ path('app_icalres_edit', {'id': icalre.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_icalres_new') }}">Create new</a>
+{% endblock %}

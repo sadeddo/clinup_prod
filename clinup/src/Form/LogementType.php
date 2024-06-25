@@ -30,6 +30,10 @@ class LogementType extends AbstractType
         'attr' => ['class' => 'form-control', 'placeholder' => 'Appartement, étage, etc.'],
         'required' => false,
     ])
+    ->add('acces', TextType::class, [
+        'attr' => ['class' => 'form-control', 'placeholder' => 'Accès au logement pour le prestataire'],
+        'required' => false,
+    ])
     ->add('surface', TextType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Surface en mètres carrés'],
     ])

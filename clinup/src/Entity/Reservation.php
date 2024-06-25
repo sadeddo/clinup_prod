@@ -49,10 +49,14 @@ class Reservation
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Receipt::class)]
     private Collection $receipts;
 
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Video::class)]
+    private Collection $videos;
+
     public function __construct()
     {
         $this->postulers = new ArrayCollection();
         $this->receipts = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +226,36 @@ class Reservation
             // set the owning side to null (unless already changed)
             if ($receipt->getReservation() === $this) {
                 $receipt->setReservation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): static
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): static
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getReservation() === $this) {
+                $video->setReservation(null);
             }
         }
 

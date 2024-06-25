@@ -58,6 +58,9 @@ class Logement
     #[ORM\OneToMany(mappedBy: 'logement', targetEntity: Icalres::class)]
     private Collection $icalres;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $acces = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -312,6 +315,18 @@ class Logement
                 $icalre->setLogement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAcces(): ?string
+    {
+        return $this->acces;
+    }
+
+    public function setAcces(?string $acces): static
+    {
+        $this->acces = $acces;
 
         return $this;
     }
