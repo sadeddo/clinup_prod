@@ -293,17 +293,21 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form name="nom" method="post" enctype="multipart/form-data">
+                            <form method="post" enctype="multipart/form-data">
                             {{ form_row(form._token) }}
                             <div class="col-sm-8">
                                 
-                                {{ form_widget(form.filePath) }}        
+                                {{ form_widget(form.filePath, {'attr': {'id': 'file'}}) }}        
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
                         </div>
                         </form>
+                        <div id="progress-wrapper" style="display: none;">
+    <progress id="progress-bar" value="0" max="100"></progress>
+    <span id="progress-text">0%</span>
+</div>
                     </div>
                 </div>
             </div>
@@ -312,6 +316,36 @@
                         var myOffcanvas = document.getElementById('editEventModal')
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
                         bsOffcanvas.toggle()
+
+                        document.getElementById('video').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var form = event.target;
+    var formData = new FormData(form);
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', form.action, true);
+
+    xhr.upload.onprogress = function(event) {
+        if (event.lengthComputable) {
+            var percentComplete = (event.loaded / event.total) * 100;
+            document.getElementById('progress-bar').value = percentComplete;
+            document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
+        }
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert('Téléchargement réussi');
+            document.getElementById('progress-wrapper').style.display = 'none';
+        } else {
+            alert('Erreur lors du téléchargement');
+        }
+    };
+
+    document.getElementById('progress-wrapper').style.display = 'block';
+    xhr.send(formData);
+});
                     </script>
                     {% endblock %}
             {% endif %}
