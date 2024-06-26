@@ -25,7 +25,7 @@ class VideoController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('file')->getData();
+            $file = $form->get('filePath')->getData();
             if ($file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
                 try {
