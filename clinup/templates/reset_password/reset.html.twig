@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Clin - up</title>
+
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Figtree' rel='stylesheet'>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="auth">
+<nav class="navbar navbar-expand-lg auth">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_home')}}" style="margin-left:43px;">
+            <img src="/assets/img/logo-clinup.png" alt="Clin-up" width="110" height="36">
+        </a>
+    </div>
+</nav>
+<main class="main-container">
+    <div class="container" style="max-width: 1330px;height: auto;margin-top:1%;">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <div style="background: #FF385C !important;padding-left: 0%;padding-right: 0%;border-radius: 14px;padding-top: 15%;margin-top: 16%;">
+                    <img src="/assets/img/auth-clesan.png" style="width: 100%;border-radius: 50px;">
+                    <div class="text">
+                        <h4 class="facilitez">Facilitez-vous la vie avec</h4>
+                        <h4 class="facilitez">votre plateforme Clinup</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5" style="padding: 5%;padding-top: 11%;">
+                <div class="form-auth">
+                    {% for flash in app.flashes('reset_password_error') %}
+                        <div class="alert alert-danger">{{ flash }}</div>
+                    {% endfor %}
+                    {% for flash in app.flashes('success') %}
+                        <div class="alert alert-success">{{ flash }}</div>
+                    {% endfor %}
+                    {{ form_start(resetForm) }}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="label">Nouveau mot de passe</label>
+                            {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'form-control input', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="label">Confirmer le nouveau mot de passe</label>
+                            {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'form-control input', 'autocomplete': 'new-password', 'required': 'required'}}) }}
+                        </div>
+                        {{ form_widget(resetForm._token) }}
+                        <button style="margin-top:14px;" type="submit" class="btn btn-secondary poster">Réinitialiser le mot de passe</button>
+                    </div>
+                    {{ form_end(resetForm) }}
+                </div><br>
+                <div style="text-align:center;font-size: 0.9rem;">
+                    <h6 style="color: #797171;font-size: 0.9rem;">Vous n'avez pas de compte ? <a href="{{ path('app_register') }}" style="color:#FF385C;">S'inscrire</a></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{# templates/reset_password/email.html.twig #}
+
+<h1>Bonjour!</h1>
+
+<p>Pour réinitialiser votre mot de passe, veuillez visiter le lien suivant :</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+<p>À bientôt!</p>
+
+<div style="display: flex; align-items: center;">
+    <p>L'équipe de </p>
+    <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+</div>

@@ -42,31 +42,25 @@
                     </div>
                     <div class="col-md-5" style="padding: 5%;padding-top: 11%;">
                         <div class="form-auth">
-                            <h4 class="titre1">Se connecter</h4>
-                            <h6 class="titre2">Bienvenue, veuillez-vous connecter à votre plateforme</h6><br>
-                            {% if error %}
-                                <div class="alert alert-danger">
-                                    {{ error.messageKey|trans(error.messageData, 'security') }}
-                                </div>
-                            {% endif %}
+                            <h4 class="titre1">Recherchez votre compte</h4><br>
+                            {% for flash in app.flashes('error') %}
+                                <div class="alert alert-danger">{{ flash }}</div>
+                            {% endfor %}
                             {% for flash in app.flashes('success') %}
                                 <div class="alert alert-success">{{ flash }}</div>
                             {% endfor %}
-                            <form method="post">
+                            {{ form_start(requestForm) }}
                             <div class="row">
                                 <div class="col-md-12">
-                                        <label class="label">Email</label>
-                                        <input type="email" name="email" id="inputEmail" value="{{ last_username }}" class="form-control input" autocomplete="email" required autofocus>
+                                    <label class="label">Email</label>
+                                    {{ form_widget(requestForm.email, {'attr': {'class': 'form-control input', 'autocomplete': 'email', 'required': 'required','placeholder': 'Adresse email'}}) }}
                                 </div>
-                                <div class="col-md-12">
-                                        <label class="label">Mot de passe</label>
-                                        <input type="password" name="password" id="inputPassword"  class="form-control input" autocomplete="current-password" required>
+                                <div>
+                                    <small>Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.</small>
                                 </div>
-                                <h6 style="color: #797171;font-size: 0.9rem;">Mot de passe oublié ? <a href="{{ path('app_forgot_password_request') }}" style="color:#FF385C;">Réinitialiser</a></h6>
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                                <button style="margin-top:14px;" type="submit" class="btn btn-secondary poster">Se connecter</button>
+                                <button style="margin-top:14px;" type="submit" class="btn btn-secondary poster">Envoyer l'email de réinitialisation</button>
                             </div>
-                            </form>
+                            {{ form_end(requestForm) }}
                         </div><br>
                         <div style="text-align:center;font-size: 0.9rem;">
                             <h6 style="color: #797171;font-size: 0.9rem;">Vous n'avez pas de compte ? <a href="{{ path('app_register') }}" style="color:#FF385C;">S'inscrire</a></h6>
@@ -78,3 +72,4 @@
 
   </body>
 </html>
+
