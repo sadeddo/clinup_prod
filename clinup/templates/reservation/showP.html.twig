@@ -293,7 +293,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" enctype="multipart/form-data">
+                            <form method="post" enctype="multipart/form-data" id="video-upload-form">
                             {{ form_row(form._token) }}
                             <div class="col-sm-8">
                                 
@@ -317,35 +317,37 @@
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
                         bsOffcanvas.toggle()
 
-                        document.getElementById('video').addEventListener('submit', function(event) {
-    event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('video-upload-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
 
-    var form = event.target;
-    var formData = new FormData(form);
-    var xhr = new XMLHttpRequest();
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', form.action, true);
+                xhr.open('POST', form.action, true);
 
-    xhr.upload.onprogress = function(event) {
-        if (event.lengthComputable) {
-            var percentComplete = (event.loaded / event.total) * 100;
-            document.getElementById('progress-bar').value = percentComplete;
-            document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
-        }
-    };
+                xhr.upload.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        var percentComplete = (event.loaded / event.total) * 100;
+                        document.getElementById('progress-bar').value = percentComplete;
+                        document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
+                    }
+                };
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert('Téléchargement réussi');
-            document.getElementById('progress-wrapper').style.display = 'none';
-        } else {
-            alert('Erreur lors du téléchargement');
-        }
-    };
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        alert('Téléchargement réussi');
+                        document.getElementById('progress-wrapper').style.display = 'none';
+                    } else {
+                        alert('Erreur lors du téléchargement');
+                    }
+                };
 
-    document.getElementById('progress-wrapper').style.display = 'block';
-    xhr.send(formData);
-});
+                document.getElementById('progress-wrapper').style.display = 'block';
+                xhr.send(formData);
+            });
+        });
                     </script>
                     {% endblock %}
             {% endif %}
