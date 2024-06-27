@@ -327,40 +327,58 @@
                         bsOffcanvas.toggle()
 
                         document.addEventListener('DOMContentLoaded', function () {
-                            var form = document.getElementById('video-upload-form');
-                            var button = document.getElementById('upload-button');
-                            button.addEventListener('click', function (event) {
-                                event.preventDefault();
+    var form = document.getElementById('video-upload-form');
+    var button = document.getElementById('upload-button');
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
 
-                                var formData = new FormData(form);
-                                var xhr = new XMLHttpRequest();
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
 
-                                xhr.open('POST', form.action, true);
+        xhr.open('POST', form.action, true);
 
-                                xhr.upload.onprogress = function (event) {
-                                    if (event.lengthComputable) {
-                                        var percentComplete = (event.loaded / event.total) * 100;
-                                        document.getElementById('progress-bar').value = percentComplete;
-                                        document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
-                                    }
-                                };
+        xhr.upload.onprogress = function (event) {
+            if (event.lengthComputable) {
+                var percentComplete = (event.loaded / event.total) * 100;
+                document.getElementById('progress-bar').value = percentComplete;
+                document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
+            }
+        };
 
-                                xhr.onload = function () {
-                                    if (xhr.status === 200) {
-                                        var response = JSON.parse(xhr.responseText);
-                                        alert(response.message);
-                                        document.getElementById('progress-wrapper').style.display = 'none';
-                                        location.reload();
-                                    } else {
-                                        var response = JSON.parse(xhr.responseText);
-                                        alert(response.message);
-                                    }
-                                };
+        xhr.onload = function () {
+            document.getElementById('progress-wrapper').style.display = 'none';
+            if (xhr.status === 200) {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    location.reload();
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    console.error('Response text:', xhr.responseText);
+                    alert('Erreur lors de l\'upload.');
+                }
+            } else {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    console.error('Response text:', xhr.responseText);
+                    alert('Erreur lors de l\'upload.');
+                }
+            }
+        };
 
-                                document.getElementById('progress-wrapper').style.display = 'block';
-                                xhr.send(formData);
-                            });
-                        });
+        xhr.onerror = function () {
+            document.getElementById('progress-wrapper').style.display = 'none';
+            alert('Erreur réseau, veuillez réessayer.');
+        };
+
+        document.getElementById('progress-wrapper').style.display = 'block';
+        xhr.send(formData);
+    });
+});
+
                     </script>
                 {% endblock %}
             {% endif %}
