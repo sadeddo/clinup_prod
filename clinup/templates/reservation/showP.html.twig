@@ -61,7 +61,7 @@
                 <div class="row">
                     {% if video is not null %}
                         <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
-                            <video controls>
+                            <video controls style="width: 100px; height: 100px;">
                                 <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
                                 Votre navigateur ne supporte pas la lecture de vidéos.
                             </video>
