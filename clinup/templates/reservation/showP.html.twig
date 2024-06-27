@@ -348,7 +348,7 @@
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         alert('Téléchargement réussi');
-                        document.getElementById('progress-wrapper').style.display = 'none';
+                        location.reload();
                     } else {
                         alert('Erreur lors du téléchargement');
                     }
