@@ -295,92 +295,71 @@
             {% endif %}
              {# modal pour ajouter une VIDEO #}
        {% if cible == "ajouterVideo" %}
-                <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editEventModalLabel">Vidéo</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" enctype="multipart/form-data" id="video-upload-form">
-                                    {{ form_row(form._token) }}
-                                    <div class="col-sm-8">
-                                        {{ form_widget(form.filePath, {'attr': {'id': 'file'}}) }}        
-                                    </div>
-                                </form>
-                                <div id="progress-wrapper" style="display: none;">
-                                    <progress id="progress-bar" value="0" max="100"></progress>
-                                    <span id="progress-text">0%</span>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit"  class="btn btn-primary" id="upload-button">{{ button_label|default('Enregistrer') }}</button>
+              <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editEventModalLabel">Vidéo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" enctype="multipart/form-data" id="video-upload-form">
+                            {{ form_row(form._token) }}
+                            <div class="col-sm-8">
+                                
+                                {{ form_widget(form.filePath, {'attr': {'id': 'file'}}) }}        
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="submit"  class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+                        </div>
+                        </form>
+                        <div id="progress-wrapper" style="display: none;">
+    <progress id="progress-bar" value="0" max="100"></progress>
+    <span id="progress-text">0%</span>
+</div>
                     </div>
                 </div>
-                {% block scripteditEventModalIdentityviid %}
-                    <script>
+            </div>
+            {% block scripteditEventModalIdentityviid %}
+                <script>
                         var myOffcanvas = document.getElementById('editEventModal')
                         var bsOffcanvas = new bootstrap.Modal(myOffcanvas)
                         bsOffcanvas.toggle()
 
-                        document.addEventListener('DOMContentLoaded', function () {
-    var form = document.getElementById('video-upload-form');
-    var button = document.getElementById('upload-button');
-    button.addEventListener('click', function (event) {
-        event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('video-upload-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
 
-        var formData = new FormData(form);
-        var xhr = new XMLHttpRequest();
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
 
-        xhr.open('POST', form.action, true);
+                xhr.open('POST', form.action, true);
 
-        xhr.upload.onprogress = function (event) {
-            if (event.lengthComputable) {
-                var percentComplete = (event.loaded / event.total) * 100;
-                document.getElementById('progress-bar').value = percentComplete;
-                document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
-            }
-        };
+                xhr.upload.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        var percentComplete = (event.loaded / event.total) * 100;
+                        document.getElementById('progress-bar').value = percentComplete;
+                        document.getElementById('progress-text').textContent = Math.round(percentComplete) + '%';
+                    }
+                };
 
-        xhr.onload = function () {
-            document.getElementById('progress-wrapper').style.display = 'none';
-            if (xhr.status === 200) {
-                try {
-                    var response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                    location.reload();
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                    console.error('Response text:', xhr.responseText);
-                    alert('Erreur lors de l\'upload.');
-                }
-            } else {
-                try {
-                    var response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                    console.error('Response text:', xhr.responseText);
-                    alert('Erreur lors de l\'upload.');
-                }
-            }
-        };
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        alert('Téléchargement réussi');
+                        document.getElementById('progress-wrapper').style.display = 'none';
+                    } else {
+                        alert('Erreur lors du téléchargement');
+                    }
+                };
 
-        xhr.onerror = function () {
-            document.getElementById('progress-wrapper').style.display = 'none';
-            alert('Erreur réseau, veuillez réessayer.');
-        };
-
-        document.getElementById('progress-wrapper').style.display = 'block';
-        xhr.send(formData);
-    });
-});
-
+                document.getElementById('progress-wrapper').style.display = 'block';
+                xhr.send(formData);
+            });
+        });
                     </script>
-                {% endblock %}
+                    {% endblock %}
             {% endif %}
 
             {% if cible == "postuler" %}
