@@ -6,6 +6,7 @@ use App\Entity\Video;
 use App\Form\VideoType;
 use App\Entity\Postuler;
 use App\Entity\Reservation;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class VideoController extends AbstractController
 {
     #[Route('/video/{id}/upload', name: 'app_video_upload')]
-    public function index(Reservation $reservation, Request $request, EntityManagerInterface $entityManager, Security $security, ReservationRepository $reservationRepository): Response
+    public function index(Reservation $reservation, Request $request, EntityManagerInterface $entityManager, Security $security, ReservationRepository $reservationRepository,VideoRepository $videoRepository): Response
     {
         $video = new Video();
         $form = $this->createForm(VideoType::class, $video);
@@ -34,6 +35,7 @@ class VideoController extends AbstractController
                         $filename
                     );
                     $video->setFilePath($filename);
+                    $video->setReservation($reservation);
                     $entityManager->persist($video);
                     $entityManager->flush();
 
@@ -48,13 +50,25 @@ class VideoController extends AbstractController
         // Vérifier si l'utilisateur a déjà postulé
         $postulation = $entityManager->getRepository(Postuler::class)
             ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
-
+            $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/showP.html.twig', [
             'form' => $form->createView(),
             'cible' => 'ajouterVideo',
             'idReservation' => $reservation->getId(),
             'reservation' => $reservationRepository->findOneBy(['id' => $reservation->getId()]),
             'hasApplied' => $postulation,
+            'video' => $video,
         ]);
     }
+    // src/Controller/VideoController.php
+
+    #[Route('/video/{id}', name: 'app_video_show')]
+    public function show(Video $video): Response
+    {
+
+        return $this->render('video/show.html.twig', [
+            'video' => $video,
+        ]);
+    }
+
 }

@@ -25,6 +25,7 @@ use App\Service\IcalService;
 use App\Form\ReservationType;
 use App\Service\PdfGenerator;
 use App\Repository\UserRepository;
+use App\Repository\VideoRepository;
 use App\Service\NotificationService;
 use App\Repository\IcalresRepository;
 use App\Repository\LogementRepository;
@@ -225,7 +226,7 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/prestataire/{id}/consulter', name: 'app_reservation_show', methods: ['GET','POST'])]
-    public function show(Reservation $reservation,EntityManagerInterface $entityManager,Security $security): Response
+    public function show(Reservation $reservation,EntityManagerInterface $entityManager,Security $security,VideoRepository $videoRepository): Response
     {
         //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
@@ -233,17 +234,19 @@ class ReservationController extends AbstractController
         
         $hoteId = $reservation->getLogement()->getHote()->getId();
         $prestataireId = $security->getUser()->getId();
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         $invitExists = $entityManager->getRepository(Invit::class)->existsInvit($hoteId, $prestataireId);
         return $this->render('reservation/showP.html.twig', [
             'reservation' => $reservation,
             'cible' => '',
             'hasApplied' => $postulation,
-            'invitExists' => $invitExists
+            'invitExists' => $invitExists,
+            'video' => $video
         ]);
     }
     //comment postuler
     #[Route('/prestataire/{id}/postuler', name: 'app_reservation_postuler', methods: ['GET','POST'])]
-    public function postuler($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService): Response
+    public function postuler($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,VideoRepository $videoRepository): Response
     {
         $comment = new Postuler();
         $form = $this->createForm(PostulerType::class, $comment);
@@ -280,19 +283,20 @@ class ReservationController extends AbstractController
         $hoteId = $reservation->getLogement()->getHote()->getId();
         $prestataireId = $security->getUser()->getId();
         $invitExists = $entityManager->getRepository(Invit::class)->existsInvit($hoteId, $prestataireId);
-
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/showP.html.twig', [
             'comment' => $comment,
             'form' => $form,
             'reservation' => $reservation,
             'cible' => 'postuler',
             'hasApplied' => $postulation,
-            'invitExists' => $invitExists
+            'invitExists' => $invitExists,
+            'video' => $video
         ]);
     }
     //comment postuler par invit (choix)
     #[Route('/invit/{id}/postuler', name: 'app_reservation_postuler_invit', methods: ['GET','POST'])]
-    public function postulerInvit($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,ReservationRepository $reservationRepository, CommentPrestaRepository $commentPrestaRepository): Response
+    public function postulerInvit($id,Security $security,Request $request,Reservation $reservation, EntityManagerInterface $entityManager,EmailSender $notificationService,NotificationService $notifService,ReservationRepository $reservationRepository, CommentPrestaRepository $commentPrestaRepository,VideoRepository $videoRepository): Response
     {
         $comment = new Postuler();
         $form = $this->createForm(PostInvitType::class, $comment);
@@ -379,14 +383,15 @@ class ReservationController extends AbstractController
         $hoteId = $reservation->getLogement()->getHote()->getId();
         $prestataireId = $security->getUser()->getId();
         $invitExists = $entityManager->getRepository(Invit::class)->existsInvit($hoteId, $prestataireId);
-
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/showP.html.twig', [
             'comment' => $comment,
             'form' => $form,
             'reservation' => $reservation,
             'cible' => 'postulerInvit',
             'hasApplied' => $postulation,
-            'invitExists' => $invitExists
+            'invitExists' => $invitExists,
+            'video' => $video
         ]);
     }
     #[Route('/hote/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]

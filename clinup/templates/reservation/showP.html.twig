@@ -48,7 +48,6 @@
                                             <div class="emptyReserv" style="padding:4%;">
                                                 <img src="/assets/img/list.png" style="width: 64px; height: 64px;"><br>
                                                 <h5 style="font-weight: 600;font-size: 18px;">Aucune tâche est liée à ce logement</h5>
-                                                <h6 style="font-size: 16px;font-weight: 500;">Vous pouvez toujours ajouter des tâches pour ce logement <a href="{{ path('app_task_index',{'id':reservation.logement.id})}}">en cliquant içi</a></h6><br>
                                             </div>
                                     {% endfor %}
                                 </div>
@@ -56,18 +55,29 @@
                         </div>
                     </div>
                     <h5 class="titree">Résultat de la prestation complète</h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="accordion" id="accordionExample">
-                                <div class="row">
-                                    <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
-                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
-                                                    <a href="{{ path('app_video_upload',{'id': reservation.id}) }}"><span>Merci d'insérer une vidéo complète du logement une fois la prestation terminée<span></a>
-                                                    </div>
-                                </div>
-                                </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="accordion" id="accordionExample">
+                <div class="row">
+                    {% if video is not null %}
+                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
+                            <video width="600" controls>
+                                <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture de vidéos.
+                            </video>
                         </div>
-                    </div>
+                    {% else %}
+                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
+                            <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                            <a href="{{ path('app_video_upload', {'id': reservation.id}) }}">
+                                <span>Merci d'insérer une vidéo complète du logement une fois la prestation terminée</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
                     {% endif %}
             <h5 class="titree">Détails de réservation</h5>
              <div class="card">

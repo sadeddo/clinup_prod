@@ -7,6 +7,7 @@ use App\Entity\Postuler;
 use App\Form\ImgTaskType;
 use App\Entity\Reservation;
 use App\Repository\TaskRepository;
+use App\Repository\VideoRepository;
 use App\Repository\ImgTaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
@@ -28,7 +29,7 @@ class ImgTaskController extends AbstractController
     }
 
     #[Route('/{idReservation}/{idTask}/ajouter', name: 'app_img_task_new', methods: ['GET', 'POST'])]
-    public function new($idReservation,$idTask,Request $request, EntityManagerInterface $entityManager,TaskRepository $TaskRepository,ReservationRepository $reservationRepository,Security $security): Response
+    public function new($idReservation,$idTask,Request $request, EntityManagerInterface $entityManager,TaskRepository $TaskRepository,ReservationRepository $reservationRepository,Security $security,VideoRepository $videoRepository): Response
     {
         $imgTask = new ImgTask();
         $form = $this->createForm(ImgTaskType::class, $imgTask);
@@ -63,9 +64,10 @@ class ImgTaskController extends AbstractController
           //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
         ->findOneBy(['reservation' => $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idReservation]), 'prestataire' => $security->getUser()]);
-        
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/showP.html.twig', [
             'img_task' => $imgTask,
+            'video' => $video,
             'form' => $form,
             'cible' => 'ajouter',
             'idReservation' => $idReservation,
