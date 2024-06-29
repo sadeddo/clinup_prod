@@ -307,6 +307,11 @@ try {
                     $entityManager->remove($imgTask);
                 }
             }
+            // Supprimer les vidéos associées à la réservation
+            foreach ($reservation->getVideos() as $video) {
+                $reservation->removeVideo($video);
+                $entityManager->remove($video);
+            }
             $entityManager->flush();
             //reçu
             $pdfGenerator->createReceipt($reservation->getId(),$entityManager);

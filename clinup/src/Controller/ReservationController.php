@@ -632,6 +632,11 @@ class ReservationController extends AbstractController
                         $entityManager->remove($imgTask);
                     }
                 }
+                // Supprimer les vidéos associées à la réservation
+                foreach ($reservation->getVideos() as $video) {
+                    $reservation->removeVideo($video);
+                    $entityManager->remove($video);
+                }
                 $entityManager->flush();
                 
                 //reçu
@@ -728,6 +733,11 @@ private function finalizeReservation(Reservation $reservation, EntityManagerInte
         foreach ($task->getImgTasks() as $imgTask) {
             $entityManager->remove($imgTask);
         }
+    }
+    // Supprimer les vidéos associées à la réservation
+    foreach ($reservation->getVideos() as $video) {
+        $reservation->removeVideo($video);
+        $entityManager->remove($video);
     }
     $entityManager->flush();
 
