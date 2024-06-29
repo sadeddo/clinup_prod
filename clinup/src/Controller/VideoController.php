@@ -60,7 +60,6 @@ class VideoController extends AbstractController
             'video' => $video,
         ]);
     }
-    // src/Controller/VideoController.php
 
     #[Route('/video/{id}', name: 'app_video_show')]
     public function show(Video $video): Response
@@ -70,5 +69,18 @@ class VideoController extends AbstractController
             'video' => $video,
         ]);
     }
+
+    #[Route('/video/{id}/download', name: 'app_video_download')]
+    public function download(Video $video): Response
+    {
+        $videoPath = $this->getParameter('videos_directory') . '/' . $video->getFilePath();
+
+        if (!file_exists($videoPath)) {
+            throw $this->createNotFoundException('La vidéo n\'existe pas');
+        }
+
+        return $this->file($videoPath, $video->getFilePath());
+    }
+
 
 }

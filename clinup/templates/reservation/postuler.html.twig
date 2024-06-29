@@ -76,10 +76,11 @@
                                 <div class="row">
                                     {% if video is not null %}
                                         <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
-                                            <video controls style="width: 300px; height: 300px;">
+                                            <video width="300" controls>
                                                 <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
                                                 Votre navigateur ne supporte pas la lecture de vidéos.
                                             </video>
+                                            <a href="{{ path('app_video_download', {'id': video.id}) }}" class="btn btn-primary" style="margin-top: 10px;">Télécharger la vidéo</a>
                                         </div>
                                     {% else %}
                                         <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
