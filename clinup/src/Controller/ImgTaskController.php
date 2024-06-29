@@ -64,7 +64,7 @@ class ImgTaskController extends AbstractController
           //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
         ->findOneBy(['reservation' => $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idReservation]), 'prestataire' => $security->getUser()]);
-        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
+        $video = $videoRepository->findOneBy(['reservation' =>  $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idReservation])]);
         return $this->render('reservation/showP.html.twig', [
             'img_task' => $imgTask,
             'video' => $video,
