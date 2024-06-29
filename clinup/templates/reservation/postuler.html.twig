@@ -75,8 +75,8 @@
                             <div class="accordion" id="accordionExample">
                                 <div class="row">
                                     {% if video is not null %}
-                                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
-                                            <video width="300" controls>
+                                        <div style="justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
+                                            <video controls>
                                                 <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
                                                 Votre navigateur ne supporte pas la lecture de vidéos.
                                             </video>
