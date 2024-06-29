@@ -22,7 +22,7 @@ class CommentPresta
     #[ORM\JoinColumn(nullable: true)]
     private ?User $prestataire = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
     #[ORM\Column]
