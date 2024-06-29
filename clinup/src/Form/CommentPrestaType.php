@@ -6,6 +6,7 @@ use App\Entity\CommentPresta;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CommentPrestaType extends AbstractType
 {
@@ -13,7 +14,14 @@ class CommentPrestaType extends AbstractType
     {
         $builder
             ->add('comment')
-            ->add('recommandation')
+            ->add('recommandation', ChoiceType::class, [
+                'choices' => [
+                    'Oui' => 'Oui',
+                    'Non' => 'Non',
+                ],
+                'attr' => ['class' => 'form-control'],
+                'required' => false,
+            ])
             ->add('evaluation')
         ;
     }
