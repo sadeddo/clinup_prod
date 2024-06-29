@@ -472,10 +472,12 @@ class ReservationController extends AbstractController
     }
     //la liste des personnes postuler
     #[Route('/hote/{id}/postulers', name: 'app_list_postuler')]
-    public function consulter(Reservation $reservation,PostulerRepository $PostulerRepository,CommentPrestaRepository $commentPrestaRepository)
+    public function consulter(Reservation $reservation,PostulerRepository $PostulerRepository,CommentPrestaRepository $commentPrestaRepository, VideoRepository $videoRepository)
     {
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/postuler.html.twig', [
             'reservation' => $reservation,
+            'video' => $video,
             
         ]);
     }
@@ -493,13 +495,14 @@ class ReservationController extends AbstractController
     }
     //la liste des personne postuler pour une reservation:
     #[Route('/hote/{id}/choisir', name: 'app_reservation_choisir', methods: ['GET'])]
-    public function choisir($id,Security $security, PostulerRepository $postulerRepository): Response
+    public function choisir($id,Security $security, PostulerRepository $postulerRepository,VideoRepository $videoRepository): Response
     {
         $prestataire = $security->getUser();
         $comments = $postulerRepository->findBy(['reservation' => $id]);
-        dd($comments);
+        $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/postuler.html.twig', [
-            'prestataires' => $comments
+            'prestataires' => $comments,
+            'video' => $video
         ]);
     }
     //confirmation prestataire
