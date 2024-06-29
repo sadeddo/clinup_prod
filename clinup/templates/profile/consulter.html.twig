@@ -124,6 +124,8 @@
                             </div>
                         </div>
                     {{ form_widget(form.evaluation, {'attr': {'style': 'display: none;', 'id': 'evaluation'}}) }}
+                                 <label style="color:black;">Recommanderiez-vous ce prestataire ?</label>
+                                {{ form_widget(form.recommandation, {'attr': {'placeholder': '', 'class': 'form-control', 'type': 'text', 'style': 'font-size:0.9rem;'}}) }}
                                 
                                 <label style="color:black;">Écrivez votre évaluation</label>
                                 {{ form_widget(form.comment, {'attr': {'placeholder': 'Décrivez la qualité, le service, Exprimez votre expérience ...', 'class': 'form-control', 'type': 'textarea', 'style': 'font-size:0.9rem;'}}) }}

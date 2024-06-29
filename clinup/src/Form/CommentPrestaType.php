@@ -13,6 +13,7 @@ class CommentPrestaType extends AbstractType
     {
         $builder
             ->add('comment')
+            ->add('recommandation')
             ->add('evaluation')
         ;
     }
