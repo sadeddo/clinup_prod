@@ -107,6 +107,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Subscription::class)]
     private Collection $subscriptions;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $palier = null;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -641,6 +644,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $subscription->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPalier(): ?string
+    {
+        return $this->palier;
+    }
+
+    public function setPalier(?string $palier): static
+    {
+        $this->palier = $palier;
 
         return $this;
     }

@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\Reservation;
+use App\Service\EmailSender;
 use App\Entity\CommentPresta;
 use App\Entity\DemandeService;
 use App\Form\CommentPrestaType;
+use App\Service\RecommendationService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use App\Repository\CommentPrestaRepository;
@@ -31,9 +33,9 @@ class CommentPrestaController extends AbstractController
     }
 
     #[Route('/{id}/{idDemande}/new', name: 'app_comment_presta_new', methods: ['GET', 'POST'])]
-    public function new($id,$idDemande,Request $request, EntityManagerInterface $entityManager,Security $security,CommentPrestaRepository $commentPrestaRepository,ReservationRepository $reservationRepository): Response
+    public function new($id,$idDemande,Request $request, EntityManagerInterface $entityManager,Security $security,CommentPrestaRepository $commentPrestaRepository,ReservationRepository $reservationRepository,EmailSender $notificationService, RecommendationService $recommendationService): Response
     {
-        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+        $presta = $entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
         $commentPrestum = new CommentPresta();
         $form = $this->createForm(CommentPrestaType::class, $commentPrestum);
         $form->handleRequest($request);
@@ -44,21 +46,9 @@ class CommentPrestaController extends AbstractController
             $commentPrestum->setCreatedAt(new DateTimeImmutable());
             $entityManager->persist($commentPrestum);
             $entityManager->flush();
-            //modif price et palier
-            $numberOfMissions =  $reservationRepository->getNombreDeMissions($id);
-            $average = $commentPrestaRepository->getAverageNoteForPrestataire($id);
-            $tier = 'Bronze'; 
-            $tarif = 35;
-            if ($average >= 4 && $average < 4.5 && 34 >= 30 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
-                $tier = 'Argent';
-                $tarif = 40;
-            } elseif ($average > 4.5 && $numberOfMissions > 70) {
-                $tier = 'Or';
-                $tarif = 45;
-            }
-            $user->setPrix($tarif);
-            $entityManager->persist($user);
-            $entityManager->flush();
+            
+
+            $recommendationService->handleRecommendation($commentPrestum, $notificationService);
 
             return $this->redirectToRoute('app_consulter_profileP', ['id' => $id,'idReservation'=>$idDemande], Response::HTTP_SEE_OTHER);
         }

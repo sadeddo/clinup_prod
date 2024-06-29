@@ -1,0 +1,23 @@
+{# templates/emails/non_recommended.html.twig #}
+
+<p>Bonjour,</p>
+
+<p>Un prestataire n'a pas été recommandé par un client.</p>
+
+<p><strong>Commentaire :</strong> {{ commentPresta.comment }}</p>
+<p><strong>Évaluation :</strong> {{ commentPresta.evaluation }}</p>
+
+<p><strong>Détails du prestataire :</strong></p>
+<ul>
+    <li>Nom : {{ prestataire.firstname }} {{ prestataire.lastname }}</li>
+    <li>Email : {{ prestataire.email }}</li>
+</ul>
+
+<p><strong>Détails du client :</strong></p>
+<ul>
+    <li>Nom : {{ client.firstname }} {{ client.lastname }}</li>
+    <li>Email : {{ client.email }}</li>
+</ul>
+
+<p>Cordialement,</p>
+<p>Votre équipe</p>

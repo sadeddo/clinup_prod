@@ -53,4 +53,27 @@ class CommentPrestaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function countYesRecommendations($prestataireId): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->where('c.prestataire = :prestataireId')
+            ->andWhere('c.recommandation = :yes')
+            ->setParameter('prestataireId', $prestataireId)
+            ->setParameter('yes', 'Oui')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countNoRecommendations($prestataireId): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->where('c.prestataire = :prestataireId')
+            ->andWhere('c.recommandation = :no')
+            ->setParameter('prestataireId', $prestataireId)
+            ->setParameter('no', 'Non')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
