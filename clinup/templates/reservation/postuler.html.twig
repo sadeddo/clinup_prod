@@ -70,26 +70,27 @@
                         </div>
                     </div>
                     <h5 class="titree">Résultat de la prestation complète</h5>
-    <div class="card">
-        <div class="card-body">
-            <div class="accordion" id="accordionExample">
-                <div class="row">
-                    {% if video is not null %}
-                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
-                            <video controls style="width: 300px; height: 300px;">
-                                <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
-                                Votre navigateur ne supporte pas la lecture de vidéos.
-                            </video>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                <div class="row">
+                                    {% if video is not null %}
+                                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
+                                            <video controls style="width: 300px; height: 300px;">
+                                                <source src="{{ asset('uploads/videos/' ~ video.filePath) }}" type="video/mp4">
+                                                Votre navigateur ne supporte pas la lecture de vidéos.
+                                            </video>
+                                        </div>
+                                    {% else %}
+                                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
+                                            <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
+                                                <span>Résultat non ajoutée</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
-                    {% else %}
-                        <div style="display: flex; justify-content: center; align-items: center; margin:auto; background: rgba(249, 249, 249, 1);">
-                            <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
-                                <span>Résultat non ajoutée</span>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+                    </div>
                     {% endif %}
                     {% if reservation.statut == "en attente" %}
             <a data-bs-toggle="modal" data-bs-target="#exampleModalAnnulerAtt" type="button" class="btn btn-secondary" style="margin-bottom:1%;">Annuler</a>
