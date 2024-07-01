@@ -1,0 +1,24 @@
+{# templates/email/account_deactivated_admin.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Compte prestataire désactivé</title>
+</head>
+<body>
+    <p>Bonjour,</p>
+
+    <p>Le compte du prestataire suivant a été désactivé suite à plusieurs recommandations négatives :</p>
+
+    <ul>
+        <li><strong>Nom :</strong> {{ prestataire.firstname }} {{ prestataire.lastname }}</li>
+        <li><strong>Email :</strong> {{ prestataire.email }}</li>
+    </ul>
+
+    <p>Merci de prendre les mesures nécessaires et de suivre la situation de près.</p>
+
+    <p>Cordialement,</p>
+    <p>L'équipe ClinUp</p>
+</body>
+</html>

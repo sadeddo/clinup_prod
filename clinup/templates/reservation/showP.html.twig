@@ -30,16 +30,19 @@
                                                 </h2>
                                                 <div id="collapseOne-{{ task.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
+                                                <div style=" justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
                                                 {% for imgTask in task.ImgTasks %}
-                                                <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
-                                                                <img src="{{app.request.basepath}}/task/{{imgTask.filePath}}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
-                                                            </div>
-                                                    {% else %}
-                                                    <div style="display: flex; justify-content: center; align-items: center; margin:auto;background: rgba(249, 249, 249, 1);">
-                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
-                                                    <a href="{{ path('app_img_task_new',{'idReservation': reservation.id , 'idTask': task.id }) }}"><span>Ajouter le résultat<span></a>
+                                                     <div style="position: relative; display: inline-block; margin: 10px;">
+                                                        <img src="{{ app.request.basepath }}/task/{{ imgTask.filePath }}" class="img-thumbnail" alt="Task Image" style="max-width: 120px; height: auto;">
+                                                        <a href="{{ path('app_img_task_delete',{'id':imgTask.id, 'idReservation': reservation.id})}}" class="delete-image" data-id="{{ imgTask.id }}" data-token="{{ csrf_token('delete' ~ imgTask.id) }}" style="position: absolute; top: 5px; right: 5px; color: red;">
+                                                            <i class="bi bi-x-circle" style="font-size: 1.5em;"></i>
+                                                        </a>
                                                     </div>
+                                                {% else %}
+                                                    <img src="/assets/img/image-gallery.png" style="width: 64px; height: 64px;">
                                                 {% endfor %}
+                                                <a href="{{ path('app_img_task_new',{'idReservation': reservation.id , 'idTask': task.id }) }}"><span>Ajouter le résultat<span></a>
+                                                 </div>
                                                 </div>
                                                 </div>
                                             </div>

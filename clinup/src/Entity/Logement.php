@@ -61,6 +61,9 @@ class Logement
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $acces = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $booking = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -327,6 +330,18 @@ class Logement
     public function setAcces(?string $acces): static
     {
         $this->acces = $acces;
+
+        return $this;
+    }
+
+    public function getBooking(): ?string
+    {
+        return $this->booking;
+    }
+
+    public function setBooking(?string $booking): static
+    {
+        $this->booking = $booking;
 
         return $this;
     }

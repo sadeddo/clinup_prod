@@ -25,17 +25,6 @@ class EvaluationController extends AbstractController
         $idPresta = $security->getUser()->getId();
         $numberOfMissions =  $reservationRepository->getNombreDeMissions($idPresta);
         $average = $commentPrestaRepository->getAverageNoteForPrestataire($idPresta);
-
-        $tier = 'Bronze'; 
-        $tarif = 35;
-
-        if ($average >= 4 && $average < 4.5 && $numberOfMissions >= 30 && $numberOfMissions < 70) {
-            $tier = 'Argent';
-            $tarif = 45;
-        } elseif ($average >= 4.5 && $numberOfMissions >= 70) {
-            $tier = 'Or';
-            $tarif = 60;
-        }
         
         //les commentaire
         $comments = $commentPrestaRepository->findBy(['prestataire' => $idPresta]);
@@ -44,8 +33,8 @@ class EvaluationController extends AbstractController
             "user" => $security->getUser(),
             'evolution' => $average,
             'comments' => $comments,
-            'palier' => $tier,
-            'tarif' => $tarif,
+            'palier' => $security->getUser()->getPalier(),
+            'tarif' => $security->getUser()->getPrix(),
             'cible' => '',
             'missions' =>  $numberOfMissions
         ]);

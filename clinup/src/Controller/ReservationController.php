@@ -66,11 +66,11 @@ class ReservationController extends AbstractController
             $counts[$reservation->getId()] = count($reservation->getPostulers());
         }
         $logements = $logementRepository->findBy(['hote' => $security->getUser()]);
-        foreach ($logements as $logement) {
+        /*foreach ($logements as $logement) {
             if ($logement->getAirbnb()) {
                 $this->processReservationsForLink($logement, $logement->getAirbnb(), $entityManager, $icalService, $icalresRepository);
             }
-        }
+        }*/
         $entityManager->flush();
         $currentDate = new \DateTime();
         return $this->render('reservation/index.html.twig', [
@@ -657,7 +657,7 @@ class ReservationController extends AbstractController
                 
                 // Redirection vers la page d'index avec message de succès
                 $this->addFlash('success', 'La prestation a été validée et le paiement transféré avec succès.');
-                return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_comment_presta_new', ['id'=> $reservation->getPrestataire()->getId(), 'idDemande' => $reservation->getId()]);
         } catch (\Stripe\Exception\ApiErrorException $e) {
             // Gestion des erreurs Stripe
             $this->addFlash('error', 'Erreur Stripe: ' . $e->getMessage());

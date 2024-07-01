@@ -332,7 +332,7 @@ try {
                 'Votre prestation a été validée avec succès ! Votre prestataire recevra bientôt le paiement. Nous vous remercions de votre confiance.'
             );
             
-            return $this->redirectToRoute('app_list_postuler', ['id'=> $idReservation]);
+            return $this->redirectToRoute('app_comment_presta_new', ['id'=> $reservation->getPrestataire()->getId(), 'idDemande' => $reservation->getId()]);
         } catch (\Exception $e) {
             $this->addFlash(
                 'error',

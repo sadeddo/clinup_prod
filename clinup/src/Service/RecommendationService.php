@@ -8,22 +8,16 @@ use App\Entity\CommentPresta;
 use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommentPrestaRepository;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Templating\EngineInterface;
 
 class RecommendationService
 {
     private $commentPrestumRepository;
     private $entityManager;
-    private $mailer;
-    private $templating;
 
-    public function __construct(CommentPrestaRepository $commentPrestumRepository, EntityManagerInterface $entityManager,EmailSender $notificationService, EngineInterface $templating)
+    public function __construct(CommentPrestaRepository $commentPrestumRepository, EntityManagerInterface $entityManager,EmailSender $notificationService)
     {
         $this->commentPrestaRepository = $commentPrestumRepository;
         $this->entityManager = $entityManager;
-        $this->mailer = $mailer;
-        $this->templating = $templating;
     }
 
     public function handleRecommendation(CommentPresta $commentPrestum, EmailSender $notificationService): void
@@ -34,11 +28,11 @@ class RecommendationService
 
         // Mise à jour du palier
         if ($yesCount >= 70) {
-            $prestataire->setPalier('OR');
+            $prestataire->setPalier('Or');
         } elseif ($yesCount >= 30) {
-            $prestataire->setPalier('ARGENT');
+            $prestataire->setPalier('Argent');
         } elseif ($yesCount >= 10) {
-            $prestataire->setPalier('BRONZE');
+            $prestataire->setPalier('Bronze');
         }
 
         // Désactiver le compte après 3 recommandations "non"

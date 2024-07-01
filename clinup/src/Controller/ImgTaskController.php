@@ -58,7 +58,7 @@ class ImgTaskController extends AbstractController
             }
             $entityManager->persist($imgTask);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Image ajoutée avec succès');
             return $this->redirectToRoute('app_reservation_show', ['id' => $idReservation ], Response::HTTP_SEE_OTHER);
         }
           //verifier si l'utilisateur à deja postuler
@@ -103,14 +103,12 @@ class ImgTaskController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_img_task_delete', methods: ['POST'])]
-    public function delete(Request $request, ImgTask $imgTask, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/{idReservation}supprimer', name: 'app_img_task_delete', methods: ['POST','GET'])]
+    public function delete($idReservation,Request $request, ImgTask $imgTask, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$imgTask->getId(), $request->request->get('_token'))) {
             $entityManager->remove($imgTask);
             $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_img_task_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Image supprimée avec succès');
+        return $this->redirectToRoute('app_reservation_show', ['id' => $idReservation], Response::HTTP_SEE_OTHER);
     }
 }

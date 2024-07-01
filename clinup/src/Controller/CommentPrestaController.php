@@ -54,7 +54,7 @@ class CommentPrestaController extends AbstractController
         }
         $average = $commentPrestaRepository->getAverageNoteForPrestataire($id);
         return $this->render('profile/consulter.html.twig', [
-            'presta'=> $user,
+            'presta'=> $presta,
             'comment_prestum' => $commentPrestum,
             "userpic" => $security->getUser(),
             'form' => $form,
