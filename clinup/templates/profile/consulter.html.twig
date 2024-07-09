@@ -18,10 +18,12 @@
                                     <p class="res-d">{{ presta.description}}</p>
                                 </div>
                                 <div class="col-md-auto" style="font-weight: 600;">
-                                   
-                                    <form id="payment-form">
+                                   {% if demande.statut != "payer" %}
+                                     <form id="payment-form">
                                         <button  id="submit" class="btn btn-secondary">Réserver</button>
                                     </form>
+                                   {% endif %}
+                                   
                                 </div>
                             </div>
                             <div class="row" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);">
