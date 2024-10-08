@@ -24,6 +24,13 @@
                                 {% for message in app.flashes('success') %}
                                     <div class="alert alert-success">{{ message }}</div>
                                 {% endfor %}
+                                {% for message in app.flashes('warning') %}
+                                        <div class="alert alert-warning mt-4">
+                                    {{ message }}</div>
+                                {% endfor %}
+                                 {% for message in app.flashes('successp') %}
+                                    <div class="alert alert-success">{{ message }}</div>
+                                {% endfor %}
                                 <div class="row align-items-center d-flex">
                                     <div class="col-md-auto">
                                         <div class="form-group" style="text-align: center;margin-bottom:4%;">

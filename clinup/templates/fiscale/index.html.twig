@@ -2,45 +2,37 @@
 
 {% block body %}
   <!-- Main -->
-    <!-- Main -->
       <main class="main-container">
         <div class="main-title">
           <p class="font-weight-bold"></p>
         </div>
 
-        <div class="main-cards" style="display:flex;justify-content: space-around;">
+        <div class="main-cards row" style="display:flex;justify-content: space-around;width: 99%;margin-left:1%;">
 
-          <div class="card">
+          <div class="card col-lg-3" style="margin-bottom:4%;">
             <div class="card-inner">
               <p class="text-primary">Missions aujourd'hui:</p>
             </div>
-            <span class="text-primary font-weight-bold">{{today}}</span>
+            <span class="text-primary font-weight-bold" style="text-align: center;">{{today}}</span>
           </div>
 
-          <div class="card">
+          <div class="card col-lg-3" style="margin-bottom:4%;">
             <div class="card-inner">
               <p class="text-primary">Missions cette semaine:</p>
             </div>
-            <span class="text-primary font-weight-bold">{{week}}</span>
+            <span class="text-primary font-weight-bold" style="text-align: center;">{{week}}</span>
           </div>
 
-          <div class="card">
+          <div class="card col-lg-3" style="margin-bottom:4%;">
             <div class="card-inner">
               <p class="text-primary">Missions ce mois:</p>
             </div>
-            <span class="text-primary font-weight-bold">{{month}}</span>
+            <span class="text-primary font-weight-bold" style="text-align: center;">{{month}}</span>
           </div>
 
-          <div class="card">
-            <div class="card-inner">
-              <p class="text-primary">Missions cette année:</p>
-            </div>
-            <span class="text-primary font-weight-bold">4</span>
-          </div>
 
         </div>
 
-        <div class="charts">
 
           <div class="charts-card">
             <p class="chart-title">Somme Mensuelle de Vos Revenus</p>
@@ -49,20 +41,18 @@
 
           <div class="charts-card">
             <p class="chart-title">Moyenne Mensuelle de Vos Revenus</p>
-            <div id="area-chart"></div>
+            <div id="area-chart" ></div>
           </div>
-
-        </div>
         <div class="charts-card">
             <p class="chart-title">Moyenne des Revenus de Tous les Prestataires</p>
             <div id="area-chart-all"></div>
-          </div>
-        <table class="table" style="background-color:white;">
+        </div>
+        <table class="table" style="background-color:white;width:99% !important;">
   <thead>
     <tr>
       <th scope="col">Récapitulatif Mensuel </th>
       <th scope="col"></th>
-      <th scope="col"><a href="{{ path('download_csv') }}"><button type="button" class="btn btn-primary" style="margin-left: 57%;background-color:#FF385C;border-color:#FF385C;"><i class="bi bi-file-earmark-pdf" style="color:white;"></i></button></a></th>
+      <th scope="col"><a href="{{ path('download_csv') }}"><button type="button" class="btn btn-primary" style="background-color:#FF385C;border-color:#FF385C;"><i class="bi bi-file-earmark-pdf" style="color:white;"></i></button></a></th>
     </tr>
     <tr>
       <th scope="col">Date</th>

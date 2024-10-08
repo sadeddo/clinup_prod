@@ -4,7 +4,7 @@
 
 {% block body %}
     <main class="main-container logem">
-        <div class="container" style="width: 50%;height: auto;background-color: white;border: 1px solid rgba(0, 0, 0, 0.16);border-radius: 3%;padding: 3%;margin-top:3%;">
+        <div class="container" style="width: 100%;height: auto;background-color: white;border: 1px solid rgba(0, 0, 0, 0.16);border-radius: 3%;padding: 3%;margin-top:3%;">
     <strong><h5 style="font-size: 20px;">Modifier un logement</h5></strong></br>
  <form method="post" enctype="multipart/form-data">
     <div class="row" style="margin-bottom: 3%;">
@@ -47,11 +47,19 @@
         <label for="description">Image</label>
         {{ form_widget(form.img) }}
     </div><br>
-    <div class="row">
-        <div class="col-md-6">
+     <div class="row">
+        <div class="col-md-12">
             <div class="form-group">
-                <label for="adresse">Ical airbnb</label>
+                <label for="adresse">Lien Ical airbnb</label>
                 {{ form_widget(form.airbnb) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="adresse">Lien Ical booking</label>
+                {{ form_widget(form.booking) }}
             </div>
         </div>
     </div>
@@ -71,11 +79,15 @@
         </div>
     </div>
 
-
+ <div class="form-group">
+        <label for="description">Accès au logement</label>
+        {{ form_widget(form.acces) }}
+    </div><br>
     <div class="form-group">
         <label for="description">Description</label>
         {{ form_widget(form.description) }}
     </div><br>
+   
 
     <div>
         <button type="submit"  class="btn btn-secondary" style="width: 126px;padding-top: 2%;padding-bottom: 2%;font-size: 0.9rem;margin: auto;">{{ button_label|default('Enregistrer') }}</button>

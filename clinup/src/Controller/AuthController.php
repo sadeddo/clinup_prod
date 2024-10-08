@@ -87,6 +87,7 @@ class AuthController extends AbstractController
                 ]);
             }
             $user->setRoles([$selectedRole]);
+            $user->setPalier('Bronze');
             $user->setPicture('default.png');
             $user->setPrix('35');
             $user->setPassword($this->hasher->hashPassword($user, $form->get("password")->getData()));

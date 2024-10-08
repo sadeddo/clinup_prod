@@ -16,7 +16,7 @@
 			<!-- Colonne des jours de la semaine -->
             <h2 style="font-weight: 600;margin-bottom:2%;">Disponibilités</h2>
             <h6>Planification répétée pour chaque : </h6>
-			<div class="col-md-9o'-)àç!(§''""éé&@) d-flex" style="margin-top: 2%;justify-content: space-between;">
+			<div class="col-md-12 d-flex" style="margin-top: 2%;justify-content: space-between;">
 					<a class="days" onclick="location.href='/availabilities/lundis';">Lundis</a>
 					<a class="days" onclick="location.href='/availabilities/mardis';">Mardis</a>
 					<a class="days" onclick="location.href='/availabilities/mercredis';">Mercredis</a>
@@ -33,46 +33,51 @@
 		</div>
 	</div>
         </div>
-    <script>
-            document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        // Définir des options par défaut qui peuvent être surchargées
-        minTime: '07:00:00',
-        maxTime: '21:00:00',
-        headerToolbar:{
-            left: 'today',
-            center: 'title',
-            right: 'prev,next'
-        },
-        // Utiliser une fonction pour définir la vue initiale en fonction de la largeur
-        initialView: window.innerWidth < 601 ? 'timeGridDay' : 'timeGridWeek',
-        locale: 'fr',
-        navLinks: true,
-        buttonText:{
-            today: 'Aujourd\'hui',
-        },
-        timeZone: 'Europe/Paris',
-        allDaySlot: false,
-        events: {{data|raw}},
-        themeSystem: 'bootstrap',
-        eventClick: function(info) {
-            window.location.href="/availabilities/edit/" + info.event.id;
-        }
-    });
-    
-    calendar.render();
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var isMobile = window.innerWidth < 601; // Detect mobile screens
 
-    // Attacher un gestionnaire d'événement pour le redimensionnement de la fenêtre
-    window.addEventListener('resize', function() {
-        var newView = window.innerWidth < 601 ? 'timeGridDay' : 'timeGridWeek';
-        if (calendar.view.type !== newView) {
-            calendar.changeView(newView);
-        }
-    });
-});
+        // Configure the calendar
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: isMobile ? 'timeGridDay' : 'timeGridWeek',  // Use timeGrid for time range control
+            headerToolbar: {
+                left: isMobile ? '' : 'today',  // Show 'Today' button only for non-mobile
+                center: 'title',
+                right: 'prev,next'
+            },
+            buttonText: {
+            today: "Aujourd'hui", // Texte du bouton 'Aujourd'hui'
+        },
+            locale: 'fr',
+            navLinks: true,
+            timeZone: 'Europe/Paris',
+            allDaySlot: false,  // Hide the "all day" slot
 
-        </script>
+            // Set the time range for the day
+            minTime: '07:00:00',  // Start at 7 AM
+            maxTime: '21:00:00',  // End at 9 PM
+
+            // Set events dynamically
+            events: {{ data|raw }},
+
+            // Change view based on window resizing (for responsiveness)
+            windowResize: function(view) {
+                if (window.innerWidth < 601) {
+                    calendar.changeView('timeGridDay');  // Switch to day view for mobile
+                } else {
+                    calendar.changeView('timeGridWeek');  // Switch to week view for desktop
+                }
+            },
+            themeSystem: 'bootstrap',
+            eventClick: function(info) {
+                window.location.href = "/availabilities/edit/" + info.event.id;
+            }
+        });
+
+        calendar.render();  // Render the calendar
+    });
+</script>
             {# le offcanvasconsulter liée au bouton consulter pour chaque lundis #}
 		{% if cible == "modalMonday" %}
             <div class="modal fade" id="modalajouter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
