@@ -217,7 +217,7 @@ try {
                 'product_data' => [
                     'name' => 'Paiement pour service',
                 ],
-                'unit_amount' => $reservation->getPrix() * 100 * 1.05, // 200,00 EUR
+                'unit_amount' => $reservation->getPrix() * 100 * 1.05, 
             ],
             'quantity' => 1,
         ]],
@@ -236,10 +236,20 @@ try {
     echo 'Erreur lors de la création de la session : ' . $e->getMessage();
 }
     }
-//paiement invit 
+//paiement invit vraaaaai 
     #[Route('/create-checkout-session/{id}', name: 'create-checkout-session', methods: ['POST','GET'])]
     public function createCheckoutSession(Request $request,Reservation $reservation): JsonResponse
     {
+
+        $prix = $reservation->getPrix() * 100; //prix du base
+        $fraisClinup = round((5 * $prix) / 100); //frais clinup
+        $fraisStripe = round(25 + (($prix * 1.5) / 100));
+        $total = $prix + $fraisClinup + $fraisStripe;
+         // Frais Clinup pour le prestataire (5% du montant que le prestataire va recevoir)
+    $fraisClinupPrestataire = round(($prix * 5) / 100);
+
+    // Montant à transférer au prestataire (prix - 5% de frais Clinup pour le prestataire)
+    $montantPrestataire = $prix - $fraisClinupPrestataire;
 
         // Configurez votre clé secrète Stripe
         Stripe::setApiKey($this->stripeSecretKey);
@@ -251,7 +261,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $reservation->getPrix() * 100 * 1.05,
+                        'unit_amount' => round($total),
                     ],
                     'quantity' => 1,
                 ]],
@@ -261,7 +271,7 @@ try {
                 'payment_intent_data' => [
                     'transfer_data' => [
                         'destination' => $reservation->getPrestataire()->getIdStripe(),  // Transférer au compte connecté
-                        'amount' => $reservation->getPrix() * 100 * 0.95,
+                        'amount' => round($montantPrestataire),
                     ],
                 ],
             ]);
@@ -361,13 +371,17 @@ try {
     #[Route('/checkout-session/{reservationId}/{prestataireId}', name: 'checkout-session', methods: ['POST','GET'])]
     public function CheckoutSession($reservationId,$prestataireId,Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        $reservation = $entityManager->getRepository(Reservation::class)->find($reservationId);
+        $prestataire = $entityManager->getRepository(User::class)->find($prestataireId);
 
+        $prix = $reservation->getPrix() * 100; //prix du base
+        $fraisClinup = round((5 * $prix) / 100); //frais clinup
+        $fraisStripe = round(25 + (($prix * 1.5) / 100));
+        $total = $prix + $fraisClinup + $fraisStripe;
         // Configurez votre clé secrète Stripe
         $stripe = new \Stripe\StripeClient($this->stripeSecretKey);
 
         try {
-            $reservation = $entityManager->getRepository(Reservation::class)->find($reservationId);
-            $prestataire = $entityManager->getRepository(User::class)->find($prestataireId);
             $uuid = Uuid::v4()->toRfc4122(); 
             $session = $stripe->checkout->sessions->create([
                 'line_items' => [
