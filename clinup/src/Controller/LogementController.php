@@ -109,7 +109,7 @@ class LogementController extends AbstractController
             $session = $stripe->checkout->sessions->create([
                 'line_items' => [
                   [
-                    'price' => 'price_1Q7jUpGrwysY3nEfUWRzuLbH',
+                    'price' => 'price_1PO1nXGrwysY3nEfu9XnA8zU',
                     // For metered billing, do not pass quantity
                     'quantity' => 1,
                   ],

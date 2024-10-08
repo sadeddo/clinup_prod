@@ -105,7 +105,7 @@ class SubscriptionController extends AbstractController
             $session = $stripe->checkout->sessions->create([
                 'line_items' => [
                   [
-                    'price' => 'price_1POhLTGrwysY3nEfvh2lae5a',
+                    'price' => 'price_1PO1oiGrwysY3nEfk1WG22Bt',
                     // For metered billing, do not pass quantity
                     'quantity' => 1,
                   ],
