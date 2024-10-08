@@ -46,14 +46,14 @@ class SubscriptionController extends AbstractController
                             'id' => $subscription->getSubscriptionItemId(),
                             'deleted' => true,
                         ],
-                        ['price' => 'price_1Q7j4FGrwysY3nEfUiVeEdZm'],
+                        ['price' => 'price_1PO1oiGrwysY3nEfk1WG22Bt'],
                     ],
                 ]
             );
             // Récupérer le nouvel Subscription Item ID
             $newSubscriptionItemId = null;
             foreach ($upg->items->data as $item) {
-                if ($item->price->id === 'price_1Q7j4FGrwysY3nEfUiVeEdZm') {
+                if ($item->price->id === 'price_1PO1oiGrwysY3nEfk1WG22Bt') {
                     $newSubscriptionItemId = $item->id;
                     break;
                 }
