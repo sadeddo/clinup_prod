@@ -26,11 +26,11 @@ class IcalSynchronizationService
     {
         $logements = $this->logementRepository->findAll();
         foreach ($logements as $logement) {
-            // Synchronisation pour Airbnb
+            // Synchronisation for Airbnb
             if ($logement->getAirbnb()) {
                 $this->processReservationsForLink($logement, $logement->getAirbnb());
             }
-            // Synchronisation pour Booking
+            // Synchronisation for Booking
             if ($logement->getBooking()) {
                 $this->processReservationsForLink($logement, $logement->getBooking());
             }
@@ -43,7 +43,14 @@ class IcalSynchronizationService
         // Get reservations from the iCal link
         $reservations = $this->icalService->getReservationsFromIcal($link);
 
-        // Ensure $reservations is iterable before proceeding
+        // Check if $reservations is null
+        if ($reservations === null) {
+            // Log or display a message if no reservations are found
+            echo sprintf("No reservations found for logement ID %d with link %s\n", $logement->getId(), $link);
+            return; // Stop processing if reservations are null
+        }
+
+        // Ensure $reservations is iterable before processing
         if (is_array($reservations) || $reservations instanceof \Traversable) {
             foreach ($reservations as $reservationData) {
                 $existingReservation = $this->icalresRepository->findOneBy([
@@ -52,7 +59,7 @@ class IcalSynchronizationService
                     'dtEnd' => $reservationData['end_time'],
                 ]);
 
-                // Create new reservation if it doesn't exist
+                // Create a new reservation if it doesn't exist
                 if (!$existingReservation) {
                     $reservation = new Icalres();
                     $reservation->setLogement($logement);
@@ -65,8 +72,8 @@ class IcalSynchronizationService
                 }
             }
         } else {
-            // Handle the case where $reservations is not valid (log or throw an exception)
-            // Log or throw exception here if necessary
+            // Handle the case where $reservations is not valid (e.g., not an array or iterable)
+            echo sprintf("Invalid reservations format for logement ID %d with link %s\n", $logement->getId(), $link);
         }
     }
 }
