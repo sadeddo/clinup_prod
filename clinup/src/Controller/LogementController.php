@@ -104,12 +104,12 @@ class LogementController extends AbstractController
         $user = $security->getUser();
         // Configurez votre clé secrète Stripe
         $stripe = new \Stripe\StripeClient($this->stripeSecretKey);
-
+        //////produit 2 logement 
         try {
             $session = $stripe->checkout->sessions->create([
                 'line_items' => [
                   [
-                    'price' => 'price_1PO1nXGrwysY3nEfu9XnA8zU',
+                    'price' => 'price_1Q7jUpGrwysY3nEfUWRzuLbH',
                     // For metered billing, do not pass quantity
                     'quantity' => 1,
                   ],
