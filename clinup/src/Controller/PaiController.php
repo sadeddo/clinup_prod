@@ -389,7 +389,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $reservation->getPrix() * 100 * 1.05,
+                        'unit_amount' => $total,
                     ],
                     'quantity' => 1,
                   ],
