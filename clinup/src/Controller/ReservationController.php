@@ -224,14 +224,12 @@ class ReservationController extends AbstractController
             'counts' => $counts,
         ]);
     }
-
     #[Route('/prestataire/{id}/consulter', name: 'app_reservation_show', methods: ['GET','POST'])]
     public function show(Reservation $reservation,EntityManagerInterface $entityManager,Security $security,VideoRepository $videoRepository): Response
-    {
-        //verifier si l'utilisateur à deja postuler
+    {   
+    //verifier si l'utilisateur à deja postuler
         $postulation = $entityManager->getRepository(Postuler::class)
                     ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
-        
         $hoteId = $reservation->getLogement()->getHote()->getId();
         $prestataireId = $security->getUser()->getId();
         $video = $videoRepository->findOneBy(['reservation' => $reservation]);
@@ -468,6 +466,7 @@ class ReservationController extends AbstractController
     #[Route('/prestataires', name: 'app_list_prestataire')]
     public function findPrest(EntityManagerInterface $entityManager,Request $request, SessionInterface $session,EntityManagerInterface $em,Security $security,Reservation $reservation){
         
+
         
     }
     //la liste des personnes postuler

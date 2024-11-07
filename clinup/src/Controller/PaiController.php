@@ -389,7 +389,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $total,
+                        'unit_amount' => $total /100,
                     ],
                     'quantity' => 1,
                   ],
