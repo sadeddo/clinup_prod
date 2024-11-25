@@ -41,6 +41,7 @@ class SubscriptionController extends AbstractController
             $upg = $stripe->subscriptions->update(
                 $subscription->getSubscriptionId(),
                 [
+                    'proration_behavior' => 'always_invoice',
                     'items' => [
                         [
                             'id' => $subscription->getSubscriptionItemId(),
