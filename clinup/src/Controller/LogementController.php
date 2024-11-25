@@ -114,7 +114,6 @@ class LogementController extends AbstractController
                     'quantity' => 1,
                   ],
                 ],
-                'ui_mode' => 'embedded',
                 'mode' => 'subscription',
                 'customer_email' => $user->getEmail(),
                 'success_url' => 'https://clinup.fr/logement/success-log?session_id={CHECKOUT_SESSION_ID}',
