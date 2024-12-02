@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle demande de contact</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #ff4063;">Nouvelle demande de contact</h1>
+        
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <p><strong>Nom :</strong> {{ name }}</p>
+            <p><strong>Email :</strong> {{ email }}</p>
+            <p><strong>Message :</strong></p>
+            <p style="white-space: pre-wrap;">{{ message }}</p>
+        </div>
+
+        <p style="color: #666; font-size: 12px;">Cet email a été envoyé automatiquement depuis le formulaire de contact de Clinup.</p>
+    </div>
+</body>
+</html>
