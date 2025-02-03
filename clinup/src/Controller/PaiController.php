@@ -374,9 +374,9 @@ try {
         $reservation = $entityManager->getRepository(Reservation::class)->find($reservationId);
         $prestataire = $entityManager->getRepository(User::class)->find($prestataireId);
 
-        $prix = $reservation->getPrix() * 100; //prix du base
-        $fraisClinup = round((5 * $prix) / 100); //frais clinup
-        $fraisStripe = round(25 + (($prix * 1.5) / 100));
+        $prix = (int)round($reservation->getPrix() * 100); //prix du base
+        $fraisClinup = (int)round((5 * $prix) / 100); //frais clinup
+        $fraisStripe = (int)round(25 + (($prix * 1.5) / 100));
         $total = $prix + $fraisClinup + $fraisStripe;
         // Configurez votre clé secrète Stripe
         $stripe = new \Stripe\StripeClient($this->stripeSecretKey);
@@ -389,7 +389,7 @@ try {
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => ['name' => 'Service'],
-                        'unit_amount' => $total /100,
+                        'unit_amount' => $total,
                     ],
                     'quantity' => 1,
                   ],
