@@ -104,6 +104,21 @@
                                         </div>
                                     </div>
                                 </div><br>
+                                <h6 style="font-weight:700;">Informations de l'entreprise:</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nom">Raison sociale</label>
+                                            {{ form_widget(form.raison_sociale) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="surface">Siret</label>
+                                            {{ form_widget(form.siret) }}
+                                        </div>
+                                    </div>
+                                </div><br>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary proB">Modifier</button>

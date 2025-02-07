@@ -110,6 +110,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $palier = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $siret = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $raison_sociale = null;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -656,6 +662,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPalier(?string $palier): static
     {
         $this->palier = $palier;
+
+        return $this;
+    }
+
+    public function getSiret(): ?string
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): static
+    {
+        $this->siret = $siret;
+
+        return $this;
+    }
+
+    public function getRaisonSociale(): ?string
+    {
+        return $this->raison_sociale;
+    }
+
+    public function setRaisonSociale(?string $raison_sociale): static
+    {
+        $this->raison_sociale = $raison_sociale;
 
         return $this;
     }

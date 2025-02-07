@@ -56,6 +56,12 @@ class ProfileType extends AbstractType
     ->add('description', TextareaType::class, [
         'attr' => ['class' => 'form-control', 'placeholder' => 'Description'],
         'required' => false,
+    ])
+    ->add('raison_sociale', TextType::class, [
+        'attr' => ['class' => 'form-control', 'placeholder' => 'Raison sociale'],
+    ])
+    ->add('siret', TextType::class, [
+        'attr' => ['class' => 'form-control', 'placeholder' => 'Siret'],
     ]);
     }
 
