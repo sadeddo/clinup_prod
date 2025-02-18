@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Postuler;
 use App\Form\ProfileType;
 use App\Entity\Reservation;
 use Psr\Log\LoggerInterface;
@@ -14,6 +15,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -143,15 +145,36 @@ class ProfileController extends AbstractController
     public function consulterP($id,$idReservation, UserRepository $userRepository,CommentPrestaRepository $commentPrestaRepository, Security $security, EntityManagerInterface $entityManager): Response
     {
         $prestataire = $userRepository->findOneBy(['id'=> $id]);
+        $proposition = $entityManager->getRepository(Postuler::class)->findOneBy(['prestataire'=>$id, 'reservation'=> $idReservation]);
         $average = $commentPrestaRepository->getAverageNoteForPrestataire($prestataire->getId());
-        
+        $propositionValue = $proposition ? $proposition->getProposition() : null;
         return $this->render('profile/consulter.html.twig', [
             'average' => $average,
             'demande' => $entityManager->getRepository(Reservation::class)->findOneBy(['id' => $idReservation ]),
             'prestataire' => $prestataire,
             'idReservation' => $idReservation,
+            'proposition' => $propositionValue,
             'presta' => $prestataire,
             'cible' => '',
         ]);
+    }
+    #[Route('/update-price/{reservationId}', name: 'update_price', methods: ['POST'])]
+    public function updatePrice(int $reservationId, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $proposedPrice = $data['proposedPrice'];
+
+        $reservation = $entityManager->getRepository(Reservation::class)->find($reservationId);
+        if (!$reservation) {
+            return new JsonResponse(['success' => false, 'error' => 'Réservation non trouvée.'], 404);
+        }
+
+        // Mise à jour du prix si une proposition existe
+        if ($proposedPrice !== null) {
+            $reservation->setPrix($proposedPrice);
+            $entityManager->flush();
+        }
+
+        return new JsonResponse(['success' => true]);
     }
 }

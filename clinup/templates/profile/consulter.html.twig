@@ -15,13 +15,23 @@
                                 <div class="col-md-9">
                                     <div style="display:flex;"><h5 style="font-weight: 500;">{{ presta.firstname }} {{ presta.lastname }} </h5> <i style="margin-left: 1%;color:rgba(4, 112, 239, 1);"  class="bi bi-patch-check-fill"></i></div>
                                     <p><i class="bi bi-star-fill" style="color:rgb(255, 211, 27);"></i> {{ average | number_format(1, '.', '') }}</p>
+                                    {% if proposition is not null %}
+                                        <p>Prix proposé: {{proposition}}€</p>
+                                    {% endif %}
                                     <p class="res-d">{{ presta.description}}</p>
                                 </div>
                                 <div class="col-md-auto" style="font-weight: 600;">
                                    {% if demande.statut != "payer" %}
                                      <form id="payment-form">
-                                        <button  id="submit" class="btn btn-secondary">Réserver</button>
-                                    </form>
+    <button id="submit" class="btn btn-secondary">
+        {% if proposition is not null %}
+            Accepter et Réserver
+        {% else %}
+            Réserver
+        {% endif %}
+    </button>
+</form>
+
                                    {% endif %}
                                    
                                 </div>
@@ -170,34 +180,52 @@
     <script src="https://js.stripe.com/v3/"></script>
 <script>
     var stripe = Stripe('pk_live_51PC23OGrwysY3nEfmZwem3Pk7fGolrLWWdjtah91j4GjCj0IFZ0O5hxa13udeUV8cxsmC1VQZy8Z81EIe1LCceYC00OrESWmRo');
-    var elements = stripe.elements();
-
     var form = document.getElementById('payment-form');
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
+
         var reservationId = {{ demande.id|json_encode }};
         var prestataireId = {{ presta.id|json_encode }};
-        fetch(`/checkout-session/${reservationId}/${prestataireId}`, {
+        var prixPropose = {{ proposition|default('null') }}; // Proposé ou null
+
+        // Mise à jour du prix avant paiement
+        fetch(`/update-price/${reservationId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({}) // Montant en centimes
+            body: JSON.stringify({ proposedPrice: prixPropose })
         }).then(function(response) {
             return response.json();
         }).then(function(data) {
-            if (data.error) {
-                alert(data.error);
-            } else {
-                stripe.redirectToCheckout({
-                    sessionId: data.id
-                }).then(function(result) {
-                    if (result.error) {
-                        alert(result.error.message);
+            if (data.success) {
+                // Une fois la mise à jour faite, on démarre la session de paiement
+                fetch(`/checkout-session/${reservationId}/${prestataireId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        stripe.redirectToCheckout({ sessionId: data.id })
+                            .then(function(result) {
+                                if (result.error) {
+                                    alert(result.error.message);
+                                }
+                            });
                     }
                 });
+            } else {
+                alert('Erreur lors de la mise à jour du prix.');
             }
         });
     });
 </script>
+
 {% endblock %}

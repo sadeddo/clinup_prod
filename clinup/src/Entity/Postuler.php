@@ -26,6 +26,9 @@ class Postuler
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $proposition = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Postuler
     public function setCreatedAt(?\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getProposition(): ?string
+    {
+        return $this->proposition;
+    }
+
+    public function setProposition(?string $proposition): static
+    {
+        $this->proposition = $proposition;
 
         return $this;
     }
