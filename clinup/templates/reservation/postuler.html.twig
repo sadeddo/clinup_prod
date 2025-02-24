@@ -7,7 +7,7 @@
         <div class="container" style="width:95%;height: auto;"></br></br>
             <!-- templates/your_template.html.twig -->
 {% if reservation.statut == "payer" %}
-<a href="{{ path('generate_receipt', {'id':reservation.id }) }}" class="btn btn-primary">Générer le PDF</a>
+<a href="{{ path('generate_receipt', {'id':reservation.id }) }}" class="btn btn-primary">Générer la facture</a>
 {% endif %}
 
             {% for messages in app.flashes('success') %}

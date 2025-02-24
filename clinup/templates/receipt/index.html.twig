@@ -1,55 +1,83 @@
-{# templates/receipt/receipt.html.twig #}
-
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Receipt</title>
+    <title>Facture N° {{ receipt.receiptNumber }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-        }
-        .receipt {
-            width: 300px;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .receipt h1 {
-            border-bottom: 1px solid #eee;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-        .receipt p {
-            margin: 10px 0;
-        }
-        .receipt .total {
-            font-size: 24px;
-            margin: 20px 0;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #888;
-        }
+        body { font-family: Arial, sans-serif; font-size: 12px; color: #333; }
+        header, footer { text-align: center; margin-bottom: 20px; }
+        .address { width: 43%; display: inline-block; vertical-align: top; }
+        .details, table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        table, th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .total { text-align: right; font-weight: bold; }
+        .legal { font-size: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
-    <div class="receipt">
-        <h1>Reçu</h1>
-        <p><strong>N°:</strong> {{ receipt.receiptNumber }}</p>
-        <p><strong>Date de paiement:</strong> {{receipt.paymentDate}}</p>
-        <p><strong>Prestataion de ménage:</strong> {{ receipt.amount }}€</p>
-        <div class="total">
-            <p>TOTAL: {{ receipt.amount }}€</p>
+    <header>
+        <h2>Facture N° {{ receipt.receiptNumber }}</h2>
+    </header>
+
+    <section>
+        <div class="address">
+            <strong>{{ receipt.reservation.prestataire.firstname }} {{ receipt.reservation.prestataire.lastname }}</strong><br>
+            {{ receipt.reservation.prestataire.adresse }}<br>
+            {% if receipt.reservation.prestataire.siret is not null %}
+                SIRET : {{ receipt.reservation.prestataire.siret }}<br>
+            {% endif %}
+            Tél : {{ receipt.reservation.prestataire.phoneNumber }}
         </div>
-        <div class="footer">
-            <p>Merci</p>
+        <div class="address" style="text-align: right;">
+            <strong>{{ receipt.reservation.logement.hote.firstname }} {{ receipt.reservation.logement.hote.lastname }}</strong><br>
+            {{ receipt.reservation.logement.adresse }}<br>
         </div>
-    </div>
+    </section>
+
+    <section class="details">
+        <table>
+            <tr>
+                <th>Date de paiement</th>
+                <th>Date de réservation</th>
+            </tr>
+            <tr>
+                <td>{{ receipt.paymentDate|date('d/m/Y') }}</td>
+                <td>{{ receipt.reservation.date|date('d/m/Y') }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantité</th>
+                    <th>Prix total HT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prestation de ménage</td>
+                    <td>{{ receipt.reservation.nbrHeure }}</td>
+                    <td>{{ receipt.reservation.prix }}€</td>
+                </tr>
+                <tr>
+                    <td>Frais Clinup</td>
+                    <td>-</td>
+                    <td>{{ (receipt.reservation.prix * 0.05)|round(2) }}€</td>
+                </tr>
+                <tr>
+                    <td>Frais Strip</td>
+                    <td>-</td>
+                    <td>{{ ((receipt.reservation.prix * 0.015) + 0.25)|round(2) }}€</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="total">Total HT : {{ (receipt.reservation.prix + (receipt.reservation.prix * 0.05) + ((receipt.reservation.prix * 0.015) + 0.25))|round(2) }} €</p>
+    </section>
+
+    <footer>
+        <p>Merci de votre confiance.</p>
+    </footer>
 </body>
 </html>

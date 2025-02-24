@@ -30,7 +30,7 @@ class PdfGenerator
         ]);
 
         $dompdf->loadHtml($html);
-        $customPaperSize = array(0, 0, 300, 500);
+        $customPaperSize = array(0, 0, 400, 600);
         $dompdf->setPaper($customPaperSize);
         $dompdf->render();
 
@@ -55,8 +55,8 @@ class PdfGenerator
 
     private function generateReceiptNumber(): string
     {
-        $number = random_int(100000, 999999);
-        return 'REC-'. $number;
+        $number = random_int(1, 9999);
+        return  $number;
     }
 }
  

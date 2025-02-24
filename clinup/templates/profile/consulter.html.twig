@@ -21,7 +21,7 @@
                                     <p class="res-d">{{ presta.description}}</p>
                                 </div>
                                 <div class="col-md-auto" style="font-weight: 600;">
-                                   {% if demande.statut != "payer" %}
+                                   {% if demande.statut == "en attente" %}
                                      <form id="payment-form">
     <button id="submit" class="btn btn-secondary">
         {% if proposition is not null %}

@@ -140,11 +140,37 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-4">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Adresse</h6>
+                                    <h6 class="res-d2">{{ reservation.logement.adresse}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Surface</h6>
+                                    <h6 class="res-d2">{{ reservation.logement.surface}}m²</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card m-2">
+                                <div class="card-body b">
+                                    <h6 class="res-d">Nombre de pièces</h6>
+                                    <h6 class="res-d2"><i class="fa-regular fa-bed"></i> {{ reservation.logement.nbrChambre }} | <i class="bi bi-house" style="color:rgba(0, 0, 0, 0.58);"></i> {{ reservation.logement.nbrBain }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="row">
                         <div class="col-md-12">
                             <div class="card m-2">
                                 <div class="card-body b">
                                     <h6 class="res-d">Description</h6>
-                                    <h6 class="res-d2">{{ reservation.description }}</h6>
+                                    <h6 class="res-d2">{{ reservation.logement.description }}</h6>
                                 </div>
                             </div>
                         </div>

@@ -34,6 +34,7 @@ class ReceiptController extends AbstractController
             'receiptNumber' => $receipt->getNumber(),
             'amount' => $receipt->getReservation()->getPrix(),
             'paymentDate' => $receipt->getPaymentDate(),
+            'reservation' => $receipt->getReservation(),
         ];
 
         // Generate PDF
@@ -45,7 +46,7 @@ class ReceiptController extends AbstractController
             200,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="receipt_' . $receipt->getNumber() . '.pdf"',
+                'Content-Disposition' => 'attachment; filename="Facture_' . $receipt->getNumber() . '.pdf"',
             ]
         );
     }
