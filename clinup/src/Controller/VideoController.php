@@ -7,6 +7,7 @@ use App\Form\VideoType;
 use App\Entity\Postuler;
 use App\Entity\Reservation;
 use App\Repository\VideoRepository;
+use App\Repository\ReceiptRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -67,6 +68,34 @@ class VideoController extends AbstractController
 
         return $this->render('video/show.html.twig', [
             'video' => $video,
+        ]);
+    }
+    private $receiptRepository;
+
+    public function __construct(ReceiptRepository $receiptRepository)
+    {
+        $this->receiptRepository = $receiptRepository;
+    }
+    #[Route('/facture', name: 'app_facture')]
+    public function fac(): Response
+    {
+        // Retrieve the receipt from the database using the ID
+        $receipt = $this->receiptRepository->findOneBy(['reservation' => 74]);
+
+        if (!$receipt) {
+            throw $this->createNotFoundException('The receipt does not exist');
+        }
+
+        // Prepare receipt data
+        $receiptData = [
+            'receiptNumber' => $receipt->getNumber(),
+            'amount' => $receipt->getReservation()->getPrix(),
+            'paymentDate' => $receipt->getPaymentDate(),
+            'reservation' => $receipt->getReservation(),
+        ];
+        return $this->render('video/facture.html.twig', [
+            'receipt' =>$receiptData,
+
         ]);
     }
 

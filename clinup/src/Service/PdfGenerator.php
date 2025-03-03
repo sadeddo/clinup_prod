@@ -30,7 +30,7 @@ class PdfGenerator
         ]);
 
         $dompdf->loadHtml($html);
-        $customPaperSize = array(0, 0, 400, 600);
+        $customPaperSize = array(0, 0, 470, 630);
         $dompdf->setPaper($customPaperSize);
         $dompdf->render();
 

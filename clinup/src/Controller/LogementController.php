@@ -34,8 +34,12 @@ class LogementController extends AbstractController
     #[Route('/', name: 'app_logement_index', methods: ['GET'])]
     public function index(LogementRepository $logementRepository, Security $security): Response
     {
+        $user = $security->getUser();
+        // Count user's current properties using the new repository method
+        $currentLogementCount = $logementRepository->countLogementsByHote($user);
         return $this->render('logement/index.html.twig', [
             'logements' => $logementRepository->findBy(['hote' => $security->getUser()]),
+            'currentLogementCount' => $currentLogementCount,
         ]);
     }
 
@@ -48,7 +52,7 @@ class LogementController extends AbstractController
         // Check if user has an active subscription
         $activeSubscription = $subscriptionRepository->findActiveSubscriptionByUser($user);
         // Check if user has 1 logement and no active subscription
-        if ($currentLogementCount == 1 && !$activeSubscription) {
+        /*if ($currentLogementCount == 1 && !$activeSubscription) {
             return $this->redirectToRoute('subscription_needed');
         }
         if ($currentLogementCount == 2 && $activeSubscription && $activeSubscription->getType() === 'log2') {
@@ -56,7 +60,7 @@ class LogementController extends AbstractController
         }
         if ($currentLogementCount >= 2 && !$activeSubscription) {
             return $this->redirectToRoute('subscription_reactif');
-        }
+        }*/
         $logement = new Logement();
         $form = $this->createForm(LogementType::class, $logement);
         $form->handleRequest($request);
@@ -89,6 +93,7 @@ class LogementController extends AbstractController
 
         return $this->render('logement/new.html.twig', [
             'logement' => $logement,
+            'currentLogementCount' => $currentLogementCount,
             'form' => $form,
         ]);
     }

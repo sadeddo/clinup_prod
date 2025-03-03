@@ -10,7 +10,18 @@
         {% for stat in reservationsStats %}
           <div class="card " style="padding: 1%;background-color: #FF385C !important;color: white;margin-bottom: 2%;">
             <div class="card-inner">
-              <h4 style="font-size: 1rem;">Réservations {{ stat.reservationStatut }}:</h4>
+              <h4 style="font-size: 1rem;">
+                    Réservations 
+                    {% if stat.reservationStatut == 'confirmer' %}
+                        confirmée
+                    {% elseif stat.reservationStatut == 'Annuler' %}
+                        annulée
+                    {% elseif stat.reservationStatut == 'payer' %}
+                        payée
+                    {% elseif stat.reservationStatut == 'en attente' %}
+                        en attente
+                    {% endif %}
+                </h4>
             </div>
             <span class=" font-weight-bold">{{ stat.nombreReservations }} </span>
           </div>
@@ -70,7 +81,7 @@
             <thead class="table-dark" style="background-color: pink !important;">
                 <tr>
                     <th class="th-dash">Logement</th>
-                    <th class="th-dash">Statut</th>
+                    <th class="th-dash">Confirmée et payée</th>
                     <th class="th-dash">Montant(€)</th>
                 </tr>
             </thead>
@@ -79,7 +90,17 @@
                     {% if reservation.reservationStatut != 'en attente' and reservation.reservationStatut != 'Annuler' %}
                         <tr>
                             <td>{{ reservation.logementNom }}</td>
-                            <td>{{ reservation.reservationStatut }}</td>
+                            <td>
+                                {% if reservation.reservationStatut == 'confirmer' %}
+                                    confirmée
+                                {% elseif reservation.reservationStatut == 'Annuler' %}
+                                    annulée
+                                {% elseif reservation.reservationStatut == 'payer' %}
+                                    payée
+                                {% elseif reservation.reservationStatut == 'en attente' %}
+                                    en attente
+                                {% endif %}
+                            </td>
                             <td>{{ reservation.totalMontant }} €</td>
                         </tr>
                     {% endif %}

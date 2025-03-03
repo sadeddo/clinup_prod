@@ -16,7 +16,9 @@
             {% endfor %}
             </div>
             <div class="col-auto" style="font-size: 1.5rem;">
-                <a class="btn btn-secondary" href="{{ path('app_logement_new') }}">Ajouter un logement</a>
+                {% if currentLogementCount == 0 %}
+                    <a class="btn btn-secondary" href="{{ path('app_logement_new') }}">Ajouter un logement</a>
+                {% endif %}
             </div>
         </div><br>
         {% for logement in logements %}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Facture N° {{ receipt.receiptNumber }}</title>
     <style>
-        body { font-family: Arial, sans-serif; font-size: 12px; color: #333; }
+        body { font-family: Arial, sans-serif; font-size: 12px; color: #333;width: 40%;margin:auto; }
         header, footer { text-align: center; margin-bottom: 20px; }
         .address { width: 43%; display: inline-block; vertical-align: top; }
         .details, table { width: 100%; margin-top: 20px; border-collapse: collapse; }
@@ -31,7 +31,6 @@
         <div class="address" style="text-align: right;">
             <strong>{{ receipt.reservation.logement.hote.firstname }} {{ receipt.reservation.logement.hote.lastname }}</strong><br>
             {{ receipt.reservation.logement.adresse }}<br>
-            
         </div>
     </section><br>
 
