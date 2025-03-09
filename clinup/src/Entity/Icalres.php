@@ -13,11 +13,11 @@ class Icalres
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $dtStart = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $dtStart = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $dtEnd = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $dtEnd = null;
 
     #[ORM\ManyToOne(inversedBy: 'icalres')]
     private ?Logement $logement = null;
@@ -31,29 +31,44 @@ class Icalres
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prix = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+private ?string $uid = null;
+
+public function getUid(): ?string
+{
+    return $this->uid;
+}
+
+public function setUid(?string $uid): static
+{
+    $this->uid = $uid;
+    return $this;
+}
+
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDtStart(): ?string
+    public function getDtStart(): ?\DateTime
     {
         return $this->dtStart;
     }
 
-    public function setDtStart(?string $dtStart): static
+    public function setDtStart(?\DateTime $dtStart): static
     {
         $this->dtStart = $dtStart;
 
         return $this;
     }
 
-    public function getDtEnd(): ?string
+    public function getDtEnd(): ?\DateTime
     {
         return $this->dtEnd;
     }
 
-    public function setDtEnd(?string $dtEnd): static
+    public function setDtEnd(?\DateTime $dtEnd): static
     {
         $this->dtEnd = $dtEnd;
 

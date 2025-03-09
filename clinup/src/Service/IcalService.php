@@ -39,12 +39,14 @@ class IcalService {
             $summary = $event->SUMMARY->getValue();
             $startTime = $event->DTSTART->getDateTime()->format('Y-m-d');
             $endTime = $event->DTEND->getDateTime()->format('Y-m-d');
+            $uid = $event->UID->getValue();
 
             // Ajouter la réservation à la liste
             $reservations[] = [
                 'summary' => $summary,
                 'start_time' => $startTime,
                 'end_time' => $endTime,
+                'UID' => $uid
             ];
         }
 

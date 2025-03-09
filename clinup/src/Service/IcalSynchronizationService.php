@@ -26,11 +26,9 @@ class IcalSynchronizationService
     {
         $logements = $this->logementRepository->findAll();
         foreach ($logements as $logement) {
-            // Synchronisation pour Airbnb
             if ($logement->getAirbnb()) {
                 $this->processReservationsForLink($logement, $logement->getAirbnb());
             }
-            // Synchronisation pour Booking
             if ($logement->getBooking()) {
                 $this->processReservationsForLink($logement, $logement->getBooking());
             }
@@ -39,34 +37,63 @@ class IcalSynchronizationService
     }
 
     private function processReservationsForLink(Logement $logement, ?string $link): void
+{
+    $reservations = $this->icalService->getReservationsFromIcal($link);
+    if (!is_array($reservations) && !$reservations instanceof \Traversable) {
+        return;
+    }
+
+    foreach ($reservations as $reservationData) {
+        if (strpos($reservationData['summary'], 'Not available') !== false) {
+            continue; // Ignore les indisponibilités
+        }
+
+        $start = new \DateTime($reservationData['start_time']);
+        $end = new \DateTime($reservationData['end_time']);
+        $uid = $reservationData['UID'];
+
+        // Vérifier si la réservation existe déjà en BDD via l'UID
+        $existingReservation = $this->icalresRepository->findOneBy(['uid' => $uid]);
+
+        if ($existingReservation) {
+            // Mise à jour des dates en cas de modification
+            $existingReservation->setDtStart($start);
+            $existingReservation->setDtEnd($end);
+        } else {
+            // Créer une nouvelle réservation si elle n'existe pas
+            $reservation = new Icalres();
+            $reservation->setLogement($logement);
+            $reservation->setDtStart($start);
+            $reservation->setDtEnd($end);
+            $reservation->setNbrHeure("1h30");
+            $reservation->setPrix("35");
+            $reservation->setStatut('0');
+            $reservation->setUid($uid);
+            $this->entityManager->persist($reservation);
+        }
+    }
+
+    $this->entityManager->flush();
+}
+
+
+    public function cleanOldReservations(Logement $logement, array $newReservations)
     {
-        // Get reservations from the iCal link
-        $reservations = $this->icalService->getReservationsFromIcal($link);
+        $existingReservations = $this->icalresRepository->findBy(['logement' => $logement]);
 
-        // Ensure $reservations is iterable before proceeding
-        if (is_array($reservations) || $reservations instanceof \Traversable) {
-            foreach ($reservations as $reservationData) {
-                $existingReservation = $this->icalresRepository->findOneBy([
-                    'logement' => $logement,
-                    'dtStart' => $reservationData['start_time'],
-                    'dtEnd' => $reservationData['end_time'],
-                ]);
-
-                // Create new reservation if it doesn't exist
-                if (!$existingReservation) {
-                    $reservation = new Icalres();
-                    $reservation->setLogement($logement);
-                    $reservation->setDtStart($reservationData['start_time']);
-                    $reservation->setDtEnd($reservationData['end_time']);
-                    $reservation->setNbrHeure("1h30");
-                    $reservation->setPrix("35");
-                    $reservation->setStatut('0');
-                    $this->entityManager->persist($reservation);
+        foreach ($existingReservations as $existing) {
+            $found = false;
+            foreach ($newReservations as $reservation) {
+                if ($existing->getDtStart()->format('Y-m-d H:i:s') === $reservation['start_time'] &&
+                    $existing->getDtEnd()->format('Y-m-d H:i:s') === $reservation['end_time']) {
+                    $found = true;
+                    break;
                 }
             }
-        } else {
-            // Handle the case where $reservations is not valid (log or throw an exception)
-            // Log or throw exception here if necessary
+            if (!$found) {
+                $this->entityManager->remove($existing);
+            }
         }
+        $this->entityManager->flush();
     }
 }
