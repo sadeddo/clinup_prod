@@ -1,0 +1,75 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Tous les Prestataires{% endblock %}
+
+{% block body %}
+ <main class="main-container">
+  
+        <div class="container" style="width:99%;background-color:white;margin:auto;border-radius: 4px;margin-top: 2%;height: auto;">
+    <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes demandes de prestations</strong>
+    
+    <div class="row">
+        {% for prestataire in prestataires %}
+            <div class="col-md-3" style="margin-top:2%;">
+                <div class="card shadow-sm">
+                    <div class="image-container position-relative">
+                        {% set initials = prestataire.firstname|slice(0, 1)|upper ~ prestataire.lastname|slice(0, 1)|upper %}
+
+                        {% if prestataire.picture %}
+                            <img src="{{ app.request.basepath }}/img/{{ prestataire.picture }}" 
+                                 class="card-img-top" 
+                                 alt="{{ prestataire.firstname }} Image">
+                        {% else %}
+                            <div style="width: 100%; 
+                                        aspect-ratio: 16/9;
+                                        background-color: #f1f1f1; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center;
+                                        color: #0e0147;
+                                        font-weight: bold;
+                                        font-size: 2rem;"
+                                 class="card-img-top">
+                                {{ initials }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="card-title mb-0">{{ prestataire.firstname }} {{ prestataire.lastname }}</h6>
+                            </div>
+                        </div>
+                     
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% set total_rating = 0 %}
+                            {% set nb_comments = prestataire.commentPrestas|length %}
+                            {% for comment in prestataire.commentPrestas %}
+                                {% set total_rating = total_rating + comment.evaluation %}
+                            {% endfor %}
+                            {% set average_rating = nb_comments > 0 ? (total_rating / nb_comments)|number_format(1) : '0.0' %}
+
+                            <span class="text-muted">
+                                {{ average_rating }} ★ 
+                                {% if nb_comments > 999 %}
+                                    ({{ (nb_comments/1000)|number_format(1) }}k+)
+                                {% else %}
+                                    ({{ nb_comments }})
+                                {% endif %}
+                            </span>
+
+                            <a href="{{ path('app_tous_prestataires_consulter',{'id':prestataire.id})}}" >
+                                <button class="btn btn-outline-primary btn-sm">Consulter</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center">Aucun prestataire vérifié disponible.</p>
+        {% endfor %}
+    </div>
+</div>
+</main>
+{% endblock %}

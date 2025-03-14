@@ -72,4 +72,14 @@ public function findByRole($role)
         ->getQuery()
         ->getResult();
 }
+public function findVerifiedPrestataires(): array {
+    return $this->createQueryBuilder('u')
+        ->where('u.roles LIKE :role')
+        ->andWhere('u.isVerified = :verified')
+        ->setParameter('role', '%ROLE_PRESTATAIRE%')
+        ->setParameter('verified', true)
+        ->getQuery()
+        ->getResult();
+}
+
 }
