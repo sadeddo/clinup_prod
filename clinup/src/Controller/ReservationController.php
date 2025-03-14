@@ -169,7 +169,7 @@ class ReservationController extends AbstractController
         $res = $icalresRepository->findOneBy(['id' => $id]);
         $reservation = new Reservation();
         $reservation->setLogement($res->getLogement());
-        $reservation->setDate(new DateTime($res->getDtEnd()));
+        $reservation->setDate($res->getDtEnd());
         $reservation->setHeure(new DateTime('11:00:00'));
         if ($res->getNbrHeure() === null) {
             $reservation->setNbrHeure('1h30');
