@@ -18,6 +18,8 @@
                         annulée
                     {% elseif stat.reservationStatut == 'payer' %}
                         payée
+                    {% elseif stat.reservationStatut == 'refusée' %}
+                        refusée
                     {% elseif stat.reservationStatut == 'en attente' %}
                         en attente
                     {% endif %}
@@ -81,7 +83,7 @@
             <thead class="table-dark" style="background-color: pink !important;">
                 <tr>
                     <th class="th-dash">Logement</th>
-                    <th class="th-dash">Confirmée et payée</th>
+                    <th class="th-dash">Statut</th>
                     <th class="th-dash">Montant(€)</th>
                 </tr>
             </thead>
@@ -95,6 +97,8 @@
                                     confirmée
                                 {% elseif reservation.reservationStatut == 'Annuler' %}
                                     annulée
+                                {% elseif reservation.reservationStatut == 'refusée' %}
+                                    refusée
                                 {% elseif reservation.reservationStatut == 'payer' %}
                                     payée
                                 {% elseif reservation.reservationStatut == 'en attente' %}

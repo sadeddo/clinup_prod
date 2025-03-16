@@ -299,38 +299,64 @@ class ReservationController extends AbstractController
         $comment = new Postuler();
         $form = $this->createForm(PostInvitType::class, $comment);
         $form->handleRequest($request);
-
+        $hoteId = $reservation->getLogement()->getHote()->getId();
+        $prestataireId = $security->getUser()->getId();
+        $invitExists = $entityManager->getRepository(Invit::class)->existsInvit($hoteId, $prestataireId);
         if ($form->isSubmitted() && $form->isValid()) {
+            $date = new \DateTime('now', new DateTimeZone('Europe/Paris'));
+            $currentDate = new \DateTime();
             ///les modiif
             $rep = $form->getData()->getComment();
             if ($rep == 'Je ne suis pas disponible') {
-                $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
-                foreach($dispos as $dispo){
-                    $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+                if ($invitExists && $reservation->getIdIntent() !== 'direct') {
+                    $dispos = $this->getAvailablePrestataires($reservation, $entityManager);
+                    foreach($dispos as $dispo){
+                        $this->notifyPrestataire($dispo, $reservation, $notificationService, $notifService);
+                    }
+                    $comment->setCreatedAt($date);
+                    $comment->setPrestataire($security->getUser());
+                    $comment->setReservation($reservation);
+                    $entityManager->persist($comment);
+                    $entityManager->flush();
+                    
+                    $notificationService->sendEmail(
+                        $reservation->getLogement()->getHote()->getEmail(),
+                        'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
+                        'email/prestaPostule.html.twig',
+                        [
+                            'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
+                            
+                        ]
+                    );
+                    $notifService->createNotification(
+                        $reservation->getLogement()->getHote(),
+                        'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
+                        '/reservation/hote/'.$reservation->getId().'/postulers'
+            
+                    );
+                    $this->addFlash('success', 'Votre réponse a été envoyée avec succès !');
+                } elseif($reservation->getIdIntent() === 'direct') {
+                    $reservation->setStatut('refusée');
+                    $entityManager->flush();
+            
+                    $notificationService->sendEmail(
+                        $reservation->getLogement()->getHote()->getEmail(),
+                        'Votre réservation a été refusée par votre prestataire le'.' '.$currentDate->format('d-m-Y'),
+                        'email/prestaRefus.html.twig',
+                        [
+                            'user' => $reservation->getLogement()->getHote(),
+                            'reservation' => $reservation
+                        ]
+                    );
+            
+                    $notifService->createNotification(
+                        $reservation->getLogement()->getHote(),
+                        'Votre réservation a été refusée.',
+                        '/reservation/hote/'.$reservation->getId().'/postulers'
+                    );
+            
+                    $this->addFlash('error', 'Vous avez refusé cette réservation.');
                 }
-                $date = new \DateTime('now', new DateTimeZone('Europe/Paris'));
-                $comment->setCreatedAt($date);
-                $comment->setPrestataire($security->getUser());
-                $comment->setReservation($reservation);
-                $entityManager->persist($comment);
-                $entityManager->flush();
-                $currentDate = new \DateTime();
-                $notificationService->sendEmail(
-                    $reservation->getLogement()->getHote()->getEmail(),
-                    'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
-                    'email/prestaPostule.html.twig',
-                    [
-                        'user' => $reservation->getLogement()->getHote(), // Objet ou tableau contenant les informations de l'utilisateur
-                        
-                    ]
-                );
-                $notifService->createNotification(
-                    $reservation->getLogement()->getHote(),
-                    'Nouvelle réponse pour Votre Réservation le'.' '.$currentDate->format('d-m-Y'),
-                    '/reservation/hote/'.$reservation->getId().'/postulers'
-        
-                );
-                $this->addFlash('success', 'Votre réponse a été envoyée avec succès !');
             }elseif ($rep == 'Je suis disponible') {
                 $prestataire = $security->getUser();
                 $reservation->setStatut('confirmer');
@@ -378,9 +404,6 @@ class ReservationController extends AbstractController
         $postulation = $entityManager->getRepository(Postuler::class)
         ->findOneBy(['reservation' => $reservation, 'prestataire' => $security->getUser()]);
         //if invit
-        $hoteId = $reservation->getLogement()->getHote()->getId();
-        $prestataireId = $security->getUser()->getId();
-        $invitExists = $entityManager->getRepository(Invit::class)->existsInvit($hoteId, $prestataireId);
         $video = $videoRepository->findOneBy(['reservation' => $reservation]);
         return $this->render('reservation/showP.html.twig', [
             'comment' => $comment,

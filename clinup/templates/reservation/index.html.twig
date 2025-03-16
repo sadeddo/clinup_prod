@@ -106,6 +106,10 @@
                                                 <div class="col-md-2 alert alert-warning annuler" role="alert">
                                                     <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Annulée
                                                 </div>
+                                            {% elseif reservation.statut == "refusée" %}
+                                                <div class="col-md-2 alert alert-warning annuler" role="alert">
+                                                    <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(255, 28, 63);"></i>  Refusée
+                                                </div>
                                             {% elseif reservation.statut == "payer" %}
                                                 <div class="col-md-2 alert alert-warning payer" role="alert">
                                                     <i class="bi bi-circle-fill" style="font-size:8px;color:rgb(60, 196, 39);"></i>  Payée

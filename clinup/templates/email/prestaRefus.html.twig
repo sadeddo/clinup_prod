@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation Refusée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3d4465;
+            background-color: #ffffff;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1, p, a {
+            text-align: left;
+        }
+        a {
+            background-color: rgb(255, 56, 92);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            h1, p, a {
+                font-size: 14px;
+            }
+            a {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Votre Réservation a été Refusée</h1>
+    <p>Bonjour {{ user.firstname }},</p>
+    <p>Nous souhaitons vous informer que votre réservation prévue pour le <strong>{{ reservation.date|date('d-m-Y') }}</strong> a été refusée par le prestataire.</p>
+    <p>Si vous souhaitez trouver un autre prestataire disponible pour cette date, nous vous invitons à explorer notre plateforme et à soumettre une nouvelle demande.</p>
+    <p>Vous pouvez consulter les détails de votre réservation et rechercher un autre prestataire en cliquant sur le lien ci-dessous :</p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td align="center">
+                    <a href="https://clinup.fr" target="_blank">Voir ma Réservation</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Nous restons à votre disposition pour toute assistance.</p>
+    <p>Cordialement,</p>
+    <div style="display: flex; align-items: center;">
+        <p>L'équipe de </p>
+        <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
+    </div>
+</div>
+</body>
+</html>
