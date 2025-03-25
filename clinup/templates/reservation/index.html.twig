@@ -22,7 +22,8 @@
                     </div><br>
                     <div class="row">
                         {% for logement in logements %}
-                            {% for res in logement.icalres %}
+                            {% set sortedIcalres = logement.icalres|filter(res => res.dtEnd > now and res.statut != "1")|sort((a, b) => a.dtEnd <=> b.dtEnd) %}
+                            {% for res in sortedIcalres %}
                             {% if res.dtEnd > now and res.statut != "1" %}
                             <div class="col-md-6">
                             <div class="card">

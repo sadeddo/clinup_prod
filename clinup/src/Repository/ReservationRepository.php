@@ -56,9 +56,13 @@ public function findReservationsByPrestataire($prestataireId)
         ->join('r.logement', 'l')
         ->where('l.hote = :prestataireId')
         ->setParameter('prestataireId', $prestataireId)
+        ->orderBy('r.date', 'DESC')
+        ->addOrderBy('r.heure', 'DESC')
         ->getQuery()
         ->getResult();
 }
+
+
 public function findReservationsByHote($prestataireId)
 {
     return $this->createQueryBuilder('l')
