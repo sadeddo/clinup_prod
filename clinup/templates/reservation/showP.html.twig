@@ -14,6 +14,9 @@
             {% if reservation.statut == "en attente" and hasApplied != null %}
                 <div class="alert alert-warning">Vous avez déjà postulé à cette offre.</div>
             {% endif %}
+            {% if reservation.prestataire.id == app.user.id %}
+                <div class="alert alert-danger">Cette réservation a déjà été confirmée par un autre prestataire</div>
+            {% endif %}
             {% if reservation.statut == "confirmer" and reservation.prestataire.id == app.user.id %}
             <h5 class="titree">Résultats des tâches</h5>
                     <div class="card">
