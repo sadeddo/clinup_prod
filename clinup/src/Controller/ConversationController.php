@@ -84,40 +84,49 @@ class ConversationController extends AbstractController
     }
     //
     #[Route('/conversation/{id}', name: 'app_conversation_id')]
-    public function createConversation(int $id,ConversationRepository $conversationRepository,Security $security,EntityManagerInterface $em): Response
-    {
+    public function createConversation(
+        int $id,
+        ConversationRepository $conversationRepository,
+        Security $security,
+        EntityManagerInterface $em
+    ): Response {
         $userId = $security->getUser()->getId();
-        $conversation = $em->getRepository(Conversation::class)->createQueryBuilder('c')
-            ->where('c.participant1 = :user1Id')
-            ->orWhere('c.participant1 = :user2Id')
-            ->andWhere('c.participant2 = :user2Id')
-            ->orWhere('c.participant2 = :user1Id')
-            ->andWhere('c.participant1 != c.participant2')
+    
+        $conversation = $em->getRepository(Conversation::class)
+            ->createQueryBuilder('c')
+            ->where('(c.participant1 = :user1Id AND c.participant2 = :user2Id)')
+            ->orWhere('(c.participant1 = :user2Id AND c.participant2 = :user1Id)')
             ->setParameter('user1Id', $userId)
             ->setParameter('user2Id', $id)
             ->getQuery()
             ->getOneOrNullResult();
+    
         if ($conversation) {
-            // La conversation existe déjà, redirigez l'utilisateur vers la conversation existante
-            return $this->redirectToRoute('app_messages_show', ['id' => $conversation->getId(),'idrecipiant' => $id]);
-        }else{
-            $user1 = $em->getRepository(User::class)->find($userId);
-            $user2 = $em->getRepository(User::class)->find($id);
-            if (!$user1 || !$user2) {
-                throw $this->createNotFoundException('Les utilisateurs spécifiés nexistent pas.');
-            }
-            // Créez une nouvelle instance de Conversation
-            $newConversation = new Conversation();
-            $newConversation->setParticipant1($user1);
-            $newConversation->setParticipant2($user2);
-
-            $em->persist($newConversation);
-            $em->flush();
-            return $this->redirectToRoute('app_messages_show', ['id' => $newConversation->getId(),'idrecipiant' => $id]);
+            return $this->redirectToRoute('app_messages_show', [
+                'id' => $conversation->getId(),
+                'idrecipiant' => $id
+            ]);
         }
-        return $this->render('conversation/index.html.twig', [
+    
+        $user1 = $em->getRepository(User::class)->find($userId);
+        $user2 = $em->getRepository(User::class)->find($id);
+    
+        if (!$user1 || !$user2) {
+            throw $this->createNotFoundException('Les utilisateurs spécifiés n\'existent pas.');
+        }
+    
+        $newConversation = new Conversation();
+        $newConversation->setParticipant1($user1);
+        $newConversation->setParticipant2($user2);
+    
+        $em->persist($newConversation);
+        $em->flush();
+    
+        return $this->redirectToRoute('app_messages_show', [
+            'id' => $newConversation->getId(),
+            'idrecipiant' => $id
         ]);
-    }
+    }    
     /*
     #[Route('/{idConversation}/{idrecipiant}/message', name: 'app_message')]
     public function message(int $idConversation,int $idrecipiant,EntityManagerInterface $entityManager,Request $request,Security $security): Response
