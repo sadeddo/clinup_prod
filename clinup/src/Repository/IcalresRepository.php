@@ -45,4 +45,17 @@ class IcalresRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findUpcomingUnnotifiedReservations(\DateTimeInterface $from, \DateTimeInterface $to): array
+{
+    return $this->createQueryBuilder('r')
+        ->join('r.logement', 'l')
+        ->where('r.statut = :statut')
+        ->andWhere('r.dtStart BETWEEN :from AND :to')
+        ->setParameter('statut', 0)
+        ->setParameter('from', $from)
+        ->setParameter('to', $to)
+        ->getQuery()
+        ->getResult();
+}
+
 }

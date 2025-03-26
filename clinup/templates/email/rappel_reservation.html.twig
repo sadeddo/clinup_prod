@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Préparation au départ du voyageur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #3d4465;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            color: rgb(255, 56, 92);
+        }
+        .btn {
+            background-color: rgb(255, 56, 92);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+        }
+        .footer h2 {
+            color: rgb(255, 56, 92);
+            margin-left: 5px;
+        }
+         a {
+            background-color: rgb(255, 56, 92);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Anticipez le départ de votre voyageur</h1>
+
+    <p>Bonjour {{ hote.firstname }},</p>
+
+    <p>
+        Une réservation dans votre logement <strong>{{ logement.nom }}</strong>
+        approche de sa fin prévue le <strong>{{ reservation.dtEnd|date('d/m/Y') }}</strong>.
+    </p>
+
+    <p>
+        Pensez à réserver un prestataire de ménage afin de préparer le logement pour l'arrivée du prochain voyageur.
+    </p>
+
+    <p style="margin-top: 20px;">
+        <a href="https://clinup.fr" target="_blank">
+            Réserver un prestataire
+        </a>
+    </p>
+
+    <p style="margin-top: 30px;">Merci pour votre confiance,</p>
+
+    <div class="footer">
+        <p>L’équipe</p><h2>ClinUp</h2>
+    </div>
+</div>
+</body>
+</html>
