@@ -29,7 +29,8 @@
 
                             {% for res in sortedIcalres %}
                             {% set dtEnd = res.dtEnd|date('Y-m-d')|date %}
-                            {% if dtEnd > "now"|date and res.statut != "1" %}
+{% if dtEnd > now and res.statut != "1" %}
+
 
                             <div class="col-md-6">
                             <div class="card">
