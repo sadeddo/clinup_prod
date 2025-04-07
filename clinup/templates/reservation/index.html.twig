@@ -22,9 +22,15 @@
                     </div><br>
                     <div class="row">
                         {% for logement in logements %}
-                            {% set sortedIcalres = logement.icalres|filter(res => res.dtEnd > now and res.statut != "1")|sort((a, b) => a.dtEnd <=> b.dtEnd) %}
+                           {% set sortedIcalres = logement.icalres
+                                |filter(res => res.dtEnd|date('Y-m-d')|date > "now"|date and res.statut != "1")
+                                |sort((a, b) => a.dtEnd <=> b.dtEnd)
+                                %}
+
                             {% for res in sortedIcalres %}
-                            {% if res.dtEnd > now and res.statut != "1" %}
+                            {% set dtEnd = res.dtEnd|date('Y-m-d')|date %}
+                            {% if dtEnd > "now"|date and res.statut != "1" %}
+
                             <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
