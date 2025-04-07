@@ -22,71 +22,75 @@
                     </div><br>
                     <div class="row">
                         {% for logement in logements %}
-                           {% set sortedIcalres = logement.icalres
-                                |filter(res => res.dtEnd|date('Y-m-d')|date > "now"|date and res.statut != "1")
-                                |sort((a, b) => a.dtEnd <=> b.dtEnd)
-                                %}
+  {# On filtre manuellement ici car le tri avec |sort ne marche pas après un filter complexe #}
+  {% set filteredIcalres = [] %}
+  {% for res in logement.icalres %}
+    {% if res.dtEnd is not null %}
+      {% set dtEnd = res.dtEnd|date('U') %}
+      {% set dtNow = now|date('U') %}
+      {% if dtEnd > dtNow and res.statut != "1" %}
+        {% set filteredIcalres = filteredIcalres|merge([res]) %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
 
-                            {% for res in sortedIcalres %}
-                            {% set dtEnd = res.dtEnd|date('Y-m-d')|date %}
-{% if dtEnd > now and res.statut != "1" %}
-<p>dtEnd: {{ dtEnd|date('Y-m-d') }}, now: {{ now|date('Y-m-d') }}</p>
+  {% set sortedIcalres = filteredIcalres|sort((a, b) => a.dtEnd <=> b.dtEnd) %}
 
+  {% for res in sortedIcalres %}
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6 me-auto">
+              <strong class="card-title log">{{ logement.nom }}</strong>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn1 btn-secondary" href="{{ path('app_icalres_edit', {'id': res.id}) }}">Modifier</a>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-secondary" href="{{ path('app_reservation_new', {'id': res.id}) }}">Publier</a>
+            </div>
+          </div>
+          <div class="row" style="margin: auto; margin-top: 1rem;">
+            <div class="col-md-auto" style="margin-bottom: 5%;">
+              <div class="card">
+                <div class="card-body b">
+                  <h6 class="res-d">Départ</h6>
+                  <h6 class="res-d2">{{ res.dtEnd|date('j M. Y') }}</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto" style="margin-bottom: 5%;">
+              <div class="card">
+                <div class="card-body b">
+                  <h6 class="res-d">Heure</h6>
+                  <h6 class="res-d2">11h30min</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto" style="margin-bottom: 5%;">
+              <div class="card">
+                <div class="card-body b">
+                  <h6 class="res-d">Durée</h6>
+                  <h6 class="res-d2">{{ res.nbrHeure ?? '1h30' }}min</h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto" style="margin-bottom: 5%;">
+              <div class="card">
+                <div class="card-body b">
+                  <h6 class="res-d">Montant</h6>
+                  <h6 class="res-d2">{{ res.prix ?? '35' }}€</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endfor %}
 
-                            <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-6 me-auto">
-                                            <strong class="card-title log">{{ logement.nom }}</strong>
-                                        </div>
-                                        <div class="col-auto">
-                                            <a  class="btn btn1 btn-secondary" href="{{ path('app_icalres_edit',{'id':res.id}) }}" type="button">Modifier</a>
-                                        </div>
-                                        <div class="col-auto">
-                                            <a  class="btn btn-secondary" href="{{ path('app_reservation_new',{'id':res.id}) }}" type="button">Publier</a>
-                                        </div>
-                                    </div></br>
-                                    <div class="row" style="margin: auto;">
-                                        <div class="col-md-auto" style="margin-bottom: 5%;">
-                                            <div class="card ">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Départ</h6>
-                                                    <h6 class="res-d2">{{ res.dtEnd ? res.dtEnd|date('j M. Y') : '' }} </h6>
-                                                </div>
-                                            </div>
-                                        </div><br>
-                                        <div class="col-md-auto" style="margin-bottom: 5%;"> 
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Heure</h6>
-                                                    <h6 class="res-d2">11h30min</h6>
-                                                </div>
-                                            </div>
-                                        </div><br>
-                                        <div class="col-md-auto" style="margin-bottom: 5%;">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Durée</h6>
-                                                    <h6 class="res-d2">{{ res.nbrHeure is not null ? res.nbrHeure : '1h30'}}min</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-auto" style="margin-bottom: 5%;">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Montant</h6>
-                                                    <h6 class="res-d2">{{ res.prix is not null ? res.prix : '35'}}€</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        {% endfor %}
                     </div>
                     <div class="row">
                     {% if reservations|length > 0 %}
