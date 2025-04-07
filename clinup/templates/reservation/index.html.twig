@@ -30,6 +30,7 @@
                             {% for res in sortedIcalres %}
                             {% set dtEnd = res.dtEnd|date('Y-m-d')|date %}
 {% if dtEnd > now and res.statut != "1" %}
+<p>dtEnd: {{ dtEnd|date('Y-m-d') }}, now: {{ now|date('Y-m-d') }}</p>
 
 
                             <div class="col-md-6">
