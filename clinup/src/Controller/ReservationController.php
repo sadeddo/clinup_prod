@@ -77,7 +77,7 @@ class ReservationController extends AbstractController
             'reservations' => $reservations,
             'counts' => $counts,
             'cible' => '',
-            'now' => $currentDate->format('Y-m-d'),
+            'now' => new \DateTime(),
             'logements' => $logements
         ]);
     }
@@ -915,7 +915,7 @@ public function annuler(Request $request, Reservation $reservation, EntityManage
             'form' => $form,
             'cible' => 'addReservation',
             'counts' => $counts,
-            'now' => $currentDate->format('Y-m-d'),
+            'now' => new \DateTime(),
         ]);
     }
     //button pour envoyer aux autres prestataires

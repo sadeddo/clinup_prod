@@ -47,7 +47,7 @@ class IcalresController extends AbstractController
             'logements' => $logementRepository->findBy(['hote' => $security->getUser()]),
             "cible" => "modifierIcal",
             'form' => $form,
-            'now' => $currentDate->format('Y-m-d'),
+            'now' => new \DateTime(),
             'reservations' => $reservations,
             'counts' => $counts,
         ]);
