@@ -34,6 +34,9 @@ class Icalres
     #[ORM\Column(length: 255, unique: true)]
 private ?string $uid = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $heure = null;
+
 public function getUid(): ?string
 {
     return $this->uid;
@@ -119,6 +122,18 @@ public function setUid(?string $uid): static
     public function setPrix(?string $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getHeure(): ?string
+    {
+        return $this->heure;
+    }
+
+    public function setHeure(?string $heure): static
+    {
+        $this->heure = $heure;
 
         return $this;
     }

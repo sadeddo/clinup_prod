@@ -74,6 +74,7 @@ class IcalSynchronizationService
                 $reservation->setDtEnd($end);
                 $reservation->setNbrHeure("1h30");
                 $reservation->setPrix("35");
+                $reservation->setHeure("11h30");
                 $reservation->setStatut('0');
                 $reservation->setUid($uid);
                 $this->entityManager->persist($reservation);
