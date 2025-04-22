@@ -45,18 +45,16 @@ class IcalSynchronizationService
         $reservations = $this->icalService->getReservationsFromIcal($link);
     
         if (!is_iterable($reservations)) {
-            // Optionnel : logger un warning ici
             return;
         }
     
-        foreach ($reservations as $reservationData) {
-            if (
-                !isset($reservationData['summary'], $reservationData['start_time'], $reservationData['end_time'], $reservationData['UID'])
-            ) {
-                continue;
-            }
+        $isFromBooking = str_contains($link, 'booking.com'); // Détection Booking
     
-            if (strpos($reservationData['summary'], 'Not available') !== false) {
+        foreach ($reservations as $reservationData) {
+            $summary = $reservationData['summary'] ?? '';
+    
+            // Si ce n'est pas Booking ET le résumé indique une indisponibilité => on ignore
+            if (!$isFromBooking && str_contains(strtolower($summary), 'not available')) {
                 continue;
             }
     
@@ -85,7 +83,6 @@ class IcalSynchronizationService
         $this->entityManager->flush();
     }
     
-
 
     public function cleanOldReservations(Logement $logement, array $newReservations)
     {
