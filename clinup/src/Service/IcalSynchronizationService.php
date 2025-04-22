@@ -37,44 +37,54 @@ class IcalSynchronizationService
     }
 
     private function processReservationsForLink(Logement $logement, ?string $link): void
-{
-    $reservations = $this->icalService->getReservationsFromIcal($link);
-    if (!is_array($reservations) && !$reservations instanceof \Traversable) {
-        return;
-    }
-
-    foreach ($reservations as $reservationData) {
-        if (strpos($reservationData['summary'], 'Not available') !== false) {
-            continue; // Ignore les indisponibilités
+    {
+        if (!$link) {
+            return;
         }
-
-        $start = new \DateTime($reservationData['start_time']);
-        $end = new \DateTime($reservationData['end_time']);
-        $uid = $reservationData['UID'];
-
-        // Vérifier si la réservation existe déjà en BDD via l'UID
-        $existingReservation = $this->icalresRepository->findOneBy(['uid' => $uid]);
-
-        if ($existingReservation) {
-            // Mise à jour des dates en cas de modification
-            $existingReservation->setDtStart($start);
-            $existingReservation->setDtEnd($end);
-        } else {
-            // Créer une nouvelle réservation si elle n'existe pas
-            $reservation = new Icalres();
-            $reservation->setLogement($logement);
-            $reservation->setDtStart($start);
-            $reservation->setDtEnd($end);
-            $reservation->setNbrHeure("1h30");
-            $reservation->setPrix("35");
-            $reservation->setStatut('0');
-            $reservation->setUid($uid);
-            $this->entityManager->persist($reservation);
+    
+        $reservations = $this->icalService->getReservationsFromIcal($link);
+    
+        if (!is_iterable($reservations)) {
+            // Optionnel : logger un warning ici
+            return;
         }
+    
+        foreach ($reservations as $reservationData) {
+            if (
+                !isset($reservationData['summary'], $reservationData['start_time'], $reservationData['end_time'], $reservationData['UID'])
+            ) {
+                continue;
+            }
+    
+            if (strpos($reservationData['summary'], 'Not available') !== false) {
+                continue;
+            }
+    
+            $start = new \DateTime($reservationData['start_time']);
+            $end = new \DateTime($reservationData['end_time']);
+            $uid = $reservationData['UID'];
+    
+            $existingReservation = $this->icalresRepository->findOneBy(['uid' => $uid]);
+    
+            if ($existingReservation) {
+                $existingReservation->setDtStart($start);
+                $existingReservation->setDtEnd($end);
+            } else {
+                $reservation = new Icalres();
+                $reservation->setLogement($logement);
+                $reservation->setDtStart($start);
+                $reservation->setDtEnd($end);
+                $reservation->setNbrHeure("1h30");
+                $reservation->setPrix("35");
+                $reservation->setStatut('0');
+                $reservation->setUid($uid);
+                $this->entityManager->persist($reservation);
+            }
+        }
+    
+        $this->entityManager->flush();
     }
-
-    $this->entityManager->flush();
-}
+    
 
 
     public function cleanOldReservations(Logement $logement, array $newReservations)
