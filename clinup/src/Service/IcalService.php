@@ -28,8 +28,12 @@ class IcalService {
 
         $reservations = [];
 
-        // Parcourir les événements VEVENT
-        foreach ($vCalendar->VEVENT as $event) {
+        // Vérifier que VEVENT existe et est itérable
+if (!isset($vCalendar->VEVENT) || !is_iterable($vCalendar->VEVENT)) {
+    return []; // Aucun événement trouvé
+}
+
+foreach ($vCalendar->VEVENT as $event) {
             // Vérifier la présence des propriétés essentielles
             if (!isset($event->SUMMARY, $event->DTSTART, $event->DTEND)) {
                 continue; // Passer cet événement s'il manque des propriétés
