@@ -59,7 +59,9 @@ class ReservationController extends AbstractController
             $this->addFlash('success', 'Votre réservation a été confirmée avec succès.');
         }
         $hote = $security->getUser();
-        $reservations = $reservationRepository->findReservationsByPrestataire($hote->getId());
+        $statut = $request->query->get('statut');
+        $reservations = $reservationRepository->findReservationsByPrestataire($hote->getId(), $statut);
+
 
         $counts = [];
         foreach ($reservations as $reservation) {
@@ -506,12 +508,15 @@ class ReservationController extends AbstractController
     
     //pour la liste des reservation  pour prestataire:
     #[Route('/prestataire/consulter', name: 'app_reservation_prestataire', methods: ['GET'])]
-    public function indexP(Security $security, ReservationRepository $reservationRepository): Response
+    public function indexP(Request $request, Security $security, ReservationRepository $reservationRepository): Response
     {
         $prestataire = $security->getUser();
-        $allDemandes = $reservationRepository->findReservationsByHote($prestataire->getId());
+    $statut = $request->query->get('statut'); // récupérer filtre
+    $reservations = $reservationRepository->findReservationsByPrestataireFiltered($prestataire->getId(), $statut);
+
         return $this->render('reservation/reservationP.html.twig', [
-            'reservations' => $allDemandes,
+            'reservations' => $reservations,
+            'selectedStatut' => $statut ?? 'tous',
             'cible' => ''
         ]);
     }

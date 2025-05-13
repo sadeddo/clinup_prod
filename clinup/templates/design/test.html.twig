@@ -11,15 +11,15 @@
           <div class="card " style="padding: 1%;background-color: #FF385C !important;color: white;margin-bottom: 2%;">
             <div class="card-inner">
               <h4 style="font-size: 1rem;">
-                    Réservations 
+                    Réservation(s)
                     {% if stat.reservationStatut == 'confirmer' %}
-                        confirmée
+                        confirmée(s)
                     {% elseif stat.reservationStatut == 'Annuler' %}
-                        annulée
+                        annulée(s)
                     {% elseif stat.reservationStatut == 'payer' %}
-                        payée
+                        payée(s)
                     {% elseif stat.reservationStatut == 'refusée' %}
-                        refusée
+                        refusée(s)
                     {% elseif stat.reservationStatut == 'en attente' %}
                         en attente
                     {% endif %}

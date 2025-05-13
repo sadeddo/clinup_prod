@@ -50,17 +50,30 @@ class ReservationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-public function findReservationsByPrestataire($prestataireId)
+public function findReservationsByPrestataire($prestataireId, ?string $statut = null)
 {
-    return $this->createQueryBuilder('r')
+    // 1. Commence la requête sur la table 'r' (alias pour Reservation)
+    $qb = $this->createQueryBuilder('r')
+        // 2. Joint la table Logement pour accéder à l'hôte
         ->join('r.logement', 'l')
+        // 3. Condition : réserver uniquement les logements appartenant à cet hôte
         ->where('l.hote = :prestataireId')
-        ->setParameter('prestataireId', $prestataireId)
-        ->orderBy('r.date', 'DESC')
-        ->addOrderBy('r.heure', 'DESC')
-        ->getQuery()
-        ->getResult();
+        ->setParameter('prestataireId', $prestataireId);
+
+    // 4. Si un statut est fourni (et différent de "tous"), on filtre aussi dessus
+    if ($statut && $statut !== 'tous') {
+        $qb->andWhere('r.statut = :statut')
+           ->setParameter('statut', $statut);
+    }
+
+    // 5. Trie les résultats par date DESC, puis heure DESC
+    $qb->orderBy('r.date', 'DESC')
+       ->addOrderBy('r.heure', 'DESC');
+
+    // 6. Exécute la requête et retourne le résultat
+    return $qb->getQuery()->getResult();
 }
+
 
 
 public function findReservationsByHote($prestataireId)
@@ -240,5 +253,44 @@ public function countAndSumReservations(UserInterface $user, $logementId = null,
 
     return $qb->getQuery()->getResult();
     }
+
+    public function findReservationDetailsForWeb(UserInterface $user, ?int $logementId, ?string $startDate, ?string $endDate): array
+{
+    $qb = $this->createQueryBuilder('r')
+        ->join('r.logement', 'l')
+        ->where('l.hote = :user')
+        ->setParameter('user', $user);
+
+    if ($logementId) {
+        $qb->andWhere('l.id = :logementId')->setParameter('logementId', $logementId);
+    }
+
+    if ($startDate) {
+        $qb->andWhere('r.date >= :startDate')->setParameter('startDate', new \DateTime($startDate));
+    }
+
+    if ($endDate) {
+        $qb->andWhere('r.date <= :endDate')->setParameter('endDate', new \DateTime($endDate));
+    }
+
+    return $qb->getQuery()->getResult();
+}
+public function findReservationsByPrestataireFiltered($prestataireId, ?string $statut = null): array
+{
+    $qb = $this->createQueryBuilder('r')
+        ->join('r.logement', 'l')
+        ->where('r.prestataire = :id')
+        ->setParameter('id', $prestataireId)
+        ->orderBy('r.date', 'DESC')
+        ->addOrderBy('r.heure', 'DESC');
+
+    if ($statut && $statut !== 'tous') {
+        $qb->andWhere('r.statut = :statut')
+           ->setParameter('statut', $statut);
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
 
 }

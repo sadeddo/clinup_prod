@@ -3,6 +3,30 @@
 {% block title %}Réservations{% endblock %}
 
 {% block body %}
+<style>
+.filtre-statut {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #555;
+  font-weight: 500;
+  margin: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.filtre-statut:hover {
+  background-color: #f7f7f7;
+}
+
+.filtre-statut.active {
+  background-color: #ff385c;
+  color: #fff;
+  border-color: #ff385c;
+}
+
+
+</style>
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
         
@@ -93,6 +117,26 @@
 
                     </div>
                     <div class="row">
+            {% set statuts = {
+  'tous': 'Toutes',
+  'en attente': 'En attente',
+  'confirmer': 'Confirmées',
+  'payer': 'Payées',
+  'Annuler': 'Annulées',
+  'refusée': 'Refusées'
+} %}
+
+<div class="d-flex flex-wrap justify-content-center mb-4">
+  {% for key, label in statuts %}
+    {% set isActive = app.request.get('statut') == key or (not app.request.get('statut') and key == 'tous') %}
+    <a href="{{ path('app_reservation_index', {'statut': key}) }}"
+       class="filtre-statut {% if isActive %}active{% endif %}">
+      {{ label }}
+    </a>
+  {% endfor %}
+</div>
+
+
                     {% if reservations|length > 0 %}
                     {% for reservation in reservations %}
                        <div class="col-md-6">
@@ -147,14 +191,25 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-auto" style="margin-bottom: 5%;">
-                                            <div class="card">
-                                                <div class="card-body b">
-                                                    <h6 class="res-d">Agents intéressés</h6>
-                                                    <h6 class="res-d2">{{ counts[reservation.id] }}</h6>
+                                        {% if reservation.statut == 'en attente' %}
+                                            <div class="col-md-auto" style="margin-bottom: 5%;">
+                                                <div class="card">
+                                                    <div class="card-body b">
+                                                        <h6 class="res-d">Agents intéressés</h6>
+                                                        <h6 class="res-d2">{{ counts[reservation.id] }}</h6>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        {% else %}
+                                             <div class="col-md-auto" style="margin-bottom: 5%;">
+                                                <div class="card">
+                                                    <div class="card-body b">
+                                                        <h6 class="res-d">Montant</h6>
+                                                        <h6 class="res-d2">{{ reservation.prix }}€</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div></a>

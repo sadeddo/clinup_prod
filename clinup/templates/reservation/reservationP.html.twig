@@ -3,6 +3,29 @@
 {% block title %}Réservations{% endblock %}
 
 {% block body %}
+<style>
+.filtre-statut {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #555;
+  font-weight: 500;
+  margin: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.filtre-statut:hover {
+  background-color: #f7f7f7;
+}
+
+.filtre-statut.active {
+  background-color: #ff385c;
+  color: #fff;
+  border-color: #ff385c;
+}
+</style>
+
     <main class="main-container">
         <div class="container" style="width:95%;height: auto;">
         
@@ -10,7 +33,26 @@
                         <div class="col-auto me-auto">
                             <strong class="card-title" style="font-weight: bold;font-size:1.6rem;">Mes réservations</strong>
                         </div>
-                    </div><br>
+                    </div>
+                    {% set statuts = {
+  'tous': 'Toutes',
+  'en attente': 'En attente',
+  'confirmer': 'Confirmées',
+  'payer': 'Payées',
+  'Annuler': 'Annulées',
+  'refusée': 'Refusées'
+} %}
+
+<div class="d-flex flex-wrap justify-content-center mb-4">
+  {% for key, label in statuts %}
+    {% set isActive = selectedStatut == key or (not selectedStatut and key == 'tous') %}
+    <a href="{{ path('app_reservation_prestataire', {'statut': key}) }}"
+       class="filtre-statut {% if isActive %}active{% endif %}">
+      {{ label }}
+    </a>
+  {% endfor %}
+</div>
+
                     {% for messages in app.flashes('success') %}
                         <div class="alert alert-success">{{ messages }}</div>
                     {% endfor %}

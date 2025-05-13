@@ -116,6 +116,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $raison_sociale = null;
 
+    /**
+     * @var Collection<int, DeviceToken>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: DeviceToken::class)]
+    private Collection $deviceTokens;
+
     public function __construct()
     {
         $this->logements = new ArrayCollection();
@@ -128,6 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commentPrestas = new ArrayCollection();
         $this->invits = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->deviceTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -686,6 +693,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRaisonSociale(?string $raison_sociale): static
     {
         $this->raison_sociale = $raison_sociale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DeviceToken>
+     */
+    public function getDeviceTokens(): Collection
+    {
+        return $this->deviceTokens;
+    }
+
+    public function addDeviceToken(DeviceToken $deviceToken): static
+    {
+        if (!$this->deviceTokens->contains($deviceToken)) {
+            $this->deviceTokens->add($deviceToken);
+            $deviceToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeviceToken(DeviceToken $deviceToken): static
+    {
+        if ($this->deviceTokens->removeElement($deviceToken)) {
+            // set the owning side to null (unless already changed)
+            if ($deviceToken->getUser() === $this) {
+                $deviceToken->setUser(null);
+            }
+        }
 
         return $this;
     }
