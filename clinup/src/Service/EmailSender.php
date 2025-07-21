@@ -21,12 +21,14 @@ class EmailSender {
 
     public function sendEmail($to, $subject, $template, $context) {
         $content = $this->twig->render($template, $context);
+        $contentText = strip_tags($content);
 
         $email = (new Email())
             ->from('contact@clinup.fr')
             ->to($to)
             ->subject($subject)
-            ->html($content);
+            ->html($content)
+            ->text($contentText);
 
         try {
             $this->mailer->send($email);

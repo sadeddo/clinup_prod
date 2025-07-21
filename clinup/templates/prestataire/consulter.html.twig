@@ -1,210 +1,150 @@
 {% extends 'base1.html.twig' %}
 
-{% block title %}détails réservation{% endblock %}
+{% block title %}Détails du prestataire{% endblock %}
 
 {% block body %}
-    <main class="main-container">
-        <div class="container" style="width:95%;height: auto;">
-            <h5 class="titree">Profil d’agent : {{ presta.firstname }} {{ presta.lastname }}</h5>
-                <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-auto">
-                                    <img src="{{app.request.basepath}}/img/{{presta.picture}}" class="card-img-top rounded-circle" alt="..." style="width: 100px; height: 100px;margin:auto;">
-                                </div>
-                                <div class="col-md-8">
-                                    <div style="display:flex;"><h5 style="font-weight: 500;">{{ presta.firstname }} {{ presta.lastname }} </h5> <i style="margin-left: 1%;color:rgba(4, 112, 239, 1);"  class="bi bi-patch-check-fill"></i></div>
-                                    <p><i class="bi bi-star-fill" style="color:rgb(255, 211, 27);"></i> {{ average | number_format(1, '.', '') }}</p>
-                                   
-                                    <p class="res-d">{{ presta.description}}</p>
-                                </div>
-                                <div class="col-md-auto" style="font-weight: 600;">
-                                   <a href="{{ path('app_reservation_ajouter_direct',{'id':presta.id})}}"><button id="submit" class="btn btn-secondary">
-                                        Faire une demande
-                                    </button></a>
-                                </div>
-                            </div>
-                            <div class="row" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);">
-                                 <div class="card" style="border-radius:10px;">
-                                    <div class="card-body">
-                                        <h5 style="font-weight:600;font-size:19px;margin-bottom:3%;">Expériences</h5>
-                                        {% for experience in presta.experiences %}
-                                            <div>
-                                                <strong>{{ experience.experience }}</strong> | <small class="res-d">{{ experience.dtStart|date('Y-m') }} à {{ experience.dtEnd|date('Y-m') }}</small>
-                                                <p style="font-size: 0.9rem;">{{ experience.description }}</p>
-                                            </div>
-                                            <hr>
-                                        {% else %}
-                                            <p style="margin-left:2%;">Aucune expérience enregistrée.</p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding:var(--bs-card-spacer-y) var(--bs-card-spacer-x);">
-                                 <div class="card" style="border-radius:10px;">
-                                    <div class="card-body">
-                                        <div class="row">
-                                        <div class="col-md-11">
-                                            <h5 style="font-weight:600;font-size:19px;margin-bottom:3%;">Avis et commentaires</h5>
-                                        </div>
-                                        <div class="col-md-auto">
-                                          
-                                        </div>
-                                        </div>
-                                        {% for comment in presta.getCommentPrestas() %}
-                                                <div class="d-flex  marg">
-                                                    {% if comment.client.picture %}
-                                                        <img src="{{ app.request.basepath }}/img/{{ comment.client.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                    {% endif %}
-                                                    <div>
-                                                    <h6 class="card-title mb-0 nom">{{ comment.client.firstname }} {{ comment.client.lastname }}   <span class="">
-                                                        {% for i in 1..5 %}
-                                                            {% if i <= comment.evaluation %}
-                                                                <span style="color: gold;">★</span>
-                                                            {% else %}
-                                                                <span style="color: grey;">★</span>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                        </span></h6>
-                                                
-                                                    <div class="card-subtitle dateC">
-                                                        <span class="text-muted">{{ comment.createdAt|date('j M. Y') }} | {{ comment.createdAt|date('H:i') }}</span>
-                                                    
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                <p class="card-text mt-2 comment" style="margin-left: 5%;">{{ comment.comment }}</p>
-                                                {% if comment.reponse != null %}
-                                                <div class="d-flex  marg" style="margin-left:5%;">
-                                                    {% if comment.prestataire.picture %}
-                                                        <img src="{{ app.request.basepath }}/img/{{ comment.prestataire.picture }}" alt="Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                                                    {% endif %}
-                                                    <div>
-                                                    <h6 class="card-title mb-0 nom">Réponse de l'agent</h6>
-                                                    <p class="mt-2 comment" style="margin-left: 5%;">{{ comment.reponse }}</p>
-                                                    </div>
-                                                    </div>
-                                                {% endif %}
-
-                                        {% else %}
-                                            <p style="margin-left:2%;">Aucun commentaire enregistré.</p>
-                                        {% endfor %}
-                                    </div>
-                                    {# modal pour comment #}
-      
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-        </div>
-         {% if cible == "addReservation" %}
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="padding:2%;">
-    <div class="modal-content modal-reservation">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Poster une réservation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       <form method="post">
-                <div class="row">
-                   <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="date">Le jour</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control" id="date" name="reservation[date]"required>
-                                <span class="input-group-addon"><i class="bi bi-calendar-event"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="surface">Heure</label>
-                            <div class="input-group">
-                                <input type="time" class="form-control" id="surface" name="reservation[heure]" placeholder="Donnez une heure" required>
-                                <span class="input-group-addon"><i class="bi bi-clock"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div><br>
-                <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="surface">Durée de la prestation</label>
-                                <div id="hour-selector" class="hour-selector">
-                                    <button type="button" onclick="changeHours(-1)" class="cursur">-</button>
-                                    <input type="text" id="hourValue" name="reservation[nbrHeure]" value="1h30" readonly>
-                                    <button type="button" onclick="changeHours(1)">+</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="surface">Montant</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="prix" name="reservation[prix]" placeholder="Montant de la prestation" required>
-                            </div>
-                        </div>
-                    </div>
-                </div><br>
-                <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="completAdresse">Pour le logement</label>
-                                <div class="input-group">
-                                    {{ form_widget(form.logement) }}
-                                    <span class="input-group-addon"><i class="bi bi-chevron-down"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                </div><br>
-                <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="completAdresse">Ajouter une note (Optionnel)</label>
-                                {{ form_widget(form.description) }}
-                            </div>
-                        </div>
-                </div><br>
-                <div class="form-group col align-self-center" style="text-align: center;">
-                    <button  type="submit" class="btn btn-secondary post">Poster</button>
-                </div>
-                {{ form_row(form._token) }}
-            </form><br>
-      </div>
-    </div>
-  </div>
-  {% block scripteditEventModalIdentity %}
-                <script>
-    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
-    myModal.show();
-</script>
-<script>
-function changeHours(change) {
-    var currentValue = document.getElementById('hourValue').value;
-    var match = currentValue.match(/^(\d+)h(\d+)$/);
-    var hours = parseInt(match[1], 10);
-    var minutes = parseInt(match[2], 10);
-    
-    // Convertissez tout en minutes pour le calcul
-    var totalMinutes = hours * 60 + minutes + (change * 30); // changez par pas de 30 minutes
-
-    // Assurez-vous que la valeur reste dans un intervalle acceptable
-    if (totalMinutes < 60) totalMinutes = 60;  // Limite inférieure 1h30
-    if (totalMinutes > 300) totalMinutes = 300; // Limite supérieure 2h30
-
-    // Convertissez de nouveau en heures et minutes
-    var newHours = Math.floor(totalMinutes / 60);
-    var newMinutes = totalMinutes % 60;
-
-    // Mise à jour de la valeur de l'input
-    document.getElementById('hourValue').value = newHours + 'h' + (newMinutes < 10 ? '0' : '') + newMinutes;
+<style>
+@media (max-width: 768px) {
+    .card-body .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .card-body img {
+        width: 80px !important;
+        height: 80px !important;
+    }
 }
+</style>
+<main class="main-container py-4">
+    <div class="container-fluid px-3 px-md-5">
+        <h2 class="fw-bold mb-4">Profil d’agent : {{ presta.firstname }} {{ presta.lastname }}</h2>
+
+        <div class="card shadow-sm rounded mb-4">
+    <div class="card-body">
+        <div class="row align-items-center g-4 text-center text-md-start">
+            <div class="col-12 col-md-auto">
+                <img src="{{ asset('img/' ~ presta.picture) }}" class="rounded-circle border" style="width: 100px; height: 100px;" alt="Photo de profil">
+            </div>
+
+            <div class="col-12 col-md">
+                <div class="d-flex justify-content-center justify-content-md-start align-items-center mb-2">
+                    <h5 class="mb-0 me-2">{{ presta.firstname }} {{ presta.lastname }}</h5>
+                    <i class="bi bi-patch-check-fill text-primary"></i>
+                </div>
+                <p class="mb-1">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    {{ average | number_format(1, '.', '') }}
+                </p>
+                <p class="text-muted mb-2">{{ presta.description }}</p>
+            </div>
+
+            <div class="col-12 col-md-auto d-flex flex-column gap-2 mt-2 mt-md-0">
+                <a href="{{ path('app_reservation_ajouter_direct', {'id': presta.id}) }}" class="btn btn-secondary w-100">Faire une demande</a>
+                <a href="{{ path('app_conversation_id', {'id': presta.id}) }}" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-chat-dots"></i> Contacter
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        {# Calendrier #}
+        <div class="card shadow-sm rounded mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3">Disponibilités</h5>
+                <div style="overflow-x: auto;">
+    <div id="calendar"></div>
+</div>
+
+            </div>
+        </div>
+
+        {# Expériences #}
+        <div class="card shadow-sm rounded mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3">Expériences</h5>
+                {% for experience in presta.experiences %}
+                    <div class="mb-2">
+                        <strong>{{ experience.experience }}</strong>
+                        <small class="text-muted"> | {{ experience.dtStart|date('Y-m') }} à {{ experience.dtEnd|date('Y-m') }}</small>
+                        <p class="mb-1">{{ experience.description }}</p>
+                        <hr>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucune expérience enregistrée.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Commentaires #}
+        <div class="card shadow-sm rounded mb-4">
+            <div class="card-body">
+                <h5 class="fw-semibold mb-3">Avis et commentaires</h5>
+                {% for comment in presta.getCommentPrestas() %}
+                    <div class="d-flex mb-2">
+                        <img src="{{ asset('img/' ~ comment.client.picture) }}" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;">
+                        <div>
+                            <h6 class="mb-0">{{ comment.client.firstname }} {{ comment.client.lastname }}</h6>
+                            <div>
+                                {% for i in 1..5 %}
+                                    <span style="color: {{ i <= comment.evaluation ? 'gold' : 'grey' }}">★</span>
+                                {% endfor %}
+                            </div>
+                            <small class="text-muted">{{ comment.createdAt|date('d M Y - H:i') }}</small>
+                        </div>
+                    </div>
+                    <p class="ms-5">{{ comment.comment }}</p>
+
+                    {% if comment.reponse %}
+                        <div class="d-flex ms-5">
+                            <img src="{{ asset('img/' ~ comment.prestataire.picture) }}" class="rounded-circle me-2" style="width: 40px; height: 40px;" alt="Avatar">
+                            <div>
+                                <h6 class="mb-1">Réponse de l'agent</h6>
+                                <p>{{ comment.reponse }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <hr>
+                {% else %}
+                    <p class="text-muted">Aucun commentaire enregistré.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{# FullCalendar JS + CSS #}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+
+    const isMobile = window.innerWidth <= 768;
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: isMobile ? 'timeGridDay' : 'timeGridWeek',
+        locale: 'fr',
+        height: 'auto',
+        slotMinTime: "07:00:00",
+        slotMaxTime: "19:00:00",
+        events: {{ disposJson|raw }},
+        eventColor: '#198754',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridWeek,timeGridDay'
+        },
+        allDaySlot: false,
+        nowIndicator: true,
+        expandRows: true,
+        dayMaxEventRows: true,
+    });
+
+    calendar.render();
+});
+
 </script>
-
-                    {% endblock %}
-            {% endif %}
-    </main>
-
 {% endblock %}

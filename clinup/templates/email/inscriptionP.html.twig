@@ -1,70 +1,73 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue sur ClinUp</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #3d4465;
-            background-color: #ffffff;
-        }
-        .container {
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        h1, p, a {
-            text-align: left;
-        }
-        a {
-            background-color: rgb(255, 56, 92);
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            h1, p, a {
-                font-size: 14px;
-            }
-            a {
-                padding: 8px 16px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenue sur ClinUp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #3d4465;
+      background-color: #ffffff;
+    }
+    .container {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    a.button {
+      background-color: rgb(255, 56, 92);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      a.button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>Bonjour {{ user.firstname }},</h1>
+  <div class="container">
+    <p>Bonjour {{ user.firstname }},</p>
+
     <p>Bienvenue sur ClinUp ! Nous sommes ravis de vous compter parmi nos prestataires.</p>
+
     <p>Avant de pouvoir profiter pleinement de nos services, veuillez activer votre compte en cliquant sur le bouton ci-dessous :</p>
+
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tbody>
-            <tr>
-                <td align="center">
-                    <a href="{{ absolute_url(path('verify_user', {token: token})) }}" target="_blank">Activer</a>
-                </td>
-            </tr>
-        </tbody>
+      <tr>
+        <td align="center">
+          <a href="{{ absolute_url(path('verify_user', {token: token}))|replace({'http://': 'https://' }) }}" class="button" target="_blank">
+            Activer mon compte
+          </a>
+        </td>
+      </tr>
     </table>
+
     <p>Une fois votre compte activé, vous pourrez accéder à toutes les fonctionnalités de notre plateforme.</p>
+
     <p>Si vous avez des questions ou besoin d'aide, notre équipe est à votre disposition pour vous assister.</p>
-    <p>Bien à vous,</p>
-    <div style="display: flex; align-items: center;">
-        <p>L'équipe de </p>
-        <h2 style="color: rgb(255, 56, 92);">ClinUp</h2>
-    </div>
-</div>
+
+    <p style="font-size: 16px;">
+      L'équipe de <span style="color: rgb(255, 56, 92); font-weight: bold;">ClinUp</span>
+    </p>
+
+    <p style="font-size: 12px; color: #888888;">
+      Si vous trouvez ce message dans vos spams, pensez à cliquer sur "Ce message n’est pas un spam" pour recevoir correctement nos emails à l’avenir.
+    </p>
+  </div>
 </body>
 </html>
