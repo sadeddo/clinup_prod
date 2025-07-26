@@ -102,39 +102,118 @@
             </div>
         </div>
     </div>
-</main>
+{% if cible == "addReservation" %}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="padding:2%;">
+    <div class="modal-content modal-reservation">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Poster une réservation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form method="post">
+                <div class="row">
+                   <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date">Le jour</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="date" name="reservation[date]"required>
+                                <span class="input-group-addon"><i class="bi bi-calendar-event"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="surface">Heure</label>
+                            <div class="input-group">
+                                <input type="time" class="form-control" id="surface" name="reservation[heure]" placeholder="Donnez une heure" required>
+                                <span class="input-group-addon"><i class="bi bi-clock"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="surface">Durée de la prestation</label>
+                                <div id="hour-selector" class="hour-selector">
+                                    <button type="button" onclick="changeHours(-1)" class="cursur">-</button>
+                                    <input type="text" id="hourValue" name="reservation[nbrHeure]" value="1h30" readonly>
+                                    <button type="button" onclick="changeHours(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="surface">Montant</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="prix" name="reservation[prix]" placeholder="Montant de la prestation" required>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="completAdresse">Pour le logement</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.logement) }}
+                                    <span class="input-group-addon"><i class="bi bi-chevron-down"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                </div><br>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="completAdresse">Ajouter une note (Optionnel)</label>
+                                {{ form_widget(form.description) }}
+                            </div>
+                        </div>
+                </div><br>
+                <div class="form-group col align-self-center" style="text-align: center;">
+                    <button  type="submit" class="btn btn-secondary post">Poster</button>
+                </div>
+                {{ form_row(form._token) }}
+            </form><br>
+      </div>
+    </div>
+  </div>
+  {% block scripteditEventModalIdentity %}
+                <script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+    myModal.show();
+</script>
+<script>
+function changeHours(change) {
+    var currentValue = document.getElementById('hourValue').value;
+    var match = currentValue.match(/^(\d+)h(\d+)$/);
+    var hours = parseInt(match[1], 10);
+    var minutes = parseInt(match[2], 10);
+    
+    // Convertissez tout en minutes pour le calcul
+    var totalMinutes = hours * 60 + minutes + (change * 30); // changez par pas de 30 minutes
+
+    // Assurez-vous que la valeur reste dans un intervalle acceptable
+    if (totalMinutes < 60) totalMinutes = 60;  // Limite inférieure 1h30
+    if (totalMinutes > 300) totalMinutes = 300; // Limite supérieure 2h30
+
+    // Convertissez de nouveau en heures et minutes
+    var newHours = Math.floor(totalMinutes / 60);
+    var newMinutes = totalMinutes % 60;
+
+    // Mise à jour de la valeur de l'input
+    document.getElementById('hourValue').value = newHours + 'h' + (newMinutes < 10 ? '0' : '') + newMinutes;
+}
+</script>
+
+                    {% endblock %}
+            {% endif %}
+    </main>
 
 {# FullCalendar JS + CSS #}
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const calendarEl = document.getElementById('calendar');
 
-    const isMobile = window.innerWidth <= 768;
-
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: isMobile ? 'timeGridDay' : 'timeGridWeek',
-        locale: 'fr',
-        height: 'auto',
-        slotMinTime: "07:00:00",
-        slotMaxTime: "19:00:00",
-        events: {{ disposJson|raw }},
-        eventColor: '#198754',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'timeGridWeek,timeGridDay'
-        },
-        allDaySlot: false,
-        nowIndicator: true,
-        expandRows: true,
-        dayMaxEventRows: true,
-    });
-
-    calendar.render();
-});
-
-</script>
 {% endblock %}
