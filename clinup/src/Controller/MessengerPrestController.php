@@ -106,22 +106,22 @@ class MessengerPrestController extends AbstractController
                 
                 $image->setIdConversation($entityManager->getRepository(Conversation::class)->find($id));
                 $image->setContent($newFilename);
-            $image->setSender($entityManager->getRepository(User::class)->find($security->getUser()->getId()));
-            $image->setRecipient($entityManager->getRepository(User::class)->find($idrecipiant));
-            $image->setCreatedAt(new DateTimeImmutable());
-            $image->setType('image');
-            $entityManager->persist($image);
-            $entityManager->flush();
-            $notificationService->sendEmail(
-                $entityManager->getRepository(User::class)->find($idrecipiant)->getEmail(),
-                'Nouveau Message sur ClinUp',
-                'email/nvMessage.html.twig',
-                [
-                    'user' => $entityManager->getRepository(User::class)->find($idrecipiant), // Objet ou tableau contenant les informations de l'utilisateur
-                    
-                ]
-            );
-            return $this->redirectToRoute('app_chat_show', ['id' => $id,'idrecipiant' => $idrecipiant,]);
+                $image->setSender($entityManager->getRepository(User::class)->find($security->getUser()->getId()));
+                $image->setRecipient($entityManager->getRepository(User::class)->find($idrecipiant));
+                $image->setCreatedAt(new DateTimeImmutable());
+                $image->setType('image');
+                $entityManager->persist($image);
+                $entityManager->flush();
+                $notificationService->sendEmail(
+                    $entityManager->getRepository(User::class)->find($idrecipiant)->getEmail(),
+                    'Nouveau Message sur ClinUp',
+                    'email/nvMessage.html.twig',
+                    [
+                        'user' => $entityManager->getRepository(User::class)->find($idrecipiant), // Objet ou tableau contenant les informations de l'utilisateur
+                        
+                    ]
+                );
+                return $this->redirectToRoute('app_chat_show', ['id' => $id,'idrecipiant' => $idrecipiant,]);
             }
             
         }
@@ -138,6 +138,15 @@ class MessengerPrestController extends AbstractController
             $message->setType('text');
             $entityManager->persist($message);
             $entityManager->flush();
+            $notificationService->sendEmail(
+                    $entityManager->getRepository(User::class)->find($idrecipiant)->getEmail(),
+                    'Nouveau Message sur ClinUp',
+                    'email/nvMessage.html.twig',
+                    [
+                        'user' => $entityManager->getRepository(User::class)->find($idrecipiant), // Objet ou tableau contenant les informations de l'utilisateur
+                        
+                    ]
+                );
             return $this->redirectToRoute('app_chat_show', ['id' => $id,'idrecipiant' => $idrecipiant,]);
         }
         $idUser = $security->getUser()->getId();

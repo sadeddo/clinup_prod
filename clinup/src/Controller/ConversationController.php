@@ -211,6 +211,15 @@ class ConversationController extends AbstractController
             $message->setType('text');
             $entityManager->persist($message);
             $entityManager->flush();
+            $notificationService->sendEmail(
+                $entityManager->getRepository(User::class)->find($idrecipiant)->getEmail(),
+                'Nouveau Message sur ClinUp',
+                'email/nvMessage.html.twig',
+                [
+                    'user' => $entityManager->getRepository(User::class)->find($idrecipiant), // Objet ou tableau contenant les informations de l'utilisateur
+                    
+                ]
+            );
             return $this->redirectToRoute('app_messages_show', ['id' => $id,'idrecipiant' => $idrecipiant,]);
         }
         $idUser = $security->getUser()->getId();
