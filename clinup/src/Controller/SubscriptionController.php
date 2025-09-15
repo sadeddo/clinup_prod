@@ -80,12 +80,10 @@ class SubscriptionController extends AbstractController
         // Redirigez l'utilisateur vers une page appropriée (par exemple, le tableau de bord ou la page des abonnements)
         return $this->redirectToRoute('app_logement_new'); // Assurez-vous que 'dashboard' ne redirige pas vers 'subscription_upgrade'
     }
-    #[Route('/subscription-upgrade/{id}', name: 'subscription_upgrade', methods: ['GET'])]
-    public function subscriptionNeeded(Subscription $subscription): Response
+    #[Route('/subscription-upgrade', name: 'subscription_upgrade', methods: ['GET'])]
+    public function subscriptionNeeded(): Response
     {
-        return $this->render('subscription/subscription_upgrade.html.twig',[
-            'subscription' => $subscription,
-        ]);
+        return $this->render('subscription/subscription_upgrade.html.twig');
     }
     #[Route('/testdes', name: 'subs', methods: ['GET','POST'])]
     public function subsc(): Response

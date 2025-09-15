@@ -56,7 +56,7 @@ class LogementController extends AbstractController
             return $this->redirectToRoute('subscription_needed');
         }
         if ($currentLogementCount == 2 && $activeSubscription && $activeSubscription->getType() === 'log2') {
-            return $this->redirectToRoute('subscription_upgrade',['id' => $activeSubscription->getId()]);
+            return $this->redirectToRoute('subscription_upgrade');
         }
         if ($currentLogementCount >= 2 && !$activeSubscription) {
             return $this->redirectToRoute('subscription_reactif');
