@@ -12,6 +12,7 @@ parameters:
     upload_directory_img: '%kernel.project_dir%/public/img'
     videos_directory: '%kernel.project_dir%/public/uploads/videos'
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    stripe_webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
     maps_secret_key: '%env(MAPS_SECRET_KEY)%'
     app.jwtsecret: 'fghijklmnopqrstuvwxyzABC'
 services:
